@@ -1,0 +1,598 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Richard Saviour — Digital Systems Built Clean</title>
+<meta name="description" content="Richard Saviour — websites, content, email, automation, AI agents, n8n, design, video, outreach. Built clean. Built smart. Built to make your business harder to ignore.">
+<link rel="icon" type="image/png" href="https://i.imgur.com/OC2hyJt.png">
+<link rel="shortcut icon" type="image/png" href="https://i.imgur.com/OC2hyJt.png">
+<link rel="apple-touch-icon" href="https://i.imgur.com/OC2hyJt.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700;9..144,800;9..144,900&family=Inter+Tight:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/styles.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.birds.min.js"></script>
+</head>
+<body class="is-loading">
+
+<!-- ==================== LOADER (signature, branded) ==================== -->
+<div class="rs-loader" id="rs-loader" aria-hidden="true">
+  <div class="rs-loader-mark">
+    <span class="word"><span>richard</span></span><span class="dot-mark">.</span><span class="word"><span>saviour</span></span>
+  </div>
+  <div class="rs-loader-bar"></div>
+  <div class="rs-loader-meta">Building clean digital systems</div>
+</div>
+
+<!-- ==================== NAV ==================== -->
+<nav class="nav" aria-label="Primary">
+  <a href="index.html" class="nav-logo">richard<span class="dot">.</span>saviour</a>
+  <button class="nav-toggle" aria-expanded="false" aria-controls="nav-links">Menu</button>
+  <div class="nav-links" id="nav-links">
+    <a href="index.html">Home</a>
+    <a href="portfolio.html">Portfolio</a>
+    <a href="automations.html">Need Automations?</a>
+    <a href="contact.html">Contact</a>
+  </div>
+</nav>
+
+<!-- ==================== HERO (PRESERVED SIGNATURE) ==================== -->
+<section class="hero">
+  <div id="vanta-hero" class="vanta-bg"></div>
+  <div class="hero-overlay"></div>
+  <div class="container hero-content">
+
+    <!-- LEFT — Multilingual welcome -->
+    <div>
+      <h1 class="display-xl">
+        <span class="lang-stage" id="lang-stage">
+          <span class="lang-line is-active" data-lang="en">Welcome to my <span class="site-word">website</span></span>
+          <span class="lang-line" data-lang="fr">Bienvenue sur mon <span class="site-word">site web</span></span>
+          <span class="lang-line" data-lang="zh" lang="zh">欢迎来到我的<span class="site-word">网站</span></span>
+          <span class="lang-line" data-lang="it">Benvenuto nel mio <span class="site-word">sito web</span></span>
+        </span>
+      </h1>
+      <p class="hero-sub">
+        I'm <span class="hero-name">Richard Saviour</span>, and I help your business stop losing money from the digital things you already know you should fix.
+      </p>
+      <div class="hero-bullets">
+        <p>Maybe your website looks good but does not convert.</p>
+        <p>Maybe your content gets posted but does not engage.</p>
+        <p>Maybe leads vanish after one conversation.</p>
+        <p>Maybe those emails never quite make it out.</p>
+      </div>
+      <p class="hero-highlight">
+        I help businesses <span class="stress">look better, communicate better, follow up better,</span> and sell smarter online.
+      </p>
+      <div class="hero-ctas">
+        <a href="contact.html" class="btn btn-primary">
+          Get on my calendar
+          <svg class="arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M7 17L17 7M9 7h8v8"/></svg>
+        </a>
+        <a href="#pillars" class="btn btn-ghost">
+          Show me what I do
+        </a>
+      </div>
+      <div class="hero-meta">
+        <div class="hero-meta-item">
+          <span class="label">Practice</span>
+          <span class="value">Clean systems<span class="small"> · strong execution</span></span>
+        </div>
+        <div class="hero-meta-item">
+          <span class="label">Built on</span>
+          <span class="value">Strategy<span class="small"> · not vibes</span></span>
+        </div>
+        <div class="hero-meta-item">
+          <span class="label">Based</span>
+          <span class="value">Everywhere<span class="small"> · remote</span></span>
+        </div>
+      </div>
+    </div>
+
+    <!-- RIGHT — Word Cycle Stage (the signature motion graphic) -->
+    <div class="word-cycle-panel" id="word-cycle">
+      <div class="grid-pattern"></div>
+      <div class="glow"></div>
+      <div class="word-cycle-orbit">
+        <div class="ring"><span class="dot"></span></div>
+        <div class="ring"><span class="dot"></span></div>
+        <div class="ring"><span class="dot"></span></div>
+      </div>
+      <div class="word-cycle-head">
+        <span>// Built for</span>
+        <span class="status">Live</span>
+      </div>
+      <div class="word-cycle-stage" id="word-cycle-stage">
+        <div class="word-item is-active"><span class="slash">//</span>systems</div>
+        <div class="word-item"><span class="slash">//</span>websites</div>
+        <div class="word-item"><span class="slash">//</span>social media</div>
+        <div class="word-item"><span class="slash">//</span>video</div>
+        <div class="word-item"><span class="slash">//</span>email</div>
+        <div class="word-item"><span class="slash">//</span>automations</div>
+        <div class="word-item"><span class="slash">//</span>AI agents</div>
+        <div class="word-item"><span class="slash">//</span>content</div>
+      </div>
+      <div class="word-cycle-foot">
+        <div class="progress"></div>
+        <div class="legend">
+          <span>An ecosystem · not a checklist</span>
+          <span class="counter" id="word-cycle-counter">01 / 08</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== MARQUEE (signature) ==================== -->
+<section class="marquee-section">
+  <div class="marquee">
+    <div class="marquee-track">
+      <span>Websites</span><span class="italic">Graphic Design</span><span>Video Editing</span><span class="italic">Motion Graphics</span><span>Email Marketing</span><span class="italic">Social Content</span><span>Lead Generation</span><span class="italic">n8n Automation</span><span>AI Agents</span><span class="italic">Cold Outreach</span>
+    </div>
+    <div class="marquee-track" aria-hidden="true">
+      <span>Websites</span><span class="italic">Graphic Design</span><span>Video Editing</span><span class="italic">Motion Graphics</span><span>Email Marketing</span><span class="italic">Social Content</span><span>Lead Generation</span><span class="italic">n8n Automation</span><span>AI Agents</span><span class="italic">Cold Outreach</span>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== UTILITY BELT (preserved) ==================== -->
+<section class="section-pad belt-section" id="belt">
+  <div class="container">
+    <div class="belt-grid">
+      <div class="reveal">
+        <span class="eyebrow">01 / Toolkit</span>
+        <h2 class="display-l" style="margin-top:20px;">
+          Your digital<br><span class="serif-italic text-gold">utility belt.</span>
+        </h2>
+        <p class="text-mute" style="font-size:16px; margin-top:24px; max-width: 380px; line-height:1.65; font-weight:500;">
+          Websites. Graphics. Videos. Emails. Automations. AI Agents. Essentially, the digital arsenal your business has been pretending it doesn't need.
+        </p>
+        <a href="portfolio.html" class="btn btn-ghost btn-sm" style="margin-top: 28px;">
+          See the work
+          <svg class="arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M7 17L17 7M9 7h8v8"/></svg>
+        </a>
+      </div>
+      <div class="reveal">
+        <div class="pills-cluster">
+          <span class="pill featured"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M2 12h20"/></svg>Websites</span>
+          <span class="pill"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="13.5" cy="6.5" r="2.5"/><circle cx="19" cy="13" r="2.5"/><circle cx="13.5" cy="19.5" r="2.5"/><circle cx="6" cy="13" r="2.5"/></svg>Graphic Design</span>
+          <span class="pill"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2"/></svg>Video Editing</span>
+          <span class="pill featured"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v3M12 18v3M3 12h3M18 12h3"/></svg>Motion Graphics</span>
+          <span class="pill"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg>Animation</span>
+          <span class="pill"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M22 6L12 13 2 6"/></svg>Email Marketing</span>
+          <span class="pill"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4l-1 1H4a2 2 0 00-2 2v11a2 2 0 002 2h16a2 2 0 002-2V8a2 2 0 00-2-2h-6l-1-1h-4z"/></svg>Email Design</span>
+          <span class="pill featured"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="M8.59 13.51l6.83 3.98M15.41 6.51l-6.82 3.98"/></svg>Social Content</span>
+          <span class="pill"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>Lead Gen</span>
+          <span class="pill"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 11.5a8.38 8.38 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.38 8.38 0 01-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 01-.9-3.8 8.5 8.5 0 014.7-7.6 8.38 8.38 0 013.8-.9h.5a8.48 8.48 0 018 8v.5z"/></svg>Cold DMs</span>
+          <span class="pill featured"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>n8n Workflows</span>
+          <span class="pill"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9.5 2A2.5 2.5 0 0112 4.5v15a2.5 2.5 0 01-4.96.44 2.5 2.5 0 01-2.96-3.08 3 3 0 01-.34-5.58 2.5 2.5 0 011.32-4.24 2.5 2.5 0 014.44-1.04zM14.5 2A2.5 2.5 0 0012 4.5v15a2.5 2.5 0 004.96.44 2.5 2.5 0 002.96-3.08 3 3 0 00.34-5.58 2.5 2.5 0 00-1.32-4.24 2.5 2.5 0 00-4.44-1.04z"/></svg>AI Agents</span>
+          <span class="pill"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 11-2.83 2.83l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 11-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 11-2.83-2.83l.06-.06a1.65 1.65 0 00.33-1.82 1.65 1.65 0 00-1.51-1H3a2 2 0 110-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 112.83-2.83l.06.06a1.65 1.65 0 001.82.33H9a1.65 1.65 0 001-1.51V3a2 2 0 114 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 112.83 2.83l-.06.06a1.65 1.65 0 00-.33 1.82V9a1.65 1.65 0 001.51 1H21a2 2 0 110 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>Custom Workflows</span>
+          <span class="pill"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="5" r="3"/><circle cx="5" cy="19" r="3"/><circle cx="19" cy="19" r="3"/><path d="M12 8v4M12 12L7 17M12 12l5 5"/></svg>Outreach Systems</span>
+        </div>
+      </div>
+    </div>
+
+    <p class="belt-statement reveal">
+      Different tools. Same mission. <span class="stress">Make your business harder to ignore.</span>
+    </p>
+  </div>
+</section>
+
+<!-- ==================== ORDER PROBLEM (preserved philosophy) ==================== -->
+<section class="section-pad order-section" id="order">
+  <div class="container">
+    <div class="section-head reveal">
+      <span class="eyebrow">02 / Diagnosis</span>
+      <h2 class="display-l">
+        Most businesses don't have a marketing problem.<br>
+        <span class="serif-italic text-gold">They have an order problem.</span>
+      </h2>
+      <p>
+        Owners try to grow with the right ingredients in the wrong order. They post on social with no real home for people to visit. They send traffic to pages that don't build trust. They collect leads but never follow up. Then wonder why people disappear into the internet.
+      </p>
+    </div>
+
+    <div class="timeline reveal">
+      <div class="timeline-step">
+        <div class="step-image"><img src="https://i.imgur.com/zdTtFDv.jpeg" alt="Build the home — your website" loading="lazy"></div>
+        <div class="timeline-num">01</div>
+        <h4>Build the home</h4>
+        <p>Your website.</p>
+        <span class="connector"></span>
+      </div>
+      <div class="timeline-step">
+        <div class="step-image"><img src="https://i.imgur.com/RIwuaX4.jpeg" alt="Invite guests — your social content" loading="lazy"></div>
+        <div class="timeline-num">02</div>
+        <h4>Invite guests</h4>
+        <p>Your social content.</p>
+        <span class="connector"></span>
+      </div>
+      <div class="timeline-step">
+        <div class="step-image"><img src="https://i.imgur.com/tBLHOic.jpeg" alt="Talk to them — your email marketing" loading="lazy"></div>
+        <div class="timeline-num">03</div>
+        <h4>Talk to them</h4>
+        <p>Your email marketing.</p>
+        <span class="connector"></span>
+      </div>
+      <div class="timeline-step">
+        <div class="step-image"><img src="https://i.imgur.com/eVU2A4m.jpeg" alt="Build the engine — automations and AI" loading="lazy"></div>
+        <div class="timeline-num">04</div>
+        <h4>Build the engine</h4>
+        <p>Automations &amp; AI.</p>
+      </div>
+    </div>
+
+    <div class="warning-card reveal">
+      <span class="label">Do not automate chaos</span>
+      <p>Because automation is not magic. If your system is broken,</p>
+      <p class="punchline">automation just helps you break it faster.</p>
+      <p class="small">Very impressive. Very tragic.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== SERVICE PILLARS (4 cards) ==================== -->
+<section class="section-pad pillars-section" id="pillars">
+  <div class="container">
+    <div class="section-head reveal">
+      <span class="eyebrow">03 / Ecosystem</span>
+      <h2 class="display-l">
+        The digital ecosystem<br>your business <span class="serif-italic text-gold">actually</span> needs.
+      </h2>
+      <p>The order that helps your business stop feeling scattered and start feeling like a system.</p>
+    </div>
+
+    <div class="pillars-grid">
+      <div class="pillar-card reveal">
+        <div class="pillar-num">PILLAR / 01</div>
+        <h3>Ownership</h3>
+        <p class="one-liner">"Social media is rented land. Your website is your home."</p>
+        <p>If Instagram, TikTok, or LinkedIn changes the rules tomorrow, your business should not collapse.</p>
+        <p>Your site is a place you control. A place to explain. A place to sell. A place to build trust on your terms.</p>
+      </div>
+      <div class="pillar-card reveal">
+        <div class="pillar-num">PILLAR / 02</div>
+        <h3>Momentum</h3>
+        <p class="one-liner">"Content brings people to the door. Direction tells them where to go."</p>
+        <p>Social brings people to the door. It creates curiosity and recognition.</p>
+        <p>But attention without direction is just noise wearing nice shoes.</p>
+      </div>
+      <div class="pillar-card reveal">
+        <div class="pillar-num">PILLAR / 03</div>
+        <h3>Retention</h3>
+        <p class="one-liner">"Most people do not buy the first time. Email keeps the relationship alive."</p>
+        <p>That doesn't mean they hate you. It means they're human.</p>
+        <p>They need time, trust, reminders, value, and gentle nudges. That's what email is for.</p>
+      </div>
+      <div class="pillar-card reveal">
+        <div class="pillar-num">PILLAR / 04</div>
+        <h3>Efficiency</h3>
+        <p class="one-liner">"Automation multiplies what works. It should not speed up what is already broken."</p>
+        <p>n8n, AI agents, CRM workflows, email triggers — all powerful.</p>
+        <p>But first we make sure they're powering the right thing. Nobody needs a Lamborghini engine inside a shopping cart.</p>
+      </div>
+    </div>
+
+    <div style="text-align:center; margin-top: 56px;" class="reveal">
+      <a href="automations.html" class="btn btn-ghost">
+        Curious about automation?
+        <svg class="arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M7 17L17 7M9 7h8v8"/></svg>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== WHY ME ==================== -->
+<section class="section-pad why-section">
+  <div class="container">
+    <div class="section-head reveal">
+      <span class="eyebrow">04 / The standard</span>
+      <h2 class="display-l">
+        I don't just make things pretty.<br><span class="serif-italic text-gold">Pretty without strategy is decoration with confidence.</span>
+      </h2>
+      <p>When I build, I'm thinking about every one of these.</p>
+    </div>
+
+    <div class="why-grid">
+      <div class="why-item reveal"><span class="why-num">01</span><p>Can people understand this quickly?</p></div>
+      <div class="why-item reveal"><span class="why-num">02</span><p>Does this look trustworthy?</p></div>
+      <div class="why-item reveal"><span class="why-num">03</span><p>Is the next step obvious?</p></div>
+      <div class="why-item reveal"><span class="why-num">04</span><p>Does this feel professional?</p></div>
+      <div class="why-item reveal"><span class="why-num">05</span><p>Is the message too vague?</p></div>
+      <div class="why-item reveal"><span class="why-num">06</span><p>Can this be tracked?</p></div>
+      <div class="why-item reveal"><span class="why-num">07</span><p>Can this be automated?</p></div>
+      <div class="why-item reveal"><span class="why-num">08</span><p>Will this help the business make money?</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== TESTIMONIALS ==================== -->
+<section class="section-pad testimonials-section" id="testimonials">
+  <div class="container">
+    <div class="section-head reveal">
+      <span class="eyebrow">05 / Receipts</span>
+      <h2 class="display-l">
+        Don't just take my word<br><span class="serif-italic text-gold">for it.</span>
+      </h2>
+      <p>I can sit here and tell you I'm good. Very easy. Very suspicious. So I'll let people I've worked with speak for me.</p>
+    </div>
+
+    <div class="testi-grid">
+      <div class="testi-card reveal">
+        <div class="stars">
+          <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+        </div>
+        <span class="helped">Working partner · Since 2024</span>
+        <blockquote>"We've worked with Richard since 2024, and he's been a huge asset to what we do at TBCreations. From landing pages and social media to automations, email marketing, and paid ads, he's handled a lot for us and handled it well. What I appreciate most is that he's versatile, fast, and dependable. It's rare to find someone who can touch that many moving parts and still keep the quality high."</blockquote>
+        <div class="author">
+          <div class="avatar avatar-photo"><img src="https://i.imgur.com/PQIjKd8.jpeg" alt="Thomas G. Bell" loading="lazy"></div>
+          <div class="author-text">
+            <span class="name">Thomas G. Bell</span>
+            <span class="role">CEO · TBCreations LLC</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="testi-card reveal">
+        <div class="stars">
+          <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+        </div>
+        <span class="helped">Creative + team lead · Multi-discipline</span>
+        <blockquote>"Richard has been excellent to work with. He's one of those rare people who can genuinely multitask at a high level. He's been strong with video editing, graphics, GoHighLevel, and still helps manage a team around social media work. He brings a lot to the table, stays solution-focused, and is the kind of person you can trust with real responsibility."</blockquote>
+        <div class="author">
+          <div class="avatar avatar-photo"><img src="https://assets.cdn.filesafe.space/wg8MaCLhPTGKd78gw1G8/media/686e49eb038ba857c040ad6e.png" alt="Jason McNamara" loading="lazy"></div>
+          <div class="author-text">
+            <span class="name">Jason McNamara</span>
+            <span class="role">CEO · The No More 9 to 5 Club</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="testi-card reveal">
+        <div class="stars">
+          <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+        </div>
+        <span class="helped">Creative support · Yoris app</span>
+        <blockquote>"Richard was an excellent intern and an important part of the team during his time with us at Yoris Africa. He supported the creation of promotional assets for the Yoris app and showed strong creativity, professionalism, and willingness to learn. He was dependable, easy to work with, and made meaningful contributions to the team."</blockquote>
+        <div class="author">
+          <div class="avatar avatar-photo"><img src="https://cdn.businessday.ng/wp-content/uploads/2026/04/Godwin-Obiora-Mbanefo.png" alt="Godwin Obiora Mbanefo" loading="lazy"></div>
+          <div class="author-text">
+            <span class="name">Godwin Obiora Mbanefo</span>
+            <span class="role">CEO · Yoris Africa</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <p class="testi-note">Quotes shown reflect feedback from past and ongoing collaborations · used with permission.</p>
+  </div>
+</section>
+
+<!-- ==================== CEO VIDEO TESTIMONIAL (DARK, PRESERVED) ==================== -->
+<section class="video-testi-section">
+  <div class="container">
+    <div class="section-head reveal">
+      <span class="eyebrow">06 / On the record</span>
+      <h2 class="display-l" style="margin: 20px 0 24px;">
+        A CEO said this, so<br><span class="serif-italic" style="color:var(--gold-soft);">I'm definitely using it.</span>
+      </h2>
+      <p>One of the best parts of doing good work is when someone takes the time to say it out loud. On camera. Unprompted.</p>
+    </div>
+
+    <div class="featured-video portrait-video reveal">
+      <video id="ceo-video" class="ceo-recommendation" src="https://i.imgur.com/1cnERYS.mp4" controls preload="metadata" playsinline poster=""></video>
+      <span class="label">// Featured CEO recommendation</span>
+      <div class="featured-frame-corners" aria-hidden="true">
+        <span></span><span></span><span></span><span></span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== BATMAN / PERSONAL (preserved, after key business info) ==================== -->
+<section class="batman-section">
+  <div class="container batman-content">
+    <div class="batman-grid">
+      <div class="batman-visual reveal">
+        <div class="batman-frame">
+          <img src="https://i.imgur.com/Xsiwnk3.jpeg" alt="Personal — what discipline looks like" loading="lazy">
+        </div>
+      </div>
+
+      <div class="batman-text reveal">
+        <span class="eyebrow">07 / Personal</span>
+        <h2 class="display-l">Why the <span class="serif-italic" style="color:var(--gold-soft);">Batman thing?</span></h2>
+
+        <p class="batman-lead">I've always been a huge Batman fan.</p>
+        <p class="batman-body">Not just because he looks cool in black, although that helps. I respect what he represents.</p>
+
+        <ul class="batman-tenets">
+          <li>No superpowers.</li>
+          <li>No magic.</li>
+          <li>No shortcut.</li>
+        </ul>
+
+        <p class="batman-body">Just discipline, intelligence, resourcefulness, training, and the decision to turn pain into purpose.</p>
+        <p class="batman-body">That mindset connects with how I work. Good brands do not need random effort. They need the right tools, the right systems, the right strategy, and the right execution.</p>
+        <p class="batman-close">That is what I try to bring into every project.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== FINAL CTA ==================== -->
+<section class="final-cta" id="cta">
+  <div class="final-cta-content">
+    <span class="eyebrow" style="justify-content:center; display:inline-flex;">Ready when you are</span>
+    <h2 style="margin-top:20px;">Stop losing customers<br>to the <span class="accent">void.</span></h2>
+    <p class="lead">
+      Maybe you just need someone who can look at the mess and say, <em>"yeah, I know what to do here."</em>
+    </p>
+    <div class="ctas">
+      <a href="contact.html" class="btn btn-primary">
+        Get on my calendar
+        <svg class="arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M7 17L17 7M9 7h8v8"/></svg>
+      </a>
+      <a href="mailto:richardsaviourz@gmail.com" class="btn btn-ghost">Email Richard</a>
+    </div>
+    <p class="footnote">No weird pitch · just a real conversation about what makes sense next</p>
+  </div>
+</section>
+
+<!-- ==================== FOOTER ==================== -->
+<footer>
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="logo-big">richard<span class="dot">.</span></div>
+        <p>Websites. Content. Email. Automation. AI Agents. n8n. Design. Video. Outreach.</p>
+        <div class="built">
+          <span>Built clean.</span>
+          <span>Built smart.</span>
+          <span>Built to make your business harder to ignore.</span>
+        </div>
+      </div>
+      <div class="footer-col">
+        <h5>Pages</h5>
+        <ul>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="portfolio.html">Portfolio</a></li>
+          <li><a href="automations.html">Need Automations?</a></li>
+          <li><a href="contact.html">Contact</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h5>Connect</h5>
+        <ul>
+          <li><a href="mailto:richardsaviourz@gmail.com">Email me</a></li>
+          <li><a href="contact.html">Book a call</a></li>
+          <li><a href="portfolio.html">View work</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h5>Philosophy</h5>
+        <ul>
+          <li><a href="index.html#order">The order problem</a></li>
+          <li><a href="index.html#pillars">The ecosystem</a></li>
+          <li><a href="index.html#testimonials">The receipts</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 Richard Saviour · All rights reserved</span>
+      <a class="footer-email" href="mailto:richardsaviourz@gmail.com">richardsaviourz@gmail.com</a>
+      <span class="tagline">No cape. No chaos. Just clean digital systems.</span>
+    </div>
+  </div>
+</footer>
+
+<!-- ==================== SHARED JS ==================== -->
+<script src="assets/js/main.js"></script>
+
+<!-- ==================== PAGE-SPECIFIC JS ==================== -->
+<script>
+  (function () {
+    'use strict';
+
+    /* ===== VANTA HERO (PRESERVED COLORS) =====
+       White background, gray + black birds — same as original. */
+    let vantaHero;
+    function initVanta() {
+      if (typeof VANTA === 'undefined') return;
+      if (document.getElementById('vanta-hero') && VANTA.BIRDS) {
+        try {
+          vantaHero = VANTA.BIRDS({
+            el: '#vanta-hero',
+            mouseControls: true,
+            touchControls: true,
+            gyroControls: false,
+            minHeight: 200.00,
+            minWidth: 200.00,
+            scale: 1.00,
+            scaleMobile: 1.00,
+            backgroundColor: 0xffffff,
+            color1: 0xdcdcdc,
+            color2: 0x000000,
+            colorMode: 'lerp',
+            birdSize: 0.80,
+            wingSpan: 29.00,
+            speedLimit: 4.00,
+            separation: 38.00,
+            alignment: 51.00,
+            cohesion: 75.00,
+            quantity: 4.00
+          });
+        } catch (e) { /* silent */ }
+      }
+    }
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initVanta);
+    } else {
+      initVanta();
+    }
+
+    /* ===== HERO MULTI-LANGUAGE CYCLE (PRESERVED) ===== */
+    const langLines = document.querySelectorAll('#lang-stage .lang-line');
+    if (langLines.length > 0) {
+      let langIdx = 0;
+      window.setInterval(() => {
+        langLines[langIdx].classList.remove('is-active');
+        langIdx = (langIdx + 1) % langLines.length;
+        langLines[langIdx].classList.add('is-active');
+      }, 3200);
+    }
+
+    /* ===== WORD CYCLE PANEL (PRESERVED MOTION GRAPHIC) ===== */
+    const wordItems = document.querySelectorAll('#word-cycle-stage .word-item');
+    const wordCounter = document.getElementById('word-cycle-counter');
+    if (wordItems.length > 0) {
+      let wIdx = 0;
+      const total = wordItems.length;
+      const pad = n => String(n).padStart(2, '0');
+      if (wordCounter) wordCounter.textContent = `01 / ${pad(total)}`;
+      window.setInterval(() => {
+        wordItems[wIdx].classList.remove('is-active');
+        wordItems[wIdx].classList.add('is-leaving');
+        const leaving = wIdx;
+        window.setTimeout(() => wordItems[leaving].classList.remove('is-leaving'), 600);
+        wIdx = (wIdx + 1) % total;
+        wordItems[wIdx].classList.add('is-active');
+        if (wordCounter) wordCounter.textContent = `${pad(wIdx + 1)} / ${pad(total)}`;
+      }, 2400);
+    }
+
+    /* ===== SUBTLE WORD PANEL PARALLAX (PRESERVED) ===== */
+    const wcPanel = document.getElementById('word-cycle');
+    if (wcPanel && window.matchMedia('(pointer:fine)').matches) {
+      wcPanel.addEventListener('mousemove', e => {
+        const r = wcPanel.getBoundingClientRect();
+        const x = ((e.clientX - r.left) / r.width - 0.5) * 8;
+        const y = ((e.clientY - r.top) / r.height - 0.5) * 8;
+        wcPanel.style.transform = `translate(${x}px, ${y}px)`;
+      });
+      wcPanel.addEventListener('mouseleave', () => { wcPanel.style.transform = ''; });
+      wcPanel.style.transition = 'transform 0.4s cubic-bezier(0.22, 1, 0.36, 1)';
+    }
+
+    window.addEventListener('beforeunload', () => {
+      if (vantaHero && vantaHero.destroy) vantaHero.destroy();
+    });
+  })();
+</script>
+
+</body>
+</html>
