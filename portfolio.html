@@ -14,6 +14,314 @@
 <link rel="stylesheet" href="assets/css/styles.css">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.net.min.js"></script>
+
+<!-- ==================== UPGRADED REEL PLAYER STYLES ==================== -->
+<style>
+  /* ---------- Reels gallery container (a touch more breathing room) ---------- */
+  .reels-gallery {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 32px;
+    margin-top: 56px;
+  }
+
+  /* ---------- Card shell ---------- */
+  .reel-card {
+    position: relative;
+    background: #0d0d0e;
+    border-radius: 22px;
+    overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    box-shadow:
+      0 1px 0 rgba(255, 255, 255, 0.04) inset,
+      0 20px 40px -20px rgba(0, 0, 0, 0.55),
+      0 4px 12px -4px rgba(0, 0, 0, 0.35);
+    transition:
+      transform 0.5s cubic-bezier(0.2, 0.8, 0.2, 1),
+      box-shadow 0.5s cubic-bezier(0.2, 0.8, 0.2, 1),
+      border-color 0.4s ease;
+    isolation: isolate;
+  }
+  .reel-card:hover {
+    transform: translateY(-4px);
+    border-color: rgba(212, 175, 100, 0.35);
+    box-shadow:
+      0 1px 0 rgba(255, 255, 255, 0.06) inset,
+      0 32px 64px -24px rgba(0, 0, 0, 0.65),
+      0 8px 20px -8px rgba(212, 175, 100, 0.18);
+  }
+
+  /* Gold corner accent (decorative, subtle) */
+  .reel-card::before {
+    content: '';
+    position: absolute;
+    top: 14px;
+    left: 14px;
+    width: 22px;
+    height: 22px;
+    border-top: 1.5px solid rgba(212, 175, 100, 0.6);
+    border-left: 1.5px solid rgba(212, 175, 100, 0.6);
+    border-top-left-radius: 6px;
+    z-index: 3;
+    opacity: 0;
+    transform: translate(4px, 4px);
+    transition: opacity 0.4s ease, transform 0.5s cubic-bezier(0.2, 0.8, 0.2, 1);
+    pointer-events: none;
+  }
+  .reel-card:hover::before {
+    opacity: 1;
+    transform: translate(0, 0);
+  }
+
+  /* ---------- Player frame ---------- */
+  .reel-player {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16 / 10;
+    background: #060607;
+    overflow: hidden;
+    cursor: pointer;
+  }
+  .reel-player video {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    background: #060607;
+  }
+
+  /* ---------- Top-left badge (kind tag) ---------- */
+  .reel-badge {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    z-index: 4;
+    padding: 6px 11px;
+    background: rgba(13, 13, 14, 0.75);
+    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 999px;
+    color: #d4af64;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    font-weight: 500;
+    pointer-events: none;
+  }
+
+  /* ---------- Big center play button (visible when paused) ---------- */
+  .reel-big-play {
+    position: absolute;
+    inset: 0;
+    margin: auto;
+    width: 72px;
+    height: 72px;
+    border-radius: 50%;
+    border: none;
+    background: rgba(13, 13, 14, 0.6);
+    -webkit-backdrop-filter: blur(8px);
+    backdrop-filter: blur(8px);
+    color: #fff;
+    cursor: pointer;
+    display: grid;
+    place-items: center;
+    z-index: 3;
+    opacity: 0;
+    transform: scale(0.85);
+    transition: opacity 0.35s ease, transform 0.35s cubic-bezier(0.2, 0.8, 0.2, 1), background 0.25s ease;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+  }
+  .reel-big-play svg {
+    width: 24px;
+    height: 24px;
+    margin-left: 3px; /* optical centering of the triangle */
+  }
+  .reel-big-play:hover {
+    background: rgba(212, 175, 100, 0.92);
+    color: #0d0d0e;
+  }
+  .reel-player.is-paused .reel-big-play {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  /* ---------- Bottom controls bar ---------- */
+  .reel-controls {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 4;
+    padding: 28px 14px 12px;
+    background: linear-gradient(
+      to top,
+      rgba(0, 0, 0, 0.82) 0%,
+      rgba(0, 0, 0, 0.5) 55%,
+      rgba(0, 0, 0, 0) 100%
+    );
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    opacity: 0;
+    transform: translateY(6px);
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    pointer-events: none;
+  }
+  .reel-player:hover .reel-controls,
+  .reel-player.is-paused .reel-controls,
+  .reel-player.is-active .reel-controls {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+  }
+
+  /* Control buttons */
+  .rc-btn {
+    background: transparent;
+    border: none;
+    color: rgba(255, 255, 255, 0.92);
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    display: grid;
+    place-items: center;
+    cursor: pointer;
+    transition: background 0.2s ease, color 0.2s ease;
+    flex-shrink: 0;
+  }
+  .rc-btn svg {
+    width: 16px;
+    height: 16px;
+  }
+  .rc-btn:hover {
+    background: rgba(255, 255, 255, 0.12);
+    color: #d4af64;
+  }
+  .rc-btn:focus-visible {
+    outline: 2px solid #d4af64;
+    outline-offset: 2px;
+  }
+
+  /* Progress scrubber */
+  .rc-progress {
+    flex: 1;
+    height: 22px;
+    position: relative;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+  }
+  .rc-progress-track {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    height: 3px;
+    background: rgba(255, 255, 255, 0.18);
+    border-radius: 999px;
+    overflow: hidden;
+    transition: height 0.2s ease;
+  }
+  .rc-progress:hover .rc-progress-track {
+    height: 5px;
+  }
+  .rc-progress-fill {
+    height: 100%;
+    width: 0%;
+    background: linear-gradient(90deg, #d4af64 0%, #e8c98a 100%);
+    border-radius: 999px;
+    position: relative;
+    transition: width 0.08s linear;
+  }
+  .rc-progress-thumb {
+    position: absolute;
+    right: -6px;
+    top: 50%;
+    transform: translateY(-50%) scale(0);
+    width: 12px;
+    height: 12px;
+    background: #d4af64;
+    border-radius: 50%;
+    box-shadow: 0 0 0 4px rgba(212, 175, 100, 0.2);
+    transition: transform 0.2s ease;
+  }
+  .rc-progress:hover .rc-progress-thumb {
+    transform: translateY(-50%) scale(1);
+  }
+
+  /* Time display */
+  .rc-time {
+    color: rgba(255, 255, 255, 0.78);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.04em;
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+    flex-shrink: 0;
+    padding: 0 2px;
+  }
+
+  /* ---------- Meta footer of card ---------- */
+  .reel-meta {
+    padding: 22px 24px 24px;
+    background: linear-gradient(180deg, #0f0f10 0%, #0a0a0b 100%);
+    border-top: 1px solid rgba(255, 255, 255, 0.04);
+  }
+  .reel-kind {
+    display: inline-block;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: #d4af64;
+    margin-bottom: 10px;
+    font-weight: 500;
+  }
+  .reel-meta h4 {
+    font-family: 'Fraunces', serif;
+    font-size: 22px;
+    font-weight: 600;
+    color: #fafafa;
+    margin: 0 0 6px;
+    letter-spacing: -0.01em;
+  }
+  .reel-meta p {
+    color: rgba(255, 255, 255, 0.62);
+    font-size: 14px;
+    line-height: 1.55;
+    margin: 0;
+  }
+
+  /* ---------- Mobile tweaks ---------- */
+  @media (max-width: 640px) {
+    .reels-gallery {
+      grid-template-columns: 1fr;
+      gap: 24px;
+    }
+    .reel-big-play {
+      width: 60px;
+      height: 60px;
+    }
+    .rc-time {
+      font-size: 10px;
+    }
+    .reel-meta {
+      padding: 18px 20px 20px;
+    }
+    .reel-meta h4 {
+      font-size: 19px;
+    }
+  }
+
+  /* Hide control bar entirely in fullscreen native mode if browser provides its own — optional safety */
+  .reel-player:fullscreen { background: #000; }
+  .reel-player:fullscreen video { object-fit: contain; }
+</style>
 </head>
 <body class="is-loading">
 
@@ -73,8 +381,34 @@
 
     <div class="reels-gallery">
 
+      <!-- ====== REEL 01 ====== -->
       <div class="reel-card reveal">
-        <video src="https://i.imgur.com/gJ0PGiR.mp4" muted loop playsinline preload="metadata" data-autoplay-in-view></video>
+        <div class="reel-player is-paused" data-reel>
+          <video src="https://i.imgur.com/gJ0PGiR.mp4" muted loop playsinline preload="metadata" data-autoplay-in-view></video>
+          <span class="reel-badge">Agency · MP4</span>
+          <button class="reel-big-play" type="button" aria-label="Play video">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+          </button>
+          <div class="reel-controls">
+            <button class="rc-btn rc-play" type="button" aria-label="Play / Pause">
+              <svg class="rc-icon-play" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+              <svg class="rc-icon-pause" viewBox="0 0 24 24" fill="currentColor" style="display:none"><path d="M6 5h4v14H6zm8 0h4v14h-4z"/></svg>
+            </button>
+            <div class="rc-progress" role="slider" aria-label="Seek" tabindex="0">
+              <div class="rc-progress-track">
+                <div class="rc-progress-fill"><span class="rc-progress-thumb"></span></div>
+              </div>
+            </div>
+            <span class="rc-time">0:00 / 0:00</span>
+            <button class="rc-btn rc-mute" type="button" aria-label="Mute / Unmute">
+              <svg class="rc-icon-muted" viewBox="0 0 24 24" fill="currentColor"><path d="M16.5 12A4.5 4.5 0 0014 8.04v2.21l2.45 2.45c.03-.23.05-.46.05-.7zm2.5 0c0 .94-.2 1.82-.54 2.64l1.51 1.51A8.8 8.8 0 0021 12c0-4.28-2.99-7.86-7-8.77v2.06c2.89.86 5 3.54 5 6.71zM4.27 3L3 4.27 7.73 9H3v6h4l5 5v-6.73l4.25 4.25c-.67.52-1.42.93-2.25 1.18v2.06a8.99 8.99 0 003.69-1.81L19.73 21 21 19.73l-9-9L4.27 3zM12 4L9.91 6.09 12 8.18V4z"/></svg>
+              <svg class="rc-icon-sound" viewBox="0 0 24 24" fill="currentColor" style="display:none"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3A4.5 4.5 0 0014 8.04v7.93c1.48-.74 2.5-2.27 2.5-3.97zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/></svg>
+            </button>
+            <button class="rc-btn rc-fs" type="button" aria-label="Fullscreen">
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z"/></svg>
+            </button>
+          </div>
+        </div>
         <div class="reel-meta">
           <span class="reel-kind">Agency promo</span>
           <h4>thetribeofrichard</h4>
@@ -82,8 +416,34 @@
         </div>
       </div>
 
+      <!-- ====== REEL 02 ====== -->
       <div class="reel-card reveal">
-        <video src="https://i.imgur.com/jQ37l1F.mp4" muted loop playsinline preload="metadata" data-autoplay-in-view></video>
+        <div class="reel-player is-paused" data-reel>
+          <video src="https://i.imgur.com/jQ37l1F.mp4" muted loop playsinline preload="metadata" data-autoplay-in-view></video>
+          <span class="reel-badge">Motion · MP4</span>
+          <button class="reel-big-play" type="button" aria-label="Play video">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+          </button>
+          <div class="reel-controls">
+            <button class="rc-btn rc-play" type="button" aria-label="Play / Pause">
+              <svg class="rc-icon-play" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+              <svg class="rc-icon-pause" viewBox="0 0 24 24" fill="currentColor" style="display:none"><path d="M6 5h4v14H6zm8 0h4v14h-4z"/></svg>
+            </button>
+            <div class="rc-progress" role="slider" aria-label="Seek" tabindex="0">
+              <div class="rc-progress-track">
+                <div class="rc-progress-fill"><span class="rc-progress-thumb"></span></div>
+              </div>
+            </div>
+            <span class="rc-time">0:00 / 0:00</span>
+            <button class="rc-btn rc-mute" type="button" aria-label="Mute / Unmute">
+              <svg class="rc-icon-muted" viewBox="0 0 24 24" fill="currentColor"><path d="M16.5 12A4.5 4.5 0 0014 8.04v2.21l2.45 2.45c.03-.23.05-.46.05-.7zm2.5 0c0 .94-.2 1.82-.54 2.64l1.51 1.51A8.8 8.8 0 0021 12c0-4.28-2.99-7.86-7-8.77v2.06c2.89.86 5 3.54 5 6.71zM4.27 3L3 4.27 7.73 9H3v6h4l5 5v-6.73l4.25 4.25c-.67.52-1.42.93-2.25 1.18v2.06a8.99 8.99 0 003.69-1.81L19.73 21 21 19.73l-9-9L4.27 3zM12 4L9.91 6.09 12 8.18V4z"/></svg>
+              <svg class="rc-icon-sound" viewBox="0 0 24 24" fill="currentColor" style="display:none"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3A4.5 4.5 0 0014 8.04v7.93c1.48-.74 2.5-2.27 2.5-3.97zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/></svg>
+            </button>
+            <button class="rc-btn rc-fs" type="button" aria-label="Fullscreen">
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z"/></svg>
+            </button>
+          </div>
+        </div>
         <div class="reel-meta">
           <span class="reel-kind">Logo animation</span>
           <h4>Brand reveal</h4>
@@ -91,8 +451,34 @@
         </div>
       </div>
 
+      <!-- ====== REEL 03 ====== -->
       <div class="reel-card reveal">
-        <video src="https://i.imgur.com/4fAB1v3.mp4" muted loop playsinline preload="metadata" data-autoplay-in-view></video>
+        <div class="reel-player is-paused" data-reel>
+          <video src="https://i.imgur.com/4fAB1v3.mp4" muted loop playsinline preload="metadata" data-autoplay-in-view></video>
+          <span class="reel-badge">2D · MP4</span>
+          <button class="reel-big-play" type="button" aria-label="Play video">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+          </button>
+          <div class="reel-controls">
+            <button class="rc-btn rc-play" type="button" aria-label="Play / Pause">
+              <svg class="rc-icon-play" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+              <svg class="rc-icon-pause" viewBox="0 0 24 24" fill="currentColor" style="display:none"><path d="M6 5h4v14H6zm8 0h4v14h-4z"/></svg>
+            </button>
+            <div class="rc-progress" role="slider" aria-label="Seek" tabindex="0">
+              <div class="rc-progress-track">
+                <div class="rc-progress-fill"><span class="rc-progress-thumb"></span></div>
+              </div>
+            </div>
+            <span class="rc-time">0:00 / 0:00</span>
+            <button class="rc-btn rc-mute" type="button" aria-label="Mute / Unmute">
+              <svg class="rc-icon-muted" viewBox="0 0 24 24" fill="currentColor"><path d="M16.5 12A4.5 4.5 0 0014 8.04v2.21l2.45 2.45c.03-.23.05-.46.05-.7zm2.5 0c0 .94-.2 1.82-.54 2.64l1.51 1.51A8.8 8.8 0 0021 12c0-4.28-2.99-7.86-7-8.77v2.06c2.89.86 5 3.54 5 6.71zM4.27 3L3 4.27 7.73 9H3v6h4l5 5v-6.73l4.25 4.25c-.67.52-1.42.93-2.25 1.18v2.06a8.99 8.99 0 003.69-1.81L19.73 21 21 19.73l-9-9L4.27 3zM12 4L9.91 6.09 12 8.18V4z"/></svg>
+              <svg class="rc-icon-sound" viewBox="0 0 24 24" fill="currentColor" style="display:none"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3A4.5 4.5 0 0014 8.04v7.93c1.48-.74 2.5-2.27 2.5-3.97zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/></svg>
+            </button>
+            <button class="rc-btn rc-fs" type="button" aria-label="Fullscreen">
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z"/></svg>
+            </button>
+          </div>
+        </div>
         <div class="reel-meta">
           <span class="reel-kind">2D animation</span>
           <h4>Motion explainer</h4>
@@ -100,8 +486,34 @@
         </div>
       </div>
 
+      <!-- ====== REEL 04 ====== -->
       <div class="reel-card reveal">
-        <video src="https://i.imgur.com/5M0usIu.mp4" muted loop playsinline preload="metadata" data-autoplay-in-view></video>
+        <div class="reel-player is-paused" data-reel>
+          <video src="https://i.imgur.com/5M0usIu.mp4" muted loop playsinline preload="metadata" data-autoplay-in-view></video>
+          <span class="reel-badge">Edit · MP4</span>
+          <button class="reel-big-play" type="button" aria-label="Play video">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+          </button>
+          <div class="reel-controls">
+            <button class="rc-btn rc-play" type="button" aria-label="Play / Pause">
+              <svg class="rc-icon-play" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+              <svg class="rc-icon-pause" viewBox="0 0 24 24" fill="currentColor" style="display:none"><path d="M6 5h4v14H6zm8 0h4v14h-4z"/></svg>
+            </button>
+            <div class="rc-progress" role="slider" aria-label="Seek" tabindex="0">
+              <div class="rc-progress-track">
+                <div class="rc-progress-fill"><span class="rc-progress-thumb"></span></div>
+              </div>
+            </div>
+            <span class="rc-time">0:00 / 0:00</span>
+            <button class="rc-btn rc-mute" type="button" aria-label="Mute / Unmute">
+              <svg class="rc-icon-muted" viewBox="0 0 24 24" fill="currentColor"><path d="M16.5 12A4.5 4.5 0 0014 8.04v2.21l2.45 2.45c.03-.23.05-.46.05-.7zm2.5 0c0 .94-.2 1.82-.54 2.64l1.51 1.51A8.8 8.8 0 0021 12c0-4.28-2.99-7.86-7-8.77v2.06c2.89.86 5 3.54 5 6.71zM4.27 3L3 4.27 7.73 9H3v6h4l5 5v-6.73l4.25 4.25c-.67.52-1.42.93-2.25 1.18v2.06a8.99 8.99 0 003.69-1.81L19.73 21 21 19.73l-9-9L4.27 3zM12 4L9.91 6.09 12 8.18V4z"/></svg>
+              <svg class="rc-icon-sound" viewBox="0 0 24 24" fill="currentColor" style="display:none"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3A4.5 4.5 0 0014 8.04v7.93c1.48-.74 2.5-2.27 2.5-3.97zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/></svg>
+            </button>
+            <button class="rc-btn rc-fs" type="button" aria-label="Fullscreen">
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z"/></svg>
+            </button>
+          </div>
+        </div>
         <div class="reel-meta">
           <span class="reel-kind">Video editing</span>
           <h4>Short-form edit</h4>
@@ -109,8 +521,34 @@
         </div>
       </div>
 
+      <!-- ====== REEL 05 ====== -->
       <div class="reel-card reveal">
-        <video src="https://i.imgur.com/WO1Rlh1.mp4" muted loop playsinline preload="metadata" data-autoplay-in-view></video>
+        <div class="reel-player is-paused" data-reel>
+          <video src="https://i.imgur.com/WO1Rlh1.mp4" muted loop playsinline preload="metadata" data-autoplay-in-view></video>
+          <span class="reel-badge">App · MP4</span>
+          <button class="reel-big-play" type="button" aria-label="Play video">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+          </button>
+          <div class="reel-controls">
+            <button class="rc-btn rc-play" type="button" aria-label="Play / Pause">
+              <svg class="rc-icon-play" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+              <svg class="rc-icon-pause" viewBox="0 0 24 24" fill="currentColor" style="display:none"><path d="M6 5h4v14H6zm8 0h4v14h-4z"/></svg>
+            </button>
+            <div class="rc-progress" role="slider" aria-label="Seek" tabindex="0">
+              <div class="rc-progress-track">
+                <div class="rc-progress-fill"><span class="rc-progress-thumb"></span></div>
+              </div>
+            </div>
+            <span class="rc-time">0:00 / 0:00</span>
+            <button class="rc-btn rc-mute" type="button" aria-label="Mute / Unmute">
+              <svg class="rc-icon-muted" viewBox="0 0 24 24" fill="currentColor"><path d="M16.5 12A4.5 4.5 0 0014 8.04v2.21l2.45 2.45c.03-.23.05-.46.05-.7zm2.5 0c0 .94-.2 1.82-.54 2.64l1.51 1.51A8.8 8.8 0 0021 12c0-4.28-2.99-7.86-7-8.77v2.06c2.89.86 5 3.54 5 6.71zM4.27 3L3 4.27 7.73 9H3v6h4l5 5v-6.73l4.25 4.25c-.67.52-1.42.93-2.25 1.18v2.06a8.99 8.99 0 003.69-1.81L19.73 21 21 19.73l-9-9L4.27 3zM12 4L9.91 6.09 12 8.18V4z"/></svg>
+              <svg class="rc-icon-sound" viewBox="0 0 24 24" fill="currentColor" style="display:none"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3A4.5 4.5 0 0014 8.04v7.93c1.48-.74 2.5-2.27 2.5-3.97zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/></svg>
+            </button>
+            <button class="rc-btn rc-fs" type="button" aria-label="Fullscreen">
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z"/></svg>
+            </button>
+          </div>
+        </div>
         <div class="reel-meta">
           <span class="reel-kind">App promo</span>
           <h4>Product reel</h4>
@@ -218,8 +656,8 @@
       </a>
 
       <a class="logo-card reveal" href="https://www.instagram.com/tbcreations/" target="_blank" rel="noopener">
-        <div class="logo-thumb text-logo">
-          <span>TB<br>Creations</span>
+        <div class="logo-thumb">
+          <img src="https://i.imgur.com/LAIm5st.png" alt="TBCreations" loading="lazy">
         </div>
         <div class="logo-meta">
           <span class="name">TBCreations</span>
@@ -367,6 +805,168 @@
     window.addEventListener('beforeunload', () => {
       if (vantaPortfolio && vantaPortfolio.destroy) vantaPortfolio.destroy();
     });
+
+    /* ===== CUSTOM REEL PLAYER (play/pause/seek/mute/fullscreen) ===== */
+    function formatTime(s) {
+      if (!isFinite(s) || isNaN(s)) return '0:00';
+      const m = Math.floor(s / 60);
+      const sec = Math.floor(s % 60).toString().padStart(2, '0');
+      return m + ':' + sec;
+    }
+
+    function initReelPlayers() {
+      const players = document.querySelectorAll('[data-reel]');
+      players.forEach((player) => {
+        const video = player.querySelector('video');
+        if (!video) return;
+
+        const bigPlay = player.querySelector('.reel-big-play');
+        const playBtn = player.querySelector('.rc-play');
+        const muteBtn = player.querySelector('.rc-mute');
+        const fsBtn   = player.querySelector('.rc-fs');
+        const progress = player.querySelector('.rc-progress');
+        const fill = player.querySelector('.rc-progress-fill');
+        const timeEl = player.querySelector('.rc-time');
+        const iconPlay  = playBtn ? playBtn.querySelector('.rc-icon-play') : null;
+        const iconPause = playBtn ? playBtn.querySelector('.rc-icon-pause') : null;
+        const iconMuted = muteBtn ? muteBtn.querySelector('.rc-icon-muted') : null;
+        const iconSound = muteBtn ? muteBtn.querySelector('.rc-icon-sound') : null;
+
+        // Pause indicator class drives big play button + sticky controls
+        const setPausedState = (paused) => {
+          player.classList.toggle('is-paused', paused);
+          if (iconPlay && iconPause) {
+            iconPlay.style.display  = paused ? '' : 'none';
+            iconPause.style.display = paused ? 'none' : '';
+          }
+        };
+
+        const setMutedState = (muted) => {
+          if (iconMuted && iconSound) {
+            iconMuted.style.display = muted ? '' : 'none';
+            iconSound.style.display = muted ? 'none' : '';
+          }
+        };
+
+        // Toggle play/pause and also unmute on the user's first explicit play
+        const togglePlay = (e) => {
+          if (e) { e.preventDefault(); e.stopPropagation(); }
+          if (video.paused) {
+            // Pause all other reels for a cleaner experience
+            document.querySelectorAll('[data-reel] video').forEach((v) => {
+              if (v !== video && !v.paused) v.pause();
+            });
+            video.play().catch(() => { /* autoplay restrictions, etc. */ });
+          } else {
+            video.pause();
+          }
+        };
+
+        // Clicking the video frame itself toggles play (but ignore clicks on the controls)
+        player.addEventListener('click', (e) => {
+          if (e.target.closest('.reel-controls') || e.target.closest('.reel-big-play')) return;
+          togglePlay(e);
+        });
+
+        if (bigPlay) bigPlay.addEventListener('click', togglePlay);
+        if (playBtn) playBtn.addEventListener('click', togglePlay);
+
+        // Mute / unmute
+        if (muteBtn) {
+          muteBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            video.muted = !video.muted;
+            setMutedState(video.muted);
+          });
+        }
+
+        // Fullscreen
+        if (fsBtn) {
+          fsBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const target = player; // fullscreen the whole player so custom controls stay
+            if (document.fullscreenElement) {
+              document.exitFullscreen();
+            } else if (target.requestFullscreen) {
+              target.requestFullscreen().catch(() => {
+                // fallback: try the video element itself
+                if (video.requestFullscreen) video.requestFullscreen().catch(()=>{});
+              });
+            } else if (video.webkitEnterFullscreen) {
+              // iOS Safari
+              video.webkitEnterFullscreen();
+            }
+          });
+        }
+
+        // Progress bar — update on timeupdate
+        const updateProgress = () => {
+          if (!video.duration || isNaN(video.duration)) {
+            if (timeEl) timeEl.textContent = '0:00 / 0:00';
+            return;
+          }
+          const pct = (video.currentTime / video.duration) * 100;
+          if (fill) fill.style.width = pct + '%';
+          if (timeEl) timeEl.textContent = formatTime(video.currentTime) + ' / ' + formatTime(video.duration);
+        };
+        video.addEventListener('timeupdate', updateProgress);
+        video.addEventListener('loadedmetadata', updateProgress);
+        video.addEventListener('durationchange', updateProgress);
+
+        // Seek by click or drag on the progress bar
+        let seeking = false;
+        const seekTo = (clientX) => {
+          if (!video.duration) return;
+          const rect = progress.getBoundingClientRect();
+          const ratio = Math.min(1, Math.max(0, (clientX - rect.left) / rect.width));
+          video.currentTime = ratio * video.duration;
+          if (fill) fill.style.width = (ratio * 100) + '%';
+        };
+        if (progress) {
+          progress.addEventListener('mousedown', (e) => {
+            e.stopPropagation();
+            seeking = true;
+            seekTo(e.clientX);
+          });
+          window.addEventListener('mousemove', (e) => { if (seeking) seekTo(e.clientX); });
+          window.addEventListener('mouseup', () => { seeking = false; });
+
+          // Touch
+          progress.addEventListener('touchstart', (e) => {
+            e.stopPropagation();
+            seeking = true;
+            seekTo(e.touches[0].clientX);
+          }, { passive: true });
+          window.addEventListener('touchmove', (e) => {
+            if (seeking) seekTo(e.touches[0].clientX);
+          }, { passive: true });
+          window.addEventListener('touchend', () => { seeking = false; });
+
+          // Keyboard accessibility on the slider
+          progress.addEventListener('keydown', (e) => {
+            if (!video.duration) return;
+            if (e.key === 'ArrowRight') { video.currentTime = Math.min(video.duration, video.currentTime + 5); }
+            else if (e.key === 'ArrowLeft') { video.currentTime = Math.max(0, video.currentTime - 5); }
+          });
+        }
+
+        // Sync UI to actual video events
+        video.addEventListener('play',  () => setPausedState(false));
+        video.addEventListener('pause', () => setPausedState(true));
+        video.addEventListener('ended', () => setPausedState(true));
+
+        // Initialize state
+        setPausedState(video.paused);
+        setMutedState(video.muted);
+        updateProgress();
+      });
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initReelPlayers);
+    } else {
+      initReelPlayers();
+    }
   })();
 </script>
 
