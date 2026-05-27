@@ -1757,64 +1757,96 @@ body {
   }
 })();
 
-/* -------- Audio: muted autoplay → unmute on first user gesture -------- */
+/* -------- Audio: reliable browser-safe background music --------
+   Important: modern browsers block UNMUTED autoplay.
+   This starts the track silently right away, then turns sound on after the
+   visitor's first tap/click/key press. The top-right button mutes/unmutes.
+------------------------------------------------------------------- */
 const audio = document.getElementById('bg-audio');
 const audioHint = document.getElementById('audio-hint');
 const musicBtn = document.getElementById('music-btn');
-audio.volume = 0.55;
 
-// Begin trying to play immediately. Muted autoplay is allowed by Chrome/Safari/Firefox.
-const tryPlay = () => {
-  const p = audio.play();
-  if (p && typeof p.catch === 'function') {
-    p.catch(() => { /* will retry on first interaction */ });
+const AUDIO_VOLUME = 0.55;
+let audioUnlocked = false;
+let userMuted = false;
+
+audio.volume = AUDIO_VOLUME;
+audio.muted = true;
+audio.preload = 'auto';
+musicBtn.classList.add('muted');
+musicBtn.setAttribute('aria-label', 'Unmute background music');
+musicBtn.setAttribute('title', 'Tap to unmute music');
+
+function safePlay() {
+  const playPromise = audio.play();
+  if (playPromise && typeof playPromise.catch === 'function') {
+    playPromise.catch(() => {
+      // Browser may still block playback until interaction. That is normal.
+    });
   }
-};
-tryPlay();
-// Show the hint shortly after load (since music starts silent)
-setTimeout(() => audioHint.classList.add('show'), 1400);
-
-let unlocked = false;
-function unlockAudio() {
-  if (unlocked) return;
-  unlocked = true;
-  // Begin playing if not already
-  if (audio.paused) audio.play().catch(()=>{});
-  // Smoothly fade from muted/0 volume to target volume
-  audio.muted = false;
-  audio.volume = 0;
-  let v = 0;
-  const target = 0.55;
-  const fade = setInterval(() => {
-    v = Math.min(target, v + 0.04);
-    audio.volume = v;
-    if (v >= target) clearInterval(fade);
-  }, 40);
-  // Hide the hint
-  audioHint.classList.remove('show');
 }
 
-// ANY first interaction unlocks audio (tap on arrow, tap on screen, swipe, keypress)
+function setMusicButtonState() {
+  const isMuted = audio.muted || audio.paused || userMuted;
+  musicBtn.classList.toggle('muted', isMuted);
+  musicBtn.setAttribute('aria-label', isMuted ? 'Unmute background music' : 'Mute background music');
+  musicBtn.setAttribute('title', isMuted ? 'Tap to unmute music' : 'Tap to mute music');
+}
+
+function startMutedAutoplay() {
+  audio.muted = true;
+  safePlay();
+}
+
+function unlockAudio() {
+  if (audioUnlocked) return;
+  audioUnlocked = true;
+  userMuted = false;
+  audio.muted = false;
+  audio.volume = AUDIO_VOLUME;
+  safePlay();
+  audioHint.classList.remove('show');
+  setMusicButtonState();
+}
+
+function toggleAudio(e) {
+  if (e) e.stopPropagation();
+
+  // First click on the music button should turn sound on.
+  if (!audioUnlocked) {
+    unlockAudio();
+    return;
+  }
+
+  if (audio.paused || audio.muted || userMuted) {
+    userMuted = false;
+    audio.muted = false;
+    audio.volume = AUDIO_VOLUME;
+    safePlay();
+  } else {
+    userMuted = true;
+    audio.muted = true;
+  }
+
+  setMusicButtonState();
+}
+
+window.addEventListener('DOMContentLoaded', startMutedAutoplay);
+window.addEventListener('load', startMutedAutoplay);
+
+// Any first real interaction unlocks sound. This is the closest browsers allow
+// to automatic sound on a first visit.
 ['pointerdown', 'touchstart', 'click', 'keydown'].forEach(ev => {
   document.addEventListener(ev, unlockAudio, { once: true, capture: true });
 });
 
-// Music button: toggle play/pause (also serves as mute/unmute)
-musicBtn.addEventListener('click', (e) => {
-  e.stopPropagation();
-  unlockAudio(); // first click also unmutes if still muted
-  if (audio.paused) {
-    audio.play().catch(()=>{});
-    musicBtn.classList.remove('muted');
-  } else {
-    audio.pause();
-    musicBtn.classList.add('muted');
-  }
-});
+setTimeout(() => {
+  if (!audioUnlocked) audioHint.classList.add('show');
+}, 1200);
 
-// Sync icon state to actual playback
-audio.addEventListener('play',  () => musicBtn.classList.remove('muted'));
-audio.addEventListener('pause', () => musicBtn.classList.add('muted'));
+musicBtn.addEventListener('click', toggleAudio);
+audio.addEventListener('play', setMusicButtonState);
+audio.addEventListener('pause', setMusicButtonState);
 
 /* -------- Stage Engine -------- */
 const stages = Array.from(document.querySelectorAll('.stage'));
@@ -2008,20 +2040,20 @@ function catchOrb(orb, label) {
 
 /* -------- PHOTO GALLERY -------- */
 const slideData = [
-  { src: 'https://i.imgur.com/E5egkKY.jpeg',
+  { src: 'https://i.imgur.com/E5egkKYl.jpeg',
     caption: 'Her super elegant amaziness. This picture alone is proof that some people were created with extra grace.' },
-  { src: 'https://i.imgur.com/Dv9rkFo.jpeg',
+  { src: 'https://i.imgur.com/Dv9rkFol.jpeg',
     caption: 'Still giving calm, classy, and powerful. Precious by name, precious by nature.' },
-  { src: 'https://i.imgur.com/WgbAnMJ.jpeg',
+  { src: 'https://i.imgur.com/WgbAnMJl.jpeg',
     caption: 'The sun saw her and said, "let me behave and reflect properly today." Even sunlight knows quality when it sees it.' },
-  { src: 'https://i.imgur.com/s2V7iNV.jpeg',
+  { src: 'https://i.imgur.com/s2V7iNVl.jpeg',
     caption: 'This smile right here — this is the mission. To keep you smiling the way you\'ve made so many people smile.' },
-  { src: 'https://i.imgur.com/wjJGw0s.jpeg',
+  { src: 'https://i.imgur.com/wjJGw0sl.jpeg',
     caption: 'May God cover you, guide you, protect you, and bless everything connected to you.',
     verse: { text: 'No weapon that is formed against thee shall prosper; and every tongue that shall rise against thee in judgment thou shalt condemn.', ref: 'Isaiah 54 : 17' } },
-  { src: 'https://i.imgur.com/8d6pFL4.jpeg',
+  { src: 'https://i.imgur.com/8d6pFL4l.jpeg',
     caption: 'Beautiful outside, even more beautiful inside. That\'s the part people don\'t always get to see fully — but I know it.' },
-  { src: 'https://i.imgur.com/8k69gXE.jpeg',
+  { src: 'https://i.imgur.com/8k69gXEl.jpeg',
     caption: 'May this new year be filled with divine help, open doors, peace that makes no sense, and reminders that God has not forgotten you.',
     verses: [
       { text: 'The Lord shall preserve thee from all evil: he shall preserve thy soul. The Lord shall preserve thy going out and thy coming in from this time forth, and even for evermore.', ref: 'Psalm 121 : 7-8' },
@@ -2049,7 +2081,7 @@ function initGalleryOnce() {
     slide.innerHTML = `
       <div class="slide-frame">
         <div class="slide-skeleton"></div>
-        <img class="slide-img" alt="Precious — moment ${i+1}" loading="lazy" />
+        <img class="slide-img" alt="Precious — moment ${i+1}" loading="eager" decoding="async" fetchpriority="high" />
         <div class="slide-fallback">photo couldn't load,<br>but you're still beautiful 🤎</div>
       </div>
       <p class="slide-caption">${s.caption}</p>
