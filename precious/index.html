@@ -250,45 +250,41 @@ body {
 }
 .music-btn.muted .bar { animation-play-state: paused; opacity: 0.3; }
 
-/* Music drawer */
-.music-drawer {
+/* Tiny tooltip that appears once if autoplay starts muted */
+.audio-hint {
   position: fixed;
-  top: 0; left: 0; right: 0;
-  z-index: 70;
-  background: rgba(10,10,10,0.94);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border-bottom: 1px solid var(--glass-border);
-  transform: translateY(-100%);
-  transition: transform 0.5s var(--ease);
-  padding-top: env(safe-area-inset-top);
-}
-.music-drawer.open { transform: translateY(0); }
-.music-drawer .head {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 14px 16px 6px;
-}
-.music-drawer .head .title {
-  font-family: var(--serif);
-  font-style: italic;
-  font-weight: 400;
-  font-size: 14px;
-  color: var(--gold-bright);
-  letter-spacing: 0.1em;
-}
-.music-drawer .head .close {
-  width: 30px; height: 30px;
-  display: flex; align-items: center; justify-content: center;
-  border-radius: 50%;
-  background: rgba(255,255,255,0.05);
+  top: 64px;
+  right: 12px;
+  z-index: 65;
+  padding: 8px 14px;
+  background: rgba(10,10,10,0.92);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
   border: 1px solid var(--glass-border);
-  color: var(--white-dim);
-  cursor: pointer;
+  border-radius: 999px;
+  font-family: var(--sans);
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--gold-bright);
+  letter-spacing: 0.08em;
+  opacity: 0;
+  transform: translateY(-6px);
+  transition: opacity 0.4s var(--ease), transform 0.4s var(--ease);
+  pointer-events: none;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.4);
 }
-.music-drawer .iframe-host { padding: 4px 10px 12px; }
-.music-drawer iframe { display: block; width: 100%; border: 0; border-radius: 12px; }
+.audio-hint.show { opacity: 1; transform: translateY(0); }
+.audio-hint::before {
+  content: '';
+  position: absolute;
+  top: -4px;
+  right: 14px;
+  width: 8px; height: 8px;
+  background: rgba(10,10,10,0.92);
+  border-top: 1px solid var(--glass-border);
+  border-left: 1px solid var(--glass-border);
+  transform: rotate(45deg);
+}
 
 /* ==================== STAGE STACK ==================== */
 .stage-stack {
@@ -1260,16 +1256,8 @@ body {
   pointer-events: none;
 }
 
-/* ==================== AUDIO HIDDEN HOST ==================== */
-#audio-host {
-  position: fixed;
-  top: -9999px;
-  left: -9999px;
-  width: 1px;
-  height: 1px;
-  opacity: 0;
-  pointer-events: none;
-}
+/* ==================== HIDDEN AUDIO ELEMENT ==================== */
+#bg-audio { display: none; }
 
 /* ==================== RESPONSIVE FINETUNE ==================== */
 @media (max-width: 380px) {
@@ -1332,16 +1320,7 @@ body {
   </div>
 </div>
 
-<!-- Music drawer -->
-<div class="music-drawer" id="music-drawer">
-  <div class="head">
-    <span class="title">♪ Her Song</span>
-    <button class="close" id="music-close" aria-label="close">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-    </button>
-  </div>
-  <div class="iframe-host" id="iframe-host"></div>
-</div>
+
 
 <!-- ====================================================
      STAGE STACK (27 stages)
@@ -1744,8 +1723,19 @@ body {
 <!-- Confetti canvas -->
 <canvas id="confetti"></canvas>
 
-<!-- Hidden audio host for autoplay attempt -->
-<div id="audio-host"></div>
+<!-- Audio hint (appears once if music starts muted) -->
+<div class="audio-hint" id="audio-hint">tap anywhere for sound ♪</div>
+
+<!-- Background music: starts muted so browser autoplay is permitted; unmutes on first interaction -->
+<audio
+  id="bg-audio"
+  src="https://raw.githubusercontent.com/richardsaviour/richardsaviour/fc8e46a35e2e9e68c01db5d120f8d82186c7f9df/precious/YTDown_YouTube_HAPPY-BIRTHDAY-INSTRUMENTAL-LOFI-VERSION_Media_uagxFiGwps0_009_128k.mp3"
+  autoplay
+  loop
+  muted
+  playsinline
+  preload="auto"
+></audio>
 
 <script>
 /* ===================================================================
@@ -1767,55 +1757,64 @@ body {
   }
 })();
 
-/* -------- Audio: attempt autoplay on load -------- */
-const audioHost = document.getElementById('audio-host');
-const iframeHost = document.getElementById('iframe-host');
-let iframeNode = null;
-
-function buildIframe() {
-  // Single iframe shared between hidden audio-host and the visible drawer
-  const iframe = document.createElement('iframe');
-  iframe.src = "https://whyp.it/embeds/track/347690?token=stfqf&showUser=false&backgroundColour=%23000000&autoplay=true";
-  iframe.width = "100%";
-  iframe.height = "200";
-  iframe.scrolling = "no";
-  iframe.frameBorder = "0";
-  iframe.allow = "autoplay";
-  iframe.loading = "eager";
-  iframe.title = "Her Song";
-  return iframe;
-}
-
-// Load iframe immediately into hidden host so song starts in background (if browser permits)
-iframeNode = buildIframe();
-audioHost.appendChild(iframeNode);
-
-// Music drawer
-const drawer  = document.getElementById('music-drawer');
+/* -------- Audio: muted autoplay → unmute on first user gesture -------- */
+const audio = document.getElementById('bg-audio');
+const audioHint = document.getElementById('audio-hint');
 const musicBtn = document.getElementById('music-btn');
-const musicClose = document.getElementById('music-close');
+audio.volume = 0.55;
 
-function openDrawer() {
-  // Move iframe into the visible drawer (so user can interact with player)
-  if (iframeNode && iframeNode.parentNode !== iframeHost) {
-    iframeHost.appendChild(iframeNode);
+// Begin trying to play immediately. Muted autoplay is allowed by Chrome/Safari/Firefox.
+const tryPlay = () => {
+  const p = audio.play();
+  if (p && typeof p.catch === 'function') {
+    p.catch(() => { /* will retry on first interaction */ });
   }
-  drawer.classList.add('open');
+};
+tryPlay();
+// Show the hint shortly after load (since music starts silent)
+setTimeout(() => audioHint.classList.add('show'), 1400);
+
+let unlocked = false;
+function unlockAudio() {
+  if (unlocked) return;
+  unlocked = true;
+  // Begin playing if not already
+  if (audio.paused) audio.play().catch(()=>{});
+  // Smoothly fade from muted/0 volume to target volume
+  audio.muted = false;
+  audio.volume = 0;
+  let v = 0;
+  const target = 0.55;
+  const fade = setInterval(() => {
+    v = Math.min(target, v + 0.04);
+    audio.volume = v;
+    if (v >= target) clearInterval(fade);
+  }, 40);
+  // Hide the hint
+  audioHint.classList.remove('show');
 }
-function closeDrawer() {
-  drawer.classList.remove('open');
-  // Move iframe back to hidden host to keep playing without taking space
-  setTimeout(() => {
-    if (iframeNode && iframeNode.parentNode !== audioHost) {
-      audioHost.appendChild(iframeNode);
-    }
-  }, 500);
-}
-musicBtn.addEventListener('click', () => {
-  if (drawer.classList.contains('open')) closeDrawer();
-  else openDrawer();
+
+// ANY first interaction unlocks audio (tap on arrow, tap on screen, swipe, keypress)
+['pointerdown', 'touchstart', 'click', 'keydown'].forEach(ev => {
+  document.addEventListener(ev, unlockAudio, { once: true, capture: true });
 });
-musicClose.addEventListener('click', closeDrawer);
+
+// Music button: toggle play/pause (also serves as mute/unmute)
+musicBtn.addEventListener('click', (e) => {
+  e.stopPropagation();
+  unlockAudio(); // first click also unmutes if still muted
+  if (audio.paused) {
+    audio.play().catch(()=>{});
+    musicBtn.classList.remove('muted');
+  } else {
+    audio.pause();
+    musicBtn.classList.add('muted');
+  }
+});
+
+// Sync icon state to actual playback
+audio.addEventListener('play',  () => musicBtn.classList.remove('muted'));
+audio.addEventListener('pause', () => musicBtn.classList.add('muted'));
 
 /* -------- Stage Engine -------- */
 const stages = Array.from(document.querySelectorAll('.stage'));
@@ -1877,9 +1876,6 @@ function showStage(i, direction = 1) {
   // Init gallery on its stage
   if (i === 13) initGalleryOnce();
 
-  // Trigger first-interaction unlocks (for music)
-  triggerFirstInteraction();
-
   // Celebrate finale
   if (i === 25) { // Gamsahabnida stage
     setTimeout(() => burstConfetti(140), 280);
@@ -1924,20 +1920,6 @@ document.getElementById('restart-btn').addEventListener('click', () => {
   burstConfetti(120);
   showStage(0, -1);
 });
-
-/* -------- First-interaction handler (helps audio autoplay) -------- */
-let interactionDone = false;
-function triggerFirstInteraction() {
-  if (interactionDone) return;
-  interactionDone = true;
-  // Re-inject iframe to leverage the user gesture — some browsers
-  // will allow autoplay once a gesture has occurred.
-  if (iframeNode && !iframeNode.src.includes('autoplay')) {
-    iframeNode.src = iframeNode.src + (iframeNode.src.includes('?') ? '&' : '?') + 'autoplay=true';
-  }
-}
-// Any tap anywhere counts as first interaction
-window.addEventListener('pointerdown', triggerFirstInteraction, { once: true });
 
 /* -------- GAME: catch 5 blessings -------- */
 const BLESSINGS = ['Joy', 'Favor', 'Peace', 'Grace', 'Laughter'];
