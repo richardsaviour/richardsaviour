@@ -14,10 +14,160 @@
 <link rel="stylesheet" href="/assets/css/styles.css">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.net.min.js"></script>
+
+<style>
+/* ===== CUSTOM VIDEO PLAYER ===== */
+.reel-card {
+  position: relative;
+  overflow: hidden;
+}
+
+.reel-card video {
+  display: block;
+  width: 100%;
+  aspect-ratio: 16/9;
+  object-fit: cover;
+  background: #000;
+  cursor: pointer;
+}
+
+.video-controls {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 28px 14px 14px;
+  background: linear-gradient(to top, rgba(0,0,0,0.78) 0%, transparent 100%);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  opacity: 0;
+  transition: opacity 0.22s ease;
+  z-index: 10;
+}
+
+.reel-card:hover .video-controls,
+.reel-card.controls-visible .video-controls {
+  opacity: 1;
+}
+
+.video-progress {
+  position: relative;
+  height: 3px;
+  background: rgba(255,255,255,0.25);
+  border-radius: 3px;
+  cursor: pointer;
+  transition: height 0.15s ease;
+}
+
+.video-progress:hover {
+  height: 5px;
+}
+
+.video-progress-fill {
+  height: 100%;
+  background: #fff;
+  border-radius: 3px;
+  width: 0%;
+  transition: width 0.1s linear;
+  pointer-events: none;
+}
+
+.video-progress-thumb {
+  position: absolute;
+  top: 50%;
+  transform: translate(-50%, -50%) scale(0);
+  width: 12px;
+  height: 12px;
+  background: #fff;
+  border-radius: 50%;
+  pointer-events: none;
+  transition: transform 0.15s ease;
+}
+
+.video-progress:hover .video-progress-thumb {
+  transform: translate(-50%, -50%) scale(1);
+}
+
+.video-btns {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.video-btn {
+  background: none;
+  border: none;
+  padding: 5px;
+  cursor: pointer;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  transition: background 0.15s;
+  flex-shrink: 0;
+}
+
+.video-btn:hover {
+  background: rgba(255,255,255,0.15);
+}
+
+.video-btn svg {
+  width: 18px;
+  height: 18px;
+  fill: currentColor;
+}
+
+.video-time {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  color: rgba(255,255,255,0.7);
+  margin-left: auto;
+  white-space: nowrap;
+  user-select: none;
+}
+
+.video-mute-btn svg {
+  width: 16px;
+  height: 16px;
+}
+
+/* play overlay icon on pause */
+.play-overlay {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0);
+  width: 52px;
+  height: 52px;
+  background: rgba(0,0,0,0.55);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  transition: transform 0.18s cubic-bezier(.34,1.56,.64,1), opacity 0.18s;
+  opacity: 0;
+  z-index: 9;
+}
+
+.play-overlay svg {
+  width: 22px;
+  height: 22px;
+  fill: #fff;
+  margin-left: 3px;
+}
+
+.reel-card.is-paused .play-overlay {
+  transform: translate(-50%, -50%) scale(1);
+  opacity: 1;
+}
+</style>
 </head>
 <body class="is-loading">
 
-<!-- ==================== LOADER (creative / showcase feel) ==================== -->
+<!-- ==================== LOADER ==================== -->
 <div class="rs-loader" id="rs-loader" aria-hidden="true">
   <div class="rs-loader-mark">
     <span class="word"><span>the</span></span><span class="dot-mark">.</span><span class="word"><span>work</span></span>
@@ -38,17 +188,17 @@
   </div>
 </nav>
 
-<!-- ==================== PAGE HERO (VANTA.NET) ==================== -->
+<!-- ==================== PAGE HERO ==================== -->
 <section class="page-hero is-dark">
   <div id="vanta-portfolio" class="vanta-bg"></div>
   <div class="page-hero-overlay page-hero-overlay-dark"></div>
   <div class="container">
     <span class="eyebrow">Portfolio · 2022 — present</span>
     <h1>
-      The work · <span class="accent">unedited.</span>
+      Have a look at <span class="accent">my work.</span>
     </h1>
     <p class="lead">
-      Video, websites, social. The pieces that quietly do their job in the background while clients are off doing more important things.
+      Video, websites, social. Nothing here was made to win awards — it was made because someone needed it to actually work.
     </p>
   </div>
 </section>
@@ -68,53 +218,188 @@
       <h2 class="display-l">
         Edits that <span class="serif-italic text-gold">respect attention</span>.
       </h2>
-      <p>Promos, reels, animation. Quick to land. Built to be watched all the way through.</p>
+      <p>Promos, reels, animation. The goal is always the same — make something people actually finish watching.</p>
     </div>
 
     <div class="reels-gallery">
 
-      <div class="reel-card reveal">
-        <video src="https://i.imgur.com/gJ0PGiR.mp4" muted loop playsinline preload="metadata" data-autoplay-in-view></video>
+      <!-- REEL 1 -->
+      <div class="reel-card reveal" data-video-card>
+        <video src="https://i.imgur.com/gJ0PGiR.mp4" muted loop playsinline preload="metadata"></video>
+        <div class="play-overlay">
+          <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+        </div>
+        <div class="video-controls">
+          <div class="video-progress" data-progress>
+            <div class="video-progress-fill" data-fill></div>
+            <div class="video-progress-thumb" data-thumb></div>
+          </div>
+          <div class="video-btns">
+            <button class="video-btn" data-action="rewind" title="Back 5s">
+              <svg viewBox="0 0 24 24"><path d="M12 5V1L7 6l5 5V7c3.31 0 6 2.69 6 6s-2.69 6-6 6-6-2.69-6-6H4c0 4.42 3.58 8 8 8s8-3.58 8-8-3.58-8-8-8zm-1.1 11H10v-3.26L9 13.14v-.91l1.8-.63h.1V16zm4.3-1.46c0 .45-.06.82-.17 1.12-.11.29-.28.51-.49.66s-.49.22-.82.22-.61-.07-.82-.22-.38-.37-.49-.66c-.11-.29-.17-.67-.17-1.12v-.77c0-.45.06-.82.17-1.12.11-.29.28-.51.49-.65.21-.15.49-.22.82-.22s.61.07.82.22.38.36.49.65c.11.29.17.67.17 1.12v.77zm-.85-.87c0-.3-.02-.54-.07-.72-.05-.18-.12-.31-.21-.39-.09-.08-.21-.12-.34-.12s-.25.04-.34.12c-.09.08-.16.21-.21.39-.05.18-.07.42-.07.72v.97c0 .3.02.55.07.73.05.18.12.31.21.39.09.08.21.12.34.12s.25-.04.34-.12c.09-.08.16-.21.21-.39.05-.18.07-.43.07-.73v-.97z"/></svg>
+            </button>
+            <button class="video-btn" data-action="playpause" title="Play / Pause">
+              <svg class="icon-play" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+              <svg class="icon-pause" viewBox="0 0 24 24" style="display:none"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
+            </button>
+            <button class="video-btn" data-action="forward" title="Forward 5s">
+              <svg viewBox="0 0 24 24"><path d="M18 13c0 3.31-2.69 6-6 6s-6-2.69-6-6 2.69-6 6-6v4l5-5-5-5v4c-4.42 0-8 3.58-8 8s3.58 8 8 8 8-3.58 8-8h-2zm-4.5 3H13v-3.26l-1 .36v-.91l1.8-.63h.1V16zm4.3-1.46c0 .45-.06.82-.17 1.12-.11.29-.28.51-.49.66s-.49.22-.82.22-.61-.07-.82-.22-.38-.37-.49-.66-.17-.67-.17-1.12v-.77c0-.45.06-.82.17-1.12.11-.29.28-.51.49-.65.21-.15.49-.22.82-.22s.61.07.82.22.38.36.49.65.17.67.17 1.12v.77zm-.85-.87c0-.3-.02-.54-.07-.72-.05-.18-.12-.31-.21-.39-.09-.08-.21-.12-.34-.12s-.25.04-.34.12c-.09.08-.16.21-.21.39-.05.18-.07.42-.07.72v.97c0 .3.02.55.07.73.05.18.12.31.21.39.09.08.21.12.34.12s.25-.04.34-.12c.09-.08.16-.21.21-.39.05-.18.07-.43.07-.73v-.97z"/></svg>
+            </button>
+            <button class="video-btn video-mute-btn" data-action="mute" title="Mute / Unmute">
+              <svg class="icon-unmuted" viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/></svg>
+              <svg class="icon-muted" viewBox="0 0 24 24" style="display:none"><path d="M16.5 12c0-1.77-1.02-3.29-2.5-4.03v2.21l2.45 2.45c.03-.2.05-.41.05-.63zm2.5 0c0 .94-.2 1.82-.54 2.64l1.51 1.51C20.63 14.91 21 13.5 21 12c0-4.28-2.99-7.86-7-8.77v2.06c2.89.86 5 3.54 5 6.71zM4.27 3L3 4.27 7.73 9H3v6h4l5 5v-6.73l4.25 4.25c-.67.52-1.42.93-2.25 1.18v2.06c1.38-.31 2.63-.95 3.69-1.81L19.73 21 21 19.73l-9-9L4.27 3zM12 4L9.91 6.09 12 8.18V4z"/></svg>
+            </button>
+            <span class="video-time" data-time>0:00 / 0:00</span>
+          </div>
+        </div>
         <div class="reel-meta">
           <span class="reel-kind">Agency promo</span>
           <h4>thetribeofrichard</h4>
-          <p>Branded sizzle — the studio's own intro reel.</p>
+          <p>The studio's own intro reel. Always easier to show than explain.</p>
         </div>
       </div>
 
-      <div class="reel-card reveal">
-        <video src="https://i.imgur.com/jQ37l1F.mp4" muted loop playsinline preload="metadata" data-autoplay-in-view></video>
+      <!-- REEL 2 -->
+      <div class="reel-card reveal" data-video-card>
+        <video src="https://i.imgur.com/jQ37l1F.mp4" muted loop playsinline preload="metadata"></video>
+        <div class="play-overlay">
+          <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+        </div>
+        <div class="video-controls">
+          <div class="video-progress" data-progress>
+            <div class="video-progress-fill" data-fill></div>
+            <div class="video-progress-thumb" data-thumb></div>
+          </div>
+          <div class="video-btns">
+            <button class="video-btn" data-action="rewind" title="Back 5s">
+              <svg viewBox="0 0 24 24"><path d="M12 5V1L7 6l5 5V7c3.31 0 6 2.69 6 6s-2.69 6-6 6-6-2.69-6-6H4c0 4.42 3.58 8 8 8s8-3.58 8-8-3.58-8-8-8zm-1.1 11H10v-3.26L9 13.14v-.91l1.8-.63h.1V16zm4.3-1.46c0 .45-.06.82-.17 1.12-.11.29-.28.51-.49.66s-.49.22-.82.22-.61-.07-.82-.22-.38-.37-.49-.66c-.11-.29-.17-.67-.17-1.12v-.77c0-.45.06-.82.17-1.12.11-.29.28-.51.49-.65.21-.15.49-.22.82-.22s.61.07.82.22.38.36.49.65c.11.29.17.67.17 1.12v.77zm-.85-.87c0-.3-.02-.54-.07-.72-.05-.18-.12-.31-.21-.39-.09-.08-.21-.12-.34-.12s-.25.04-.34.12c-.09.08-.16.21-.21.39-.05.18-.07.42-.07.72v.97c0 .3.02.55.07.73.05.18.12.31.21.39.09.08.21.12.34.12s.25-.04.34-.12c.09-.08.16-.21.21-.39.05-.18.07-.43.07-.73v-.97z"/></svg>
+            </button>
+            <button class="video-btn" data-action="playpause" title="Play / Pause">
+              <svg class="icon-play" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+              <svg class="icon-pause" viewBox="0 0 24 24" style="display:none"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
+            </button>
+            <button class="video-btn" data-action="forward" title="Forward 5s">
+              <svg viewBox="0 0 24 24"><path d="M18 13c0 3.31-2.69 6-6 6s-6-2.69-6-6 2.69-6 6-6v4l5-5-5-5v4c-4.42 0-8 3.58-8 8s3.58 8 8 8 8-3.58 8-8h-2zm-4.5 3H13v-3.26l-1 .36v-.91l1.8-.63h.1V16zm4.3-1.46c0 .45-.06.82-.17 1.12-.11.29-.28.51-.49.66s-.49.22-.82.22-.61-.07-.82-.22-.38-.37-.49-.66-.17-.67-.17-1.12v-.77c0-.45.06-.82.17-1.12.11-.29.28-.51.49-.65.21-.15.49-.22.82-.22s.61.07.82.22.38.36.49.65.17.67.17 1.12v.77zm-.85-.87c0-.3-.02-.54-.07-.72-.05-.18-.12-.31-.21-.39-.09-.08-.21-.12-.34-.12s-.25.04-.34.12c-.09.08-.16.21-.21.39-.05.18-.07.42-.07.72v.97c0 .3.02.55.07.73.05.18.12.31.21.39.09.08.21.12.34.12s.25-.04.34-.12c.09-.08.16-.21.21-.39.05-.18.07-.43.07-.73v-.97z"/></svg>
+            </button>
+            <button class="video-btn video-mute-btn" data-action="mute" title="Mute / Unmute">
+              <svg class="icon-unmuted" viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/></svg>
+              <svg class="icon-muted" viewBox="0 0 24 24" style="display:none"><path d="M16.5 12c0-1.77-1.02-3.29-2.5-4.03v2.21l2.45 2.45c.03-.2.05-.41.05-.63zm2.5 0c0 .94-.2 1.82-.54 2.64l1.51 1.51C20.63 14.91 21 13.5 21 12c0-4.28-2.99-7.86-7-8.77v2.06c2.89.86 5 3.54 5 6.71zM4.27 3L3 4.27 7.73 9H3v6h4l5 5v-6.73l4.25 4.25c-.67.52-1.42.93-2.25 1.18v2.06c1.38-.31 2.63-.95 3.69-1.81L19.73 21 21 19.73l-9-9L4.27 3zM12 4L9.91 6.09 12 8.18V4z"/></svg>
+            </button>
+            <span class="video-time" data-time>0:00 / 0:00</span>
+          </div>
+        </div>
         <div class="reel-meta">
           <span class="reel-kind">Logo animation</span>
           <h4>Brand reveal</h4>
-          <p>Logo motion built for a thumb-stop, not a yawn.</p>
+          <p>Logo motion that stops the thumb. Not because it's flashy — because it's timed right.</p>
         </div>
       </div>
 
-      <div class="reel-card reveal">
-        <video src="https://i.imgur.com/4fAB1v3.mp4" muted loop playsinline preload="metadata" data-autoplay-in-view></video>
+      <!-- REEL 3 -->
+      <div class="reel-card reveal" data-video-card>
+        <video src="https://i.imgur.com/4fAB1v3.mp4" muted loop playsinline preload="metadata"></video>
+        <div class="play-overlay">
+          <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+        </div>
+        <div class="video-controls">
+          <div class="video-progress" data-progress>
+            <div class="video-progress-fill" data-fill></div>
+            <div class="video-progress-thumb" data-thumb></div>
+          </div>
+          <div class="video-btns">
+            <button class="video-btn" data-action="rewind" title="Back 5s">
+              <svg viewBox="0 0 24 24"><path d="M12 5V1L7 6l5 5V7c3.31 0 6 2.69 6 6s-2.69 6-6 6-6-2.69-6-6H4c0 4.42 3.58 8 8 8s8-3.58 8-8-3.58-8-8-8zm-1.1 11H10v-3.26L9 13.14v-.91l1.8-.63h.1V16zm4.3-1.46c0 .45-.06.82-.17 1.12-.11.29-.28.51-.49.66s-.49.22-.82.22-.61-.07-.82-.22-.38-.37-.49-.66c-.11-.29-.17-.67-.17-1.12v-.77c0-.45.06-.82.17-1.12.11-.29.28-.51.49-.65.21-.15.49-.22.82-.22s.61.07.82.22.38.36.49.65c.11.29.17.67.17 1.12v.77zm-.85-.87c0-.3-.02-.54-.07-.72-.05-.18-.12-.31-.21-.39-.09-.08-.21-.12-.34-.12s-.25.04-.34.12c-.09.08-.16.21-.21.39-.05.18-.07.42-.07.72v.97c0 .3.02.55.07.73.05.18.12.31.21.39.09.08.21.12.34.12s.25-.04.34-.12c.09-.08.16-.21.21-.39.05-.18.07-.43.07-.73v-.97z"/></svg>
+            </button>
+            <button class="video-btn" data-action="playpause" title="Play / Pause">
+              <svg class="icon-play" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+              <svg class="icon-pause" viewBox="0 0 24 24" style="display:none"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
+            </button>
+            <button class="video-btn" data-action="forward" title="Forward 5s">
+              <svg viewBox="0 0 24 24"><path d="M18 13c0 3.31-2.69 6-6 6s-6-2.69-6-6 2.69-6 6-6v4l5-5-5-5v4c-4.42 0-8 3.58-8 8s3.58 8 8 8 8-3.58 8-8h-2zm-4.5 3H13v-3.26l-1 .36v-.91l1.8-.63h.1V16zm4.3-1.46c0 .45-.06.82-.17 1.12-.11.29-.28.51-.49.66s-.49.22-.82.22-.61-.07-.82-.22-.38-.37-.49-.66-.17-.67-.17-1.12v-.77c0-.45.06-.82.17-1.12.11-.29.28-.51.49-.65.21-.15.49-.22.82-.22s.61.07.82.22.38.36.49.65.17.67.17 1.12v.77zm-.85-.87c0-.3-.02-.54-.07-.72-.05-.18-.12-.31-.21-.39-.09-.08-.21-.12-.34-.12s-.25.04-.34.12c-.09.08-.16.21-.21.39-.05.18-.07.42-.07.72v.97c0 .3.02.55.07.73.05.18.12.31.21.39.09.08.21.12.34.12s.25-.04.34-.12c.09-.08.16-.21.21-.39.05-.18.07-.43.07-.73v-.97z"/></svg>
+            </button>
+            <button class="video-btn video-mute-btn" data-action="mute" title="Mute / Unmute">
+              <svg class="icon-unmuted" viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/></svg>
+              <svg class="icon-muted" viewBox="0 0 24 24" style="display:none"><path d="M16.5 12c0-1.77-1.02-3.29-2.5-4.03v2.21l2.45 2.45c.03-.2.05-.41.05-.63zm2.5 0c0 .94-.2 1.82-.54 2.64l1.51 1.51C20.63 14.91 21 13.5 21 12c0-4.28-2.99-7.86-7-8.77v2.06c2.89.86 5 3.54 5 6.71zM4.27 3L3 4.27 7.73 9H3v6h4l5 5v-6.73l4.25 4.25c-.67.52-1.42.93-2.25 1.18v2.06c1.38-.31 2.63-.95 3.69-1.81L19.73 21 21 19.73l-9-9L4.27 3zM12 4L9.91 6.09 12 8.18V4z"/></svg>
+            </button>
+            <span class="video-time" data-time>0:00 / 0:00</span>
+          </div>
+        </div>
         <div class="reel-meta">
           <span class="reel-kind">2D animation</span>
           <h4>Motion explainer</h4>
-          <p>Concept to character — animated in a tone people actually finish watching.</p>
+          <p>Concept to character. Animated in a tone people don't skip after three seconds.</p>
         </div>
       </div>
 
-      <div class="reel-card reveal">
-        <video src="https://i.imgur.com/5M0usIu.mp4" muted loop playsinline preload="metadata" data-autoplay-in-view></video>
+      <!-- REEL 4 -->
+      <div class="reel-card reveal" data-video-card>
+        <video src="https://i.imgur.com/5M0usIu.mp4" muted loop playsinline preload="metadata"></video>
+        <div class="play-overlay">
+          <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+        </div>
+        <div class="video-controls">
+          <div class="video-progress" data-progress>
+            <div class="video-progress-fill" data-fill></div>
+            <div class="video-progress-thumb" data-thumb></div>
+          </div>
+          <div class="video-btns">
+            <button class="video-btn" data-action="rewind" title="Back 5s">
+              <svg viewBox="0 0 24 24"><path d="M12 5V1L7 6l5 5V7c3.31 0 6 2.69 6 6s-2.69 6-6 6-6-2.69-6-6H4c0 4.42 3.58 8 8 8s8-3.58 8-8-3.58-8-8-8zm-1.1 11H10v-3.26L9 13.14v-.91l1.8-.63h.1V16zm4.3-1.46c0 .45-.06.82-.17 1.12-.11.29-.28.51-.49.66s-.49.22-.82.22-.61-.07-.82-.22-.38-.37-.49-.66c-.11-.29-.17-.67-.17-1.12v-.77c0-.45.06-.82.17-1.12.11-.29.28-.51.49-.65.21-.15.49-.22.82-.22s.61.07.82.22.38.36.49.65c.11.29.17.67.17 1.12v.77zm-.85-.87c0-.3-.02-.54-.07-.72-.05-.18-.12-.31-.21-.39-.09-.08-.21-.12-.34-.12s-.25.04-.34.12c-.09.08-.16.21-.21.39-.05.18-.07.42-.07.72v.97c0 .3.02.55.07.73.05.18.12.31.21.39.09.08.21.12.34.12s.25-.04.34-.12c.09-.08.16-.21.21-.39.05-.18.07-.43.07-.73v-.97z"/></svg>
+            </button>
+            <button class="video-btn" data-action="playpause" title="Play / Pause">
+              <svg class="icon-play" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+              <svg class="icon-pause" viewBox="0 0 24 24" style="display:none"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
+            </button>
+            <button class="video-btn" data-action="forward" title="Forward 5s">
+              <svg viewBox="0 0 24 24"><path d="M18 13c0 3.31-2.69 6-6 6s-6-2.69-6-6 2.69-6 6-6v4l5-5-5-5v4c-4.42 0-8 3.58-8 8s3.58 8 8 8 8-3.58 8-8h-2zm-4.5 3H13v-3.26l-1 .36v-.91l1.8-.63h.1V16zm4.3-1.46c0 .45-.06.82-.17 1.12-.11.29-.28.51-.49.66s-.49.22-.82.22-.61-.07-.82-.22-.38-.37-.49-.66-.17-.67-.17-1.12v-.77c0-.45.06-.82.17-1.12.11-.29.28-.51.49-.65.21-.15.49-.22.82-.22s.61.07.82.22.38.36.49.65.17.67.17 1.12v.77zm-.85-.87c0-.3-.02-.54-.07-.72-.05-.18-.12-.31-.21-.39-.09-.08-.21-.12-.34-.12s-.25.04-.34.12c-.09.08-.16.21-.21.39-.05.18-.07.42-.07.72v.97c0 .3.02.55.07.73.05.18.12.31.21.39.09.08.21.12.34.12s.25-.04.34-.12c.09-.08.16-.21.21-.39.05-.18.07-.43.07-.73v-.97z"/></svg>
+            </button>
+            <button class="video-btn video-mute-btn" data-action="mute" title="Mute / Unmute">
+              <svg class="icon-unmuted" viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/></svg>
+              <svg class="icon-muted" viewBox="0 0 24 24" style="display:none"><path d="M16.5 12c0-1.77-1.02-3.29-2.5-4.03v2.21l2.45 2.45c.03-.2.05-.41.05-.63zm2.5 0c0 .94-.2 1.82-.54 2.64l1.51 1.51C20.63 14.91 21 13.5 21 12c0-4.28-2.99-7.86-7-8.77v2.06c2.89.86 5 3.54 5 6.71zM4.27 3L3 4.27 7.73 9H3v6h4l5 5v-6.73l4.25 4.25c-.67.52-1.42.93-2.25 1.18v2.06c1.38-.31 2.63-.95 3.69-1.81L19.73 21 21 19.73l-9-9L4.27 3zM12 4L9.91 6.09 12 8.18V4z"/></svg>
+            </button>
+            <span class="video-time" data-time>0:00 / 0:00</span>
+          </div>
+        </div>
         <div class="reel-meta">
           <span class="reel-kind">Video editing</span>
           <h4>Short-form edit</h4>
-          <p>Clean cut, paced for retention, captioned for the half who scroll on mute.</p>
+          <p>Clean cut, paced for retention, captioned for the half who scroll on mute. You know who you are.</p>
         </div>
       </div>
 
-      <div class="reel-card reveal">
-        <video src="https://i.imgur.com/WO1Rlh1.mp4" muted loop playsinline preload="metadata" data-autoplay-in-view></video>
+      <!-- REEL 5 -->
+      <div class="reel-card reveal" data-video-card>
+        <video src="https://i.imgur.com/WO1Rlh1.mp4" muted loop playsinline preload="metadata"></video>
+        <div class="play-overlay">
+          <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+        </div>
+        <div class="video-controls">
+          <div class="video-progress" data-progress>
+            <div class="video-progress-fill" data-fill></div>
+            <div class="video-progress-thumb" data-thumb></div>
+          </div>
+          <div class="video-btns">
+            <button class="video-btn" data-action="rewind" title="Back 5s">
+              <svg viewBox="0 0 24 24"><path d="M12 5V1L7 6l5 5V7c3.31 0 6 2.69 6 6s-2.69 6-6 6-6-2.69-6-6H4c0 4.42 3.58 8 8 8s8-3.58 8-8-3.58-8-8-8zm-1.1 11H10v-3.26L9 13.14v-.91l1.8-.63h.1V16zm4.3-1.46c0 .45-.06.82-.17 1.12-.11.29-.28.51-.49.66s-.49.22-.82.22-.61-.07-.82-.22-.38-.37-.49-.66c-.11-.29-.17-.67-.17-1.12v-.77c0-.45.06-.82.17-1.12.11-.29.28-.51.49-.65.21-.15.49-.22.82-.22s.61.07.82.22.38.36.49.65c.11.29.17.67.17 1.12v.77zm-.85-.87c0-.3-.02-.54-.07-.72-.05-.18-.12-.31-.21-.39-.09-.08-.21-.12-.34-.12s-.25.04-.34.12c-.09.08-.16.21-.21.39-.05.18-.07.42-.07.72v.97c0 .3.02.55.07.73.05.18.12.31.21.39.09.08.21.12.34.12s.25-.04.34-.12c.09-.08.16-.21.21-.39.05-.18.07-.43.07-.73v-.97z"/></svg>
+            </button>
+            <button class="video-btn" data-action="playpause" title="Play / Pause">
+              <svg class="icon-play" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+              <svg class="icon-pause" viewBox="0 0 24 24" style="display:none"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
+            </button>
+            <button class="video-btn" data-action="forward" title="Forward 5s">
+              <svg viewBox="0 0 24 24"><path d="M18 13c0 3.31-2.69 6-6 6s-6-2.69-6-6 2.69-6 6-6v4l5-5-5-5v4c-4.42 0-8 3.58-8 8s3.58 8 8 8 8-3.58 8-8h-2zm-4.5 3H13v-3.26l-1 .36v-.91l1.8-.63h.1V16zm4.3-1.46c0 .45-.06.82-.17 1.12-.11.29-.28.51-.49.66s-.49.22-.82.22-.61-.07-.82-.22-.38-.37-.49-.66-.17-.67-.17-1.12v-.77c0-.45.06-.82.17-1.12.11-.29.28-.51.49-.65.21-.15.49-.22.82-.22s.61.07.82.22.38.36.49.65.17.67.17 1.12v.77zm-.85-.87c0-.3-.02-.54-.07-.72-.05-.18-.12-.31-.21-.39-.09-.08-.21-.12-.34-.12s-.25.04-.34.12c-.09.08-.16.21-.21.39-.05.18-.07.42-.07.72v.97c0 .3.02.55.07.73.05.18.12.31.21.39.09.08.21.12.34.12s.25-.04.34-.12c.09-.08.16-.21.21-.39.05-.18.07-.43.07-.73v-.97z"/></svg>
+            </button>
+            <button class="video-btn video-mute-btn" data-action="mute" title="Mute / Unmute">
+              <svg class="icon-unmuted" viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/></svg>
+              <svg class="icon-muted" viewBox="0 0 24 24" style="display:none"><path d="M16.5 12c0-1.77-1.02-3.29-2.5-4.03v2.21l2.45 2.45c.03-.2.05-.41.05-.63zm2.5 0c0 .94-.2 1.82-.54 2.64l1.51 1.51C20.63 14.91 21 13.5 21 12c0-4.28-2.99-7.86-7-8.77v2.06c2.89.86 5 3.54 5 6.71zM4.27 3L3 4.27 7.73 9H3v6h4l5 5v-6.73l4.25 4.25c-.67.52-1.42.93-2.25 1.18v2.06c1.38-.31 2.63-.95 3.69-1.81L19.73 21 21 19.73l-9-9L4.27 3zM12 4L9.91 6.09 12 8.18V4z"/></svg>
+            </button>
+            <span class="video-time" data-time>0:00 / 0:00</span>
+          </div>
+        </div>
         <div class="reel-meta">
           <span class="reel-kind">App promo</span>
           <h4>Product reel</h4>
-          <p>Feature walk-through edited to feel less like an ad, more like a tip.</p>
+          <p>Feature walk-through that feels less like an ad, more like something a friend sent you.</p>
         </div>
       </div>
 
@@ -130,7 +415,7 @@
       <h2 class="display-l">
         Sites that <span class="serif-italic text-gold">convert quietly</span>.
       </h2>
-      <p>Clean structure. Strong hierarchy. Built to make decisions easy and follow-up easier.</p>
+      <p>Clean structure. Strong hierarchy. Built to make the next step obvious — without having to spell it out.</p>
     </div>
 
     <div class="work-grid">
@@ -142,7 +427,7 @@
         <div class="work-body">
           <span class="work-built">Built · TBCreations LLC</span>
           <h3 class="work-name">TBCreations</h3>
-          <p class="work-context">Promotions hub for a creative production studio — clean landing, fast-loading, clear next action.</p>
+          <p class="work-context">Promotions hub for a creative production studio — clean landing, fast-loading, one clear next action.</p>
           <span class="work-link">
             Visit site
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M7 17L17 7M9 7h8v8"/></svg>
@@ -172,7 +457,7 @@
         <div class="work-body">
           <span class="work-built">Built · Mind Trainer Pro</span>
           <h3 class="work-name">Mind Trainer Pro</h3>
-          <p class="work-context">Self-mastery program page — narrative-led, paced for reading, structured around one clear sign-up.</p>
+          <p class="work-context">Self-mastery program page — narrative-led, paced for reading, built around one clear sign-up.</p>
           <span class="work-link">
             Visit site
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M7 17L17 7M9 7h8v8"/></svg>
@@ -190,9 +475,9 @@
     <div class="section-head reveal">
       <span class="eyebrow">03 / Social media</span>
       <h2 class="display-l">
-        Brands that <span class="serif-italic text-gold">stay visible</span>.
+        Brands I work with — <span class="serif-italic text-gold">past and present.</span>
       </h2>
-      <p>Managed content, edited reels, and feeds that actually look like someone is paying attention.</p>
+      <p>Some ongoing. Some wrapped up. All of them got content that actually looked like someone gave a damn.</p>
     </div>
 
     <div class="logo-grid">
@@ -330,12 +615,142 @@
 <!-- ==================== SHARED JS ==================== -->
 <script src="/assets/js/main.js"></script>
 
-<!-- ==================== PAGE-SPECIFIC JS ==================== -->
+<!-- ==================== VIDEO PLAYER JS ==================== -->
+<script>
+(function () {
+  'use strict';
+
+  function formatTime(s) {
+    if (!isFinite(s)) return '0:00';
+    const m = Math.floor(s / 60);
+    const sec = Math.floor(s % 60);
+    return m + ':' + (sec < 10 ? '0' : '') + sec;
+  }
+
+  function initVideoCard(card) {
+    const video   = card.querySelector('video');
+    const btnPP   = card.querySelector('[data-action="playpause"]');
+    const btnRew  = card.querySelector('[data-action="rewind"]');
+    const btnFwd  = card.querySelector('[data-action="forward"]');
+    const btnMute = card.querySelector('[data-action="mute"]');
+    const progress= card.querySelector('[data-progress]');
+    const fill    = card.querySelector('[data-fill]');
+    const thumb   = card.querySelector('[data-thumb]');
+    const timeEl  = card.querySelector('[data-time]');
+    const overlay = card.querySelector('.play-overlay');
+
+    if (!video || !btnPP) return;
+
+    // Start playing (autoplay-in-view replaces old attr)
+    video.muted = true;
+
+    function updatePlayState() {
+      const paused = video.paused;
+      card.classList.toggle('is-paused', paused);
+      btnPP.querySelector('.icon-play').style.display  = paused ? '' : 'none';
+      btnPP.querySelector('.icon-pause').style.display = paused ? 'none' : '';
+    }
+
+    function updateProgress() {
+      if (!video.duration) return;
+      const pct = (video.currentTime / video.duration) * 100;
+      fill.style.width = pct + '%';
+      thumb.style.left = pct + '%';
+      if (timeEl) timeEl.textContent = formatTime(video.currentTime) + ' / ' + formatTime(video.duration);
+    }
+
+    function updateMute() {
+      btnMute.querySelector('.icon-unmuted').style.display = video.muted ? 'none' : '';
+      btnMute.querySelector('.icon-muted').style.display   = video.muted ? '' : 'none';
+    }
+
+    btnPP.addEventListener('click', () => {
+      video.paused ? video.play() : video.pause();
+    });
+
+    btnRew.addEventListener('click', () => { video.currentTime = Math.max(0, video.currentTime - 5); });
+    btnFwd.addEventListener('click', () => { video.currentTime = Math.min(video.duration || 0, video.currentTime + 5); });
+
+    btnMute.addEventListener('click', () => {
+      video.muted = !video.muted;
+      updateMute();
+    });
+
+    video.addEventListener('play',   updatePlayState);
+    video.addEventListener('pause',  updatePlayState);
+    video.addEventListener('timeupdate', updateProgress);
+    video.addEventListener('loadedmetadata', updateProgress);
+
+    // Click video to toggle play
+    video.addEventListener('click', () => {
+      video.paused ? video.play() : video.pause();
+    });
+
+    // Scrub
+    let scrubbing = false;
+
+    function scrubTo(e) {
+      const rect = progress.getBoundingClientRect();
+      const x = Math.max(0, Math.min(e.clientX - rect.left, rect.width));
+      const pct = x / rect.width;
+      video.currentTime = pct * (video.duration || 0);
+    }
+
+    progress.addEventListener('mousedown', (e) => {
+      scrubbing = true;
+      scrubTo(e);
+    });
+    document.addEventListener('mousemove', (e) => { if (scrubbing) scrubTo(e); });
+    document.addEventListener('mouseup',   ()  => { scrubbing = false; });
+
+    // Touch scrub
+    progress.addEventListener('touchstart', (e) => {
+      scrubbing = true;
+      scrubTo(e.touches[0]);
+    }, { passive: true });
+    document.addEventListener('touchmove',  (e) => { if (scrubbing) scrubTo(e.touches[0]); }, { passive: true });
+    document.addEventListener('touchend',   ()  => { scrubbing = false; });
+
+    // Autoplay in view
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          video.play().catch(() => {});
+        } else {
+          video.pause();
+        }
+      });
+    }, { threshold: 0.4 });
+    io.observe(card);
+
+    // Show controls on touch devices
+    card.addEventListener('touchstart', () => {
+      card.classList.add('controls-visible');
+      clearTimeout(card._hideTimer);
+      card._hideTimer = setTimeout(() => card.classList.remove('controls-visible'), 3000);
+    }, { passive: true });
+
+    updatePlayState();
+    updateMute();
+  }
+
+  function initAll() {
+    document.querySelectorAll('[data-video-card]').forEach(initVideoCard);
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initAll);
+  } else {
+    initAll();
+  }
+})();
+</script>
+
+<!-- ==================== VANTA JS ==================== -->
 <script>
   (function () {
     'use strict';
 
-    /* ===== VANTA.NET — dark, gray net (premium portfolio feel) ===== */
     let vantaPortfolio;
     function initVanta() {
       if (typeof VANTA === 'undefined' || !VANTA.NET) return;
