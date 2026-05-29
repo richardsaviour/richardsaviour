@@ -16,132 +16,41 @@
 <script src="https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.net.min.js"></script>
 
 <style>
-/* ===== CUSTOM VIDEO PLAYER ===== */
+/* ===== CUSTOM VIDEO PLAYER — separated layout ===== */
+
+/* Wrapper: video player block + info card are siblings, not nested */
 .reel-card {
-  position: relative;
+  display: flex;
+  flex-direction: column;
+  border-radius: 10px;
   overflow: hidden;
+  background: #000;
 }
 
-.reel-card video {
+/* ---- VIDEO BLOCK (black chrome, no info inside) ---- */
+.reel-video-block {
+  position: relative;
+  background: #000;
+  line-height: 0;
+}
+
+.reel-video-block video {
   display: block;
   width: 100%;
   aspect-ratio: 16/9;
   object-fit: cover;
-  background: #000;
   cursor: pointer;
 }
 
-.video-controls {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  padding: 28px 14px 14px;
-  background: linear-gradient(to top, rgba(0,0,0,0.78) 0%, transparent 100%);
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  opacity: 0;
-  transition: opacity 0.22s ease;
-  z-index: 10;
-}
-
-.reel-card:hover .video-controls,
-.reel-card.controls-visible .video-controls {
-  opacity: 1;
-}
-
-.video-progress {
-  position: relative;
-  height: 3px;
-  background: rgba(255,255,255,0.25);
-  border-radius: 3px;
-  cursor: pointer;
-  transition: height 0.15s ease;
-}
-
-.video-progress:hover {
-  height: 5px;
-}
-
-.video-progress-fill {
-  height: 100%;
-  background: #fff;
-  border-radius: 3px;
-  width: 0%;
-  transition: width 0.1s linear;
-  pointer-events: none;
-}
-
-.video-progress-thumb {
-  position: absolute;
-  top: 50%;
-  transform: translate(-50%, -50%) scale(0);
-  width: 12px;
-  height: 12px;
-  background: #fff;
-  border-radius: 50%;
-  pointer-events: none;
-  transition: transform 0.15s ease;
-}
-
-.video-progress:hover .video-progress-thumb {
-  transform: translate(-50%, -50%) scale(1);
-}
-
-.video-btns {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-}
-
-.video-btn {
-  background: none;
-  border: none;
-  padding: 5px;
-  cursor: pointer;
-  color: #fff;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 4px;
-  transition: background 0.15s;
-  flex-shrink: 0;
-}
-
-.video-btn:hover {
-  background: rgba(255,255,255,0.15);
-}
-
-.video-btn svg {
-  width: 18px;
-  height: 18px;
-  fill: currentColor;
-}
-
-.video-time {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 10px;
-  color: rgba(255,255,255,0.7);
-  margin-left: auto;
-  white-space: nowrap;
-  user-select: none;
-}
-
-.video-mute-btn svg {
-  width: 16px;
-  height: 16px;
-}
-
-/* play overlay icon on pause */
+/* Big centered play/pause flash */
 .play-overlay {
   position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%) scale(0);
-  width: 52px;
-  height: 52px;
-  background: rgba(0,0,0,0.55);
+  width: 56px;
+  height: 56px;
+  background: rgba(0,0,0,0.52);
   border-radius: 50%;
   display: flex;
   align-items: center;
@@ -151,17 +60,151 @@
   opacity: 0;
   z-index: 9;
 }
+.play-overlay svg { width: 24px; height: 24px; fill: #fff; margin-left: 3px; }
+.reel-card.is-paused .play-overlay { transform: translate(-50%, -50%) scale(1); opacity: 1; }
 
-.play-overlay svg {
-  width: 22px;
-  height: 22px;
-  fill: #fff;
-  margin-left: 3px;
+/* ---- PLAYER CONTROLS BAR (sits below video, dark bg) ---- */
+.video-controls {
+  background: #111;
+  padding: 10px 14px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
 }
 
-.reel-card.is-paused .play-overlay {
-  transform: translate(-50%, -50%) scale(1);
-  opacity: 1;
+/* Progress track */
+.video-progress {
+  position: relative;
+  height: 4px;
+  background: rgba(255,255,255,0.18);
+  border-radius: 4px;
+  cursor: pointer;
+  transition: height 0.12s ease;
+}
+.video-progress:hover { height: 6px; }
+
+.video-progress-fill {
+  height: 100%;
+  background: #e5c46a; /* gold accent — matches site */
+  border-radius: 4px;
+  width: 0%;
+  pointer-events: none;
+}
+
+.video-progress-thumb {
+  position: absolute;
+  top: 50%;
+  transform: translate(-50%, -50%) scale(0);
+  width: 13px;
+  height: 13px;
+  background: #fff;
+  border-radius: 50%;
+  pointer-events: none;
+  transition: transform 0.13s ease;
+  box-shadow: 0 0 0 2px rgba(229,196,106,0.5);
+}
+.video-progress:hover .video-progress-thumb { transform: translate(-50%, -50%) scale(1); }
+
+/* Controls row */
+.video-btns {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.video-btn {
+  background: none;
+  border: none;
+  padding: 6px;
+  cursor: pointer;
+  color: #ccc;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 5px;
+  transition: background 0.13s, color 0.13s;
+  flex-shrink: 0;
+}
+.video-btn:hover { background: rgba(255,255,255,0.1); color: #fff; }
+.video-btn svg { width: 18px; height: 18px; fill: currentColor; }
+.video-btn.btn-playpause svg { width: 20px; height: 20px; }
+
+/* Volume area */
+.video-volume-wrap {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.video-volume-slider {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 70px;
+  height: 3px;
+  border-radius: 3px;
+  background: rgba(255,255,255,0.2);
+  outline: none;
+  cursor: pointer;
+}
+.video-volume-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 11px; height: 11px;
+  border-radius: 50%;
+  background: #fff;
+  cursor: pointer;
+}
+.video-volume-slider::-moz-range-thumb {
+  width: 11px; height: 11px;
+  border-radius: 50%;
+  background: #fff;
+  border: none;
+  cursor: pointer;
+}
+
+/* Time display */
+.video-time {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  color: rgba(255,255,255,0.55);
+  white-space: nowrap;
+  user-select: none;
+  margin-right: 2px;
+}
+
+/* Spacer pushes mute+volume+fullscreen to the right */
+.video-spacer { flex: 1; }
+
+/* Fullscreen btn svg slightly larger */
+.btn-fullscreen svg { width: 17px; height: 17px; }
+
+/* ---- INFO CARD (completely outside the player) ---- */
+.reel-meta {
+  background: var(--surface, #fff);
+  border: 1px solid rgba(0,0,0,0.08);
+  border-top: none;
+  padding: 16px 18px 18px;
+}
+
+.reel-kind {
+  display: inline-block;
+  font-size: 10px;
+  font-family: 'JetBrains Mono', monospace;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #888;
+  margin-bottom: 6px;
+}
+
+.reel-meta h4 {
+  margin: 0 0 5px;
+  font-size: 15px;
+  font-weight: 700;
+}
+
+.reel-meta p {
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.5;
+  color: #555;
 }
 </style>
 </head>
@@ -223,11 +266,14 @@
 
     <div class="reels-gallery">
 
+      <!-- Reusable player controls snippet repeated per card.
+           Structure: .reel-card > .reel-video-block (video + overlay) + .video-controls (dark bar) + .reel-meta (white info card) -->
+
       <!-- REEL 1 -->
       <div class="reel-card reveal" data-video-card>
-        <video src="https://i.imgur.com/gJ0PGiR.mp4" muted loop playsinline preload="metadata"></video>
-        <div class="play-overlay">
-          <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+        <div class="reel-video-block">
+          <video src="https://i.imgur.com/gJ0PGiR.mp4" muted loop playsinline preload="metadata"></video>
+          <div class="play-overlay"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>
         </div>
         <div class="video-controls">
           <div class="video-progress" data-progress>
@@ -235,21 +281,22 @@
             <div class="video-progress-thumb" data-thumb></div>
           </div>
           <div class="video-btns">
-            <button class="video-btn" data-action="rewind" title="Back 5s">
-              <svg viewBox="0 0 24 24"><path d="M12 5V1L7 6l5 5V7c3.31 0 6 2.69 6 6s-2.69 6-6 6-6-2.69-6-6H4c0 4.42 3.58 8 8 8s8-3.58 8-8-3.58-8-8-8zm-1.1 11H10v-3.26L9 13.14v-.91l1.8-.63h.1V16zm4.3-1.46c0 .45-.06.82-.17 1.12-.11.29-.28.51-.49.66s-.49.22-.82.22-.61-.07-.82-.22-.38-.37-.49-.66c-.11-.29-.17-.67-.17-1.12v-.77c0-.45.06-.82.17-1.12.11-.29.28-.51.49-.65.21-.15.49-.22.82-.22s.61.07.82.22.38.36.49.65c.11.29.17.67.17 1.12v.77zm-.85-.87c0-.3-.02-.54-.07-.72-.05-.18-.12-.31-.21-.39-.09-.08-.21-.12-.34-.12s-.25.04-.34.12c-.09.08-.16.21-.21.39-.05.18-.07.42-.07.72v.97c0 .3.02.55.07.73.05.18.12.31.21.39.09.08.21.12.34.12s.25-.04.34-.12c.09-.08.16-.21.21-.39.05-.18.07-.43.07-.73v-.97z"/></svg>
-            </button>
-            <button class="video-btn" data-action="playpause" title="Play / Pause">
+            <button class="video-btn" data-action="rewind" title="Rewind 5s"><svg viewBox="0 0 24 24"><path d="M11.99 5V1l-5 5 5 5V7c3.31 0 6 2.69 6 6s-2.69 6-6 6-6-2.69-6-6h-2c0 4.42 3.58 8 8 8s8-3.58 8-8-3.58-8-8-8z"/><text x="12" y="16" text-anchor="middle" font-size="5" fill="currentColor">5</text></svg></button>
+            <button class="video-btn btn-playpause" data-action="playpause" title="Play / Pause">
               <svg class="icon-play" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
               <svg class="icon-pause" viewBox="0 0 24 24" style="display:none"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
             </button>
-            <button class="video-btn" data-action="forward" title="Forward 5s">
-              <svg viewBox="0 0 24 24"><path d="M18 13c0 3.31-2.69 6-6 6s-6-2.69-6-6 2.69-6 6-6v4l5-5-5-5v4c-4.42 0-8 3.58-8 8s3.58 8 8 8 8-3.58 8-8h-2zm-4.5 3H13v-3.26l-1 .36v-.91l1.8-.63h.1V16zm4.3-1.46c0 .45-.06.82-.17 1.12-.11.29-.28.51-.49.66s-.49.22-.82.22-.61-.07-.82-.22-.38-.37-.49-.66-.17-.67-.17-1.12v-.77c0-.45.06-.82.17-1.12.11-.29.28-.51.49-.65.21-.15.49-.22.82-.22s.61.07.82.22.38.36.49.65.17.67.17 1.12v.77zm-.85-.87c0-.3-.02-.54-.07-.72-.05-.18-.12-.31-.21-.39-.09-.08-.21-.12-.34-.12s-.25.04-.34.12c-.09.08-.16.21-.21.39-.05.18-.07.42-.07.72v.97c0 .3.02.55.07.73.05.18.12.31.21.39.09.08.21.12.34.12s.25-.04.34-.12c.09-.08.16-.21.21-.39.05-.18.07-.43.07-.73v-.97z"/></svg>
-            </button>
-            <button class="video-btn video-mute-btn" data-action="mute" title="Mute / Unmute">
-              <svg class="icon-unmuted" viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/></svg>
-              <svg class="icon-muted" viewBox="0 0 24 24" style="display:none"><path d="M16.5 12c0-1.77-1.02-3.29-2.5-4.03v2.21l2.45 2.45c.03-.2.05-.41.05-.63zm2.5 0c0 .94-.2 1.82-.54 2.64l1.51 1.51C20.63 14.91 21 13.5 21 12c0-4.28-2.99-7.86-7-8.77v2.06c2.89.86 5 3.54 5 6.71zM4.27 3L3 4.27 7.73 9H3v6h4l5 5v-6.73l4.25 4.25c-.67.52-1.42.93-2.25 1.18v2.06c1.38-.31 2.63-.95 3.69-1.81L19.73 21 21 19.73l-9-9L4.27 3zM12 4L9.91 6.09 12 8.18V4z"/></svg>
-            </button>
+            <button class="video-btn" data-action="forward" title="Forward 5s"><svg viewBox="0 0 24 24"><path d="M12.01 5V1l5 5-5 5V7c-3.31 0-6 2.69-6 6s2.69 6 6 6 6-2.69 6-6h2c0 4.42-3.58 8-8 8s-8-3.58-8-8 3.58-8 8-8z"/><text x="12" y="16" text-anchor="middle" font-size="5" fill="currentColor">5</text></svg></button>
             <span class="video-time" data-time>0:00 / 0:00</span>
+            <span class="video-spacer"></span>
+            <div class="video-volume-wrap">
+              <button class="video-btn" data-action="mute" title="Mute / Unmute">
+                <svg class="icon-unmuted" viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/></svg>
+                <svg class="icon-muted" viewBox="0 0 24 24" style="display:none"><path d="M16.5 12c0-1.77-1.02-3.29-2.5-4.03v2.21l2.45 2.45c.03-.2.05-.41.05-.63zm2.5 0c0 .94-.2 1.82-.54 2.64l1.51 1.51C20.63 14.91 21 13.5 21 12c0-4.28-2.99-7.86-7-8.77v2.06c2.89.86 5 3.54 5 6.71zM4.27 3L3 4.27 7.73 9H3v6h4l5 5v-6.73l4.25 4.25c-.67.52-1.42.93-2.25 1.18v2.06c1.38-.31 2.63-.95 3.69-1.81L19.73 21 21 19.73l-9-9L4.27 3zM12 4L9.91 6.09 12 8.18V4z"/></svg>
+              </button>
+              <input type="range" class="video-volume-slider" data-action="volume" min="0" max="1" step="0.02" value="1" title="Volume">
+            </div>
+            <button class="video-btn btn-fullscreen" data-action="fullscreen" title="Fullscreen"><svg viewBox="0 0 24 24"><path d="M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z"/></svg></button>
           </div>
         </div>
         <div class="reel-meta">
@@ -261,9 +308,9 @@
 
       <!-- REEL 2 -->
       <div class="reel-card reveal" data-video-card>
-        <video src="https://i.imgur.com/jQ37l1F.mp4" muted loop playsinline preload="metadata"></video>
-        <div class="play-overlay">
-          <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+        <div class="reel-video-block">
+          <video src="https://i.imgur.com/jQ37l1F.mp4" muted loop playsinline preload="metadata"></video>
+          <div class="play-overlay"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>
         </div>
         <div class="video-controls">
           <div class="video-progress" data-progress>
@@ -271,21 +318,22 @@
             <div class="video-progress-thumb" data-thumb></div>
           </div>
           <div class="video-btns">
-            <button class="video-btn" data-action="rewind" title="Back 5s">
-              <svg viewBox="0 0 24 24"><path d="M12 5V1L7 6l5 5V7c3.31 0 6 2.69 6 6s-2.69 6-6 6-6-2.69-6-6H4c0 4.42 3.58 8 8 8s8-3.58 8-8-3.58-8-8-8zm-1.1 11H10v-3.26L9 13.14v-.91l1.8-.63h.1V16zm4.3-1.46c0 .45-.06.82-.17 1.12-.11.29-.28.51-.49.66s-.49.22-.82.22-.61-.07-.82-.22-.38-.37-.49-.66c-.11-.29-.17-.67-.17-1.12v-.77c0-.45.06-.82.17-1.12.11-.29.28-.51.49-.65.21-.15.49-.22.82-.22s.61.07.82.22.38.36.49.65c.11.29.17.67.17 1.12v.77zm-.85-.87c0-.3-.02-.54-.07-.72-.05-.18-.12-.31-.21-.39-.09-.08-.21-.12-.34-.12s-.25.04-.34.12c-.09.08-.16.21-.21.39-.05.18-.07.42-.07.72v.97c0 .3.02.55.07.73.05.18.12.31.21.39.09.08.21.12.34.12s.25-.04.34-.12c.09-.08.16-.21.21-.39.05-.18.07-.43.07-.73v-.97z"/></svg>
-            </button>
-            <button class="video-btn" data-action="playpause" title="Play / Pause">
+            <button class="video-btn" data-action="rewind" title="Rewind 5s"><svg viewBox="0 0 24 24"><path d="M11.99 5V1l-5 5 5 5V7c3.31 0 6 2.69 6 6s-2.69 6-6 6-6-2.69-6-6h-2c0 4.42 3.58 8 8 8s8-3.58 8-8-3.58-8-8-8z"/><text x="12" y="16" text-anchor="middle" font-size="5" fill="currentColor">5</text></svg></button>
+            <button class="video-btn btn-playpause" data-action="playpause" title="Play / Pause">
               <svg class="icon-play" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
               <svg class="icon-pause" viewBox="0 0 24 24" style="display:none"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
             </button>
-            <button class="video-btn" data-action="forward" title="Forward 5s">
-              <svg viewBox="0 0 24 24"><path d="M18 13c0 3.31-2.69 6-6 6s-6-2.69-6-6 2.69-6 6-6v4l5-5-5-5v4c-4.42 0-8 3.58-8 8s3.58 8 8 8 8-3.58 8-8h-2zm-4.5 3H13v-3.26l-1 .36v-.91l1.8-.63h.1V16zm4.3-1.46c0 .45-.06.82-.17 1.12-.11.29-.28.51-.49.66s-.49.22-.82.22-.61-.07-.82-.22-.38-.37-.49-.66-.17-.67-.17-1.12v-.77c0-.45.06-.82.17-1.12.11-.29.28-.51.49-.65.21-.15.49-.22.82-.22s.61.07.82.22.38.36.49.65.17.67.17 1.12v.77zm-.85-.87c0-.3-.02-.54-.07-.72-.05-.18-.12-.31-.21-.39-.09-.08-.21-.12-.34-.12s-.25.04-.34.12c-.09.08-.16.21-.21.39-.05.18-.07.42-.07.72v.97c0 .3.02.55.07.73.05.18.12.31.21.39.09.08.21.12.34.12s.25-.04.34-.12c.09-.08.16-.21.21-.39.05-.18.07-.43.07-.73v-.97z"/></svg>
-            </button>
-            <button class="video-btn video-mute-btn" data-action="mute" title="Mute / Unmute">
-              <svg class="icon-unmuted" viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/></svg>
-              <svg class="icon-muted" viewBox="0 0 24 24" style="display:none"><path d="M16.5 12c0-1.77-1.02-3.29-2.5-4.03v2.21l2.45 2.45c.03-.2.05-.41.05-.63zm2.5 0c0 .94-.2 1.82-.54 2.64l1.51 1.51C20.63 14.91 21 13.5 21 12c0-4.28-2.99-7.86-7-8.77v2.06c2.89.86 5 3.54 5 6.71zM4.27 3L3 4.27 7.73 9H3v6h4l5 5v-6.73l4.25 4.25c-.67.52-1.42.93-2.25 1.18v2.06c1.38-.31 2.63-.95 3.69-1.81L19.73 21 21 19.73l-9-9L4.27 3zM12 4L9.91 6.09 12 8.18V4z"/></svg>
-            </button>
+            <button class="video-btn" data-action="forward" title="Forward 5s"><svg viewBox="0 0 24 24"><path d="M12.01 5V1l5 5-5 5V7c-3.31 0-6 2.69-6 6s2.69 6 6 6 6-2.69 6-6h2c0 4.42-3.58 8-8 8s-8-3.58-8-8 3.58-8 8-8z"/><text x="12" y="16" text-anchor="middle" font-size="5" fill="currentColor">5</text></svg></button>
             <span class="video-time" data-time>0:00 / 0:00</span>
+            <span class="video-spacer"></span>
+            <div class="video-volume-wrap">
+              <button class="video-btn" data-action="mute" title="Mute / Unmute">
+                <svg class="icon-unmuted" viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/></svg>
+                <svg class="icon-muted" viewBox="0 0 24 24" style="display:none"><path d="M16.5 12c0-1.77-1.02-3.29-2.5-4.03v2.21l2.45 2.45c.03-.2.05-.41.05-.63zm2.5 0c0 .94-.2 1.82-.54 2.64l1.51 1.51C20.63 14.91 21 13.5 21 12c0-4.28-2.99-7.86-7-8.77v2.06c2.89.86 5 3.54 5 6.71zM4.27 3L3 4.27 7.73 9H3v6h4l5 5v-6.73l4.25 4.25c-.67.52-1.42.93-2.25 1.18v2.06c1.38-.31 2.63-.95 3.69-1.81L19.73 21 21 19.73l-9-9L4.27 3zM12 4L9.91 6.09 12 8.18V4z"/></svg>
+              </button>
+              <input type="range" class="video-volume-slider" data-action="volume" min="0" max="1" step="0.02" value="1" title="Volume">
+            </div>
+            <button class="video-btn btn-fullscreen" data-action="fullscreen" title="Fullscreen"><svg viewBox="0 0 24 24"><path d="M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z"/></svg></button>
           </div>
         </div>
         <div class="reel-meta">
@@ -297,9 +345,9 @@
 
       <!-- REEL 3 -->
       <div class="reel-card reveal" data-video-card>
-        <video src="https://i.imgur.com/4fAB1v3.mp4" muted loop playsinline preload="metadata"></video>
-        <div class="play-overlay">
-          <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+        <div class="reel-video-block">
+          <video src="https://i.imgur.com/4fAB1v3.mp4" muted loop playsinline preload="metadata"></video>
+          <div class="play-overlay"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>
         </div>
         <div class="video-controls">
           <div class="video-progress" data-progress>
@@ -307,21 +355,22 @@
             <div class="video-progress-thumb" data-thumb></div>
           </div>
           <div class="video-btns">
-            <button class="video-btn" data-action="rewind" title="Back 5s">
-              <svg viewBox="0 0 24 24"><path d="M12 5V1L7 6l5 5V7c3.31 0 6 2.69 6 6s-2.69 6-6 6-6-2.69-6-6H4c0 4.42 3.58 8 8 8s8-3.58 8-8-3.58-8-8-8zm-1.1 11H10v-3.26L9 13.14v-.91l1.8-.63h.1V16zm4.3-1.46c0 .45-.06.82-.17 1.12-.11.29-.28.51-.49.66s-.49.22-.82.22-.61-.07-.82-.22-.38-.37-.49-.66c-.11-.29-.17-.67-.17-1.12v-.77c0-.45.06-.82.17-1.12.11-.29.28-.51.49-.65.21-.15.49-.22.82-.22s.61.07.82.22.38.36.49.65c.11.29.17.67.17 1.12v.77zm-.85-.87c0-.3-.02-.54-.07-.72-.05-.18-.12-.31-.21-.39-.09-.08-.21-.12-.34-.12s-.25.04-.34.12c-.09.08-.16.21-.21.39-.05.18-.07.42-.07.72v.97c0 .3.02.55.07.73.05.18.12.31.21.39.09.08.21.12.34.12s.25-.04.34-.12c.09-.08.16-.21.21-.39.05-.18.07-.43.07-.73v-.97z"/></svg>
-            </button>
-            <button class="video-btn" data-action="playpause" title="Play / Pause">
+            <button class="video-btn" data-action="rewind" title="Rewind 5s"><svg viewBox="0 0 24 24"><path d="M11.99 5V1l-5 5 5 5V7c3.31 0 6 2.69 6 6s-2.69 6-6 6-6-2.69-6-6h-2c0 4.42 3.58 8 8 8s8-3.58 8-8-3.58-8-8-8z"/><text x="12" y="16" text-anchor="middle" font-size="5" fill="currentColor">5</text></svg></button>
+            <button class="video-btn btn-playpause" data-action="playpause" title="Play / Pause">
               <svg class="icon-play" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
               <svg class="icon-pause" viewBox="0 0 24 24" style="display:none"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
             </button>
-            <button class="video-btn" data-action="forward" title="Forward 5s">
-              <svg viewBox="0 0 24 24"><path d="M18 13c0 3.31-2.69 6-6 6s-6-2.69-6-6 2.69-6 6-6v4l5-5-5-5v4c-4.42 0-8 3.58-8 8s3.58 8 8 8 8-3.58 8-8h-2zm-4.5 3H13v-3.26l-1 .36v-.91l1.8-.63h.1V16zm4.3-1.46c0 .45-.06.82-.17 1.12-.11.29-.28.51-.49.66s-.49.22-.82.22-.61-.07-.82-.22-.38-.37-.49-.66-.17-.67-.17-1.12v-.77c0-.45.06-.82.17-1.12.11-.29.28-.51.49-.65.21-.15.49-.22.82-.22s.61.07.82.22.38.36.49.65.17.67.17 1.12v.77zm-.85-.87c0-.3-.02-.54-.07-.72-.05-.18-.12-.31-.21-.39-.09-.08-.21-.12-.34-.12s-.25.04-.34.12c-.09.08-.16.21-.21.39-.05.18-.07.42-.07.72v.97c0 .3.02.55.07.73.05.18.12.31.21.39.09.08.21.12.34.12s.25-.04.34-.12c.09-.08.16-.21.21-.39.05-.18.07-.43.07-.73v-.97z"/></svg>
-            </button>
-            <button class="video-btn video-mute-btn" data-action="mute" title="Mute / Unmute">
-              <svg class="icon-unmuted" viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/></svg>
-              <svg class="icon-muted" viewBox="0 0 24 24" style="display:none"><path d="M16.5 12c0-1.77-1.02-3.29-2.5-4.03v2.21l2.45 2.45c.03-.2.05-.41.05-.63zm2.5 0c0 .94-.2 1.82-.54 2.64l1.51 1.51C20.63 14.91 21 13.5 21 12c0-4.28-2.99-7.86-7-8.77v2.06c2.89.86 5 3.54 5 6.71zM4.27 3L3 4.27 7.73 9H3v6h4l5 5v-6.73l4.25 4.25c-.67.52-1.42.93-2.25 1.18v2.06c1.38-.31 2.63-.95 3.69-1.81L19.73 21 21 19.73l-9-9L4.27 3zM12 4L9.91 6.09 12 8.18V4z"/></svg>
-            </button>
+            <button class="video-btn" data-action="forward" title="Forward 5s"><svg viewBox="0 0 24 24"><path d="M12.01 5V1l5 5-5 5V7c-3.31 0-6 2.69-6 6s2.69 6 6 6 6-2.69 6-6h2c0 4.42-3.58 8-8 8s-8-3.58-8-8 3.58-8 8-8z"/><text x="12" y="16" text-anchor="middle" font-size="5" fill="currentColor">5</text></svg></button>
             <span class="video-time" data-time>0:00 / 0:00</span>
+            <span class="video-spacer"></span>
+            <div class="video-volume-wrap">
+              <button class="video-btn" data-action="mute" title="Mute / Unmute">
+                <svg class="icon-unmuted" viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/></svg>
+                <svg class="icon-muted" viewBox="0 0 24 24" style="display:none"><path d="M16.5 12c0-1.77-1.02-3.29-2.5-4.03v2.21l2.45 2.45c.03-.2.05-.41.05-.63zm2.5 0c0 .94-.2 1.82-.54 2.64l1.51 1.51C20.63 14.91 21 13.5 21 12c0-4.28-2.99-7.86-7-8.77v2.06c2.89.86 5 3.54 5 6.71zM4.27 3L3 4.27 7.73 9H3v6h4l5 5v-6.73l4.25 4.25c-.67.52-1.42.93-2.25 1.18v2.06c1.38-.31 2.63-.95 3.69-1.81L19.73 21 21 19.73l-9-9L4.27 3zM12 4L9.91 6.09 12 8.18V4z"/></svg>
+              </button>
+              <input type="range" class="video-volume-slider" data-action="volume" min="0" max="1" step="0.02" value="1" title="Volume">
+            </div>
+            <button class="video-btn btn-fullscreen" data-action="fullscreen" title="Fullscreen"><svg viewBox="0 0 24 24"><path d="M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z"/></svg></button>
           </div>
         </div>
         <div class="reel-meta">
@@ -333,9 +382,9 @@
 
       <!-- REEL 4 -->
       <div class="reel-card reveal" data-video-card>
-        <video src="https://i.imgur.com/5M0usIu.mp4" muted loop playsinline preload="metadata"></video>
-        <div class="play-overlay">
-          <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+        <div class="reel-video-block">
+          <video src="https://i.imgur.com/5M0usIu.mp4" muted loop playsinline preload="metadata"></video>
+          <div class="play-overlay"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>
         </div>
         <div class="video-controls">
           <div class="video-progress" data-progress>
@@ -343,21 +392,22 @@
             <div class="video-progress-thumb" data-thumb></div>
           </div>
           <div class="video-btns">
-            <button class="video-btn" data-action="rewind" title="Back 5s">
-              <svg viewBox="0 0 24 24"><path d="M12 5V1L7 6l5 5V7c3.31 0 6 2.69 6 6s-2.69 6-6 6-6-2.69-6-6H4c0 4.42 3.58 8 8 8s8-3.58 8-8-3.58-8-8-8zm-1.1 11H10v-3.26L9 13.14v-.91l1.8-.63h.1V16zm4.3-1.46c0 .45-.06.82-.17 1.12-.11.29-.28.51-.49.66s-.49.22-.82.22-.61-.07-.82-.22-.38-.37-.49-.66c-.11-.29-.17-.67-.17-1.12v-.77c0-.45.06-.82.17-1.12.11-.29.28-.51.49-.65.21-.15.49-.22.82-.22s.61.07.82.22.38.36.49.65c.11.29.17.67.17 1.12v.77zm-.85-.87c0-.3-.02-.54-.07-.72-.05-.18-.12-.31-.21-.39-.09-.08-.21-.12-.34-.12s-.25.04-.34.12c-.09.08-.16.21-.21.39-.05.18-.07.42-.07.72v.97c0 .3.02.55.07.73.05.18.12.31.21.39.09.08.21.12.34.12s.25-.04.34-.12c.09-.08.16-.21.21-.39.05-.18.07-.43.07-.73v-.97z"/></svg>
-            </button>
-            <button class="video-btn" data-action="playpause" title="Play / Pause">
+            <button class="video-btn" data-action="rewind" title="Rewind 5s"><svg viewBox="0 0 24 24"><path d="M11.99 5V1l-5 5 5 5V7c3.31 0 6 2.69 6 6s-2.69 6-6 6-6-2.69-6-6h-2c0 4.42 3.58 8 8 8s8-3.58 8-8-3.58-8-8-8z"/><text x="12" y="16" text-anchor="middle" font-size="5" fill="currentColor">5</text></svg></button>
+            <button class="video-btn btn-playpause" data-action="playpause" title="Play / Pause">
               <svg class="icon-play" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
               <svg class="icon-pause" viewBox="0 0 24 24" style="display:none"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
             </button>
-            <button class="video-btn" data-action="forward" title="Forward 5s">
-              <svg viewBox="0 0 24 24"><path d="M18 13c0 3.31-2.69 6-6 6s-6-2.69-6-6 2.69-6 6-6v4l5-5-5-5v4c-4.42 0-8 3.58-8 8s3.58 8 8 8 8-3.58 8-8h-2zm-4.5 3H13v-3.26l-1 .36v-.91l1.8-.63h.1V16zm4.3-1.46c0 .45-.06.82-.17 1.12-.11.29-.28.51-.49.66s-.49.22-.82.22-.61-.07-.82-.22-.38-.37-.49-.66-.17-.67-.17-1.12v-.77c0-.45.06-.82.17-1.12.11-.29.28-.51.49-.65.21-.15.49-.22.82-.22s.61.07.82.22.38.36.49.65.17.67.17 1.12v.77zm-.85-.87c0-.3-.02-.54-.07-.72-.05-.18-.12-.31-.21-.39-.09-.08-.21-.12-.34-.12s-.25.04-.34.12c-.09.08-.16.21-.21.39-.05.18-.07.42-.07.72v.97c0 .3.02.55.07.73.05.18.12.31.21.39.09.08.21.12.34.12s.25-.04.34-.12c.09-.08.16-.21.21-.39.05-.18.07-.43.07-.73v-.97z"/></svg>
-            </button>
-            <button class="video-btn video-mute-btn" data-action="mute" title="Mute / Unmute">
-              <svg class="icon-unmuted" viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/></svg>
-              <svg class="icon-muted" viewBox="0 0 24 24" style="display:none"><path d="M16.5 12c0-1.77-1.02-3.29-2.5-4.03v2.21l2.45 2.45c.03-.2.05-.41.05-.63zm2.5 0c0 .94-.2 1.82-.54 2.64l1.51 1.51C20.63 14.91 21 13.5 21 12c0-4.28-2.99-7.86-7-8.77v2.06c2.89.86 5 3.54 5 6.71zM4.27 3L3 4.27 7.73 9H3v6h4l5 5v-6.73l4.25 4.25c-.67.52-1.42.93-2.25 1.18v2.06c1.38-.31 2.63-.95 3.69-1.81L19.73 21 21 19.73l-9-9L4.27 3zM12 4L9.91 6.09 12 8.18V4z"/></svg>
-            </button>
+            <button class="video-btn" data-action="forward" title="Forward 5s"><svg viewBox="0 0 24 24"><path d="M12.01 5V1l5 5-5 5V7c-3.31 0-6 2.69-6 6s2.69 6 6 6 6-2.69 6-6h2c0 4.42-3.58 8-8 8s-8-3.58-8-8 3.58-8 8-8z"/><text x="12" y="16" text-anchor="middle" font-size="5" fill="currentColor">5</text></svg></button>
             <span class="video-time" data-time>0:00 / 0:00</span>
+            <span class="video-spacer"></span>
+            <div class="video-volume-wrap">
+              <button class="video-btn" data-action="mute" title="Mute / Unmute">
+                <svg class="icon-unmuted" viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/></svg>
+                <svg class="icon-muted" viewBox="0 0 24 24" style="display:none"><path d="M16.5 12c0-1.77-1.02-3.29-2.5-4.03v2.21l2.45 2.45c.03-.2.05-.41.05-.63zm2.5 0c0 .94-.2 1.82-.54 2.64l1.51 1.51C20.63 14.91 21 13.5 21 12c0-4.28-2.99-7.86-7-8.77v2.06c2.89.86 5 3.54 5 6.71zM4.27 3L3 4.27 7.73 9H3v6h4l5 5v-6.73l4.25 4.25c-.67.52-1.42.93-2.25 1.18v2.06c1.38-.31 2.63-.95 3.69-1.81L19.73 21 21 19.73l-9-9L4.27 3zM12 4L9.91 6.09 12 8.18V4z"/></svg>
+              </button>
+              <input type="range" class="video-volume-slider" data-action="volume" min="0" max="1" step="0.02" value="1" title="Volume">
+            </div>
+            <button class="video-btn btn-fullscreen" data-action="fullscreen" title="Fullscreen"><svg viewBox="0 0 24 24"><path d="M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z"/></svg></button>
           </div>
         </div>
         <div class="reel-meta">
@@ -369,9 +419,9 @@
 
       <!-- REEL 5 -->
       <div class="reel-card reveal" data-video-card>
-        <video src="https://i.imgur.com/WO1Rlh1.mp4" muted loop playsinline preload="metadata"></video>
-        <div class="play-overlay">
-          <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+        <div class="reel-video-block">
+          <video src="https://i.imgur.com/WO1Rlh1.mp4" muted loop playsinline preload="metadata"></video>
+          <div class="play-overlay"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>
         </div>
         <div class="video-controls">
           <div class="video-progress" data-progress>
@@ -379,21 +429,22 @@
             <div class="video-progress-thumb" data-thumb></div>
           </div>
           <div class="video-btns">
-            <button class="video-btn" data-action="rewind" title="Back 5s">
-              <svg viewBox="0 0 24 24"><path d="M12 5V1L7 6l5 5V7c3.31 0 6 2.69 6 6s-2.69 6-6 6-6-2.69-6-6H4c0 4.42 3.58 8 8 8s8-3.58 8-8-3.58-8-8-8zm-1.1 11H10v-3.26L9 13.14v-.91l1.8-.63h.1V16zm4.3-1.46c0 .45-.06.82-.17 1.12-.11.29-.28.51-.49.66s-.49.22-.82.22-.61-.07-.82-.22-.38-.37-.49-.66c-.11-.29-.17-.67-.17-1.12v-.77c0-.45.06-.82.17-1.12.11-.29.28-.51.49-.65.21-.15.49-.22.82-.22s.61.07.82.22.38.36.49.65c.11.29.17.67.17 1.12v.77zm-.85-.87c0-.3-.02-.54-.07-.72-.05-.18-.12-.31-.21-.39-.09-.08-.21-.12-.34-.12s-.25.04-.34.12c-.09.08-.16.21-.21.39-.05.18-.07.42-.07.72v.97c0 .3.02.55.07.73.05.18.12.31.21.39.09.08.21.12.34.12s.25-.04.34-.12c.09-.08.16-.21.21-.39.05-.18.07-.43.07-.73v-.97z"/></svg>
-            </button>
-            <button class="video-btn" data-action="playpause" title="Play / Pause">
+            <button class="video-btn" data-action="rewind" title="Rewind 5s"><svg viewBox="0 0 24 24"><path d="M11.99 5V1l-5 5 5 5V7c3.31 0 6 2.69 6 6s-2.69 6-6 6-6-2.69-6-6h-2c0 4.42 3.58 8 8 8s8-3.58 8-8-3.58-8-8-8z"/><text x="12" y="16" text-anchor="middle" font-size="5" fill="currentColor">5</text></svg></button>
+            <button class="video-btn btn-playpause" data-action="playpause" title="Play / Pause">
               <svg class="icon-play" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
               <svg class="icon-pause" viewBox="0 0 24 24" style="display:none"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
             </button>
-            <button class="video-btn" data-action="forward" title="Forward 5s">
-              <svg viewBox="0 0 24 24"><path d="M18 13c0 3.31-2.69 6-6 6s-6-2.69-6-6 2.69-6 6-6v4l5-5-5-5v4c-4.42 0-8 3.58-8 8s3.58 8 8 8 8-3.58 8-8h-2zm-4.5 3H13v-3.26l-1 .36v-.91l1.8-.63h.1V16zm4.3-1.46c0 .45-.06.82-.17 1.12-.11.29-.28.51-.49.66s-.49.22-.82.22-.61-.07-.82-.22-.38-.37-.49-.66-.17-.67-.17-1.12v-.77c0-.45.06-.82.17-1.12.11-.29.28-.51.49-.65.21-.15.49-.22.82-.22s.61.07.82.22.38.36.49.65.17.67.17 1.12v.77zm-.85-.87c0-.3-.02-.54-.07-.72-.05-.18-.12-.31-.21-.39-.09-.08-.21-.12-.34-.12s-.25.04-.34.12c-.09.08-.16.21-.21.39-.05.18-.07.42-.07.72v.97c0 .3.02.55.07.73.05.18.12.31.21.39.09.08.21.12.34.12s.25-.04.34-.12c.09-.08.16-.21.21-.39.05-.18.07-.43.07-.73v-.97z"/></svg>
-            </button>
-            <button class="video-btn video-mute-btn" data-action="mute" title="Mute / Unmute">
-              <svg class="icon-unmuted" viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/></svg>
-              <svg class="icon-muted" viewBox="0 0 24 24" style="display:none"><path d="M16.5 12c0-1.77-1.02-3.29-2.5-4.03v2.21l2.45 2.45c.03-.2.05-.41.05-.63zm2.5 0c0 .94-.2 1.82-.54 2.64l1.51 1.51C20.63 14.91 21 13.5 21 12c0-4.28-2.99-7.86-7-8.77v2.06c2.89.86 5 3.54 5 6.71zM4.27 3L3 4.27 7.73 9H3v6h4l5 5v-6.73l4.25 4.25c-.67.52-1.42.93-2.25 1.18v2.06c1.38-.31 2.63-.95 3.69-1.81L19.73 21 21 19.73l-9-9L4.27 3zM12 4L9.91 6.09 12 8.18V4z"/></svg>
-            </button>
+            <button class="video-btn" data-action="forward" title="Forward 5s"><svg viewBox="0 0 24 24"><path d="M12.01 5V1l5 5-5 5V7c-3.31 0-6 2.69-6 6s2.69 6 6 6 6-2.69 6-6h2c0 4.42-3.58 8-8 8s-8-3.58-8-8 3.58-8 8-8z"/><text x="12" y="16" text-anchor="middle" font-size="5" fill="currentColor">5</text></svg></button>
             <span class="video-time" data-time>0:00 / 0:00</span>
+            <span class="video-spacer"></span>
+            <div class="video-volume-wrap">
+              <button class="video-btn" data-action="mute" title="Mute / Unmute">
+                <svg class="icon-unmuted" viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/></svg>
+                <svg class="icon-muted" viewBox="0 0 24 24" style="display:none"><path d="M16.5 12c0-1.77-1.02-3.29-2.5-4.03v2.21l2.45 2.45c.03-.2.05-.41.05-.63zm2.5 0c0 .94-.2 1.82-.54 2.64l1.51 1.51C20.63 14.91 21 13.5 21 12c0-4.28-2.99-7.86-7-8.77v2.06c2.89.86 5 3.54 5 6.71zM4.27 3L3 4.27 7.73 9H3v6h4l5 5v-6.73l4.25 4.25c-.67.52-1.42.93-2.25 1.18v2.06c1.38-.31 2.63-.95 3.69-1.81L19.73 21 21 19.73l-9-9L4.27 3zM12 4L9.91 6.09 12 8.18V4z"/></svg>
+              </button>
+              <input type="range" class="video-volume-slider" data-action="volume" min="0" max="1" step="0.02" value="1" title="Volume">
+            </div>
+            <button class="video-btn btn-fullscreen" data-action="fullscreen" title="Fullscreen"><svg viewBox="0 0 24 24"><path d="M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z"/></svg></button>
           </div>
         </div>
         <div class="reel-meta">
@@ -628,21 +679,23 @@
   }
 
   function initVideoCard(card) {
-    const video   = card.querySelector('video');
-    const btnPP   = card.querySelector('[data-action="playpause"]');
-    const btnRew  = card.querySelector('[data-action="rewind"]');
-    const btnFwd  = card.querySelector('[data-action="forward"]');
-    const btnMute = card.querySelector('[data-action="mute"]');
-    const progress= card.querySelector('[data-progress]');
-    const fill    = card.querySelector('[data-fill]');
-    const thumb   = card.querySelector('[data-thumb]');
-    const timeEl  = card.querySelector('[data-time]');
-    const overlay = card.querySelector('.play-overlay');
+    const video      = card.querySelector('video');
+    const btnPP      = card.querySelector('[data-action="playpause"]');
+    const btnRew     = card.querySelector('[data-action="rewind"]');
+    const btnFwd     = card.querySelector('[data-action="forward"]');
+    const btnMute    = card.querySelector('[data-action="mute"]');
+    const volSlider  = card.querySelector('[data-action="volume"]');
+    const btnFS      = card.querySelector('[data-action="fullscreen"]');
+    const progress   = card.querySelector('[data-progress]');
+    const fill       = card.querySelector('[data-fill]');
+    const thumb      = card.querySelector('[data-thumb]');
+    const timeEl     = card.querySelector('[data-time]');
+    const overlay    = card.querySelector('.play-overlay');
 
     if (!video || !btnPP) return;
 
-    // Start playing (autoplay-in-view replaces old attr)
     video.muted = true;
+    if (volSlider) volSlider.value = 1;
 
     function updatePlayState() {
       const paused = video.paused;
@@ -655,83 +708,74 @@
       if (!video.duration) return;
       const pct = (video.currentTime / video.duration) * 100;
       fill.style.width = pct + '%';
-      thumb.style.left = pct + '%';
+      if (thumb) thumb.style.left = pct + '%';
       if (timeEl) timeEl.textContent = formatTime(video.currentTime) + ' / ' + formatTime(video.duration);
     }
 
-    function updateMute() {
-      btnMute.querySelector('.icon-unmuted').style.display = video.muted ? 'none' : '';
-      btnMute.querySelector('.icon-muted').style.display   = video.muted ? '' : 'none';
+    function updateMuteUI() {
+      if (!btnMute) return;
+      const muted = video.muted || video.volume === 0;
+      btnMute.querySelector('.icon-unmuted').style.display = muted ? 'none' : '';
+      btnMute.querySelector('.icon-muted').style.display   = muted ? '' : 'none';
     }
 
-    btnPP.addEventListener('click', () => {
-      video.paused ? video.play() : video.pause();
-    });
+    btnPP.addEventListener('click', () => { video.paused ? video.play() : video.pause(); });
+    if (btnRew) btnRew.addEventListener('click', () => { video.currentTime = Math.max(0, video.currentTime - 5); });
+    if (btnFwd) btnFwd.addEventListener('click', () => { video.currentTime = Math.min(video.duration || 0, video.currentTime + 5); });
 
-    btnRew.addEventListener('click', () => { video.currentTime = Math.max(0, video.currentTime - 5); });
-    btnFwd.addEventListener('click', () => { video.currentTime = Math.min(video.duration || 0, video.currentTime + 5); });
-
-    btnMute.addEventListener('click', () => {
+    if (btnMute) btnMute.addEventListener('click', () => {
       video.muted = !video.muted;
-      updateMute();
+      if (volSlider) volSlider.value = video.muted ? 0 : video.volume;
+      updateMuteUI();
     });
 
+    if (volSlider) volSlider.addEventListener('input', () => {
+      video.volume = parseFloat(volSlider.value);
+      video.muted  = video.volume === 0;
+      updateMuteUI();
+    });
+
+    if (btnFS) btnFS.addEventListener('click', () => {
+      const target = card.querySelector('.reel-video-block') || card;
+      if (document.fullscreenElement) {
+        document.exitFullscreen && document.exitFullscreen();
+      } else {
+        (target.requestFullscreen || target.webkitRequestFullscreen || target.mozRequestFullScreen).call(target);
+      }
+    });
+
+    video.addEventListener('click', () => { video.paused ? video.play() : video.pause(); });
     video.addEventListener('play',   updatePlayState);
     video.addEventListener('pause',  updatePlayState);
     video.addEventListener('timeupdate', updateProgress);
     video.addEventListener('loadedmetadata', updateProgress);
 
-    // Click video to toggle play
-    video.addEventListener('click', () => {
-      video.paused ? video.play() : video.pause();
-    });
-
-    // Scrub
+    // Scrub — mouse
     let scrubbing = false;
-
-    function scrubTo(e) {
+    function scrubTo(clientX) {
       const rect = progress.getBoundingClientRect();
-      const x = Math.max(0, Math.min(e.clientX - rect.left, rect.width));
-      const pct = x / rect.width;
+      const pct  = Math.max(0, Math.min((clientX - rect.left) / rect.width, 1));
       video.currentTime = pct * (video.duration || 0);
     }
-
-    progress.addEventListener('mousedown', (e) => {
-      scrubbing = true;
-      scrubTo(e);
-    });
-    document.addEventListener('mousemove', (e) => { if (scrubbing) scrubTo(e); });
-    document.addEventListener('mouseup',   ()  => { scrubbing = false; });
-
-    // Touch scrub
-    progress.addEventListener('touchstart', (e) => {
-      scrubbing = true;
-      scrubTo(e.touches[0]);
-    }, { passive: true });
-    document.addEventListener('touchmove',  (e) => { if (scrubbing) scrubTo(e.touches[0]); }, { passive: true });
+    progress.addEventListener('mousedown', (e) => { scrubbing = true; scrubTo(e.clientX); });
+    document.addEventListener('mousemove',  (e) => { if (scrubbing) scrubTo(e.clientX); });
+    document.addEventListener('mouseup',    ()  => { scrubbing = false; });
+    // Scrub — touch
+    progress.addEventListener('touchstart', (e) => { scrubbing = true; scrubTo(e.touches[0].clientX); }, { passive: true });
+    document.addEventListener('touchmove',  (e) => { if (scrubbing) scrubTo(e.touches[0].clientX); },  { passive: true });
     document.addEventListener('touchend',   ()  => { scrubbing = false; });
 
     // Autoplay in view
     const io = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          video.play().catch(() => {});
-        } else {
-          video.pause();
-        }
+        if (entry.isIntersecting) { video.play().catch(() => {}); }
+        else { video.pause(); }
       });
     }, { threshold: 0.4 });
     io.observe(card);
 
-    // Show controls on touch devices
-    card.addEventListener('touchstart', () => {
-      card.classList.add('controls-visible');
-      clearTimeout(card._hideTimer);
-      card._hideTimer = setTimeout(() => card.classList.remove('controls-visible'), 3000);
-    }, { passive: true });
-
     updatePlayState();
-    updateMute();
+    updateMuteUI();
   }
 
   function initAll() {
