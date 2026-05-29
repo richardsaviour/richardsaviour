@@ -189,38 +189,7 @@
     color: var(--gold-soft);
   }
 
-  /* ===== INTEGRATION STRIP ===== */
-  .integration-strip {
-    margin-top: 56px;
-    padding: 32px 28px;
-    border-radius: var(--radius-md);
-    background: rgba(255,255,255,0.02);
-    border: 1px solid rgba(255,255,255,0.08);
-    overflow: hidden;
-  }
-  .integration-strip .strip-label {
-    font-family: var(--font-mono);
-    font-size: 11px;
-    letter-spacing: 0.18em;
-    text-transform: uppercase;
-    color: rgba(255,255,255,0.4);
-    margin-bottom: 20px;
-    display: block;
-  }
-  .integration-logos {
-    display: flex;
-    gap: 20px;
-    flex-wrap: wrap;
-    align-items: center;
-  }
-  .integration-logos img {
-    height: 22px;
-    width: auto;
-    opacity: 0.5;
-    filter: brightness(0) invert(1);
-    transition: opacity 0.2s;
-  }
-  .integration-logos img:hover { opacity: 0.85; }
+
 
   /* ===== WARNING CARD ===== */
   .warning-card {
@@ -303,6 +272,128 @@
   .final-cta h2 { margin-top: 20px; color: #fff; }
   .final-cta .accent { color: var(--gold-soft); }
   .final-cta .lead { color: rgba(255,255,255,0.7); }
+
+  /* ===== VIDEO BLOCK ===== */
+  .video-block {
+    margin-top: 48px;
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    border: 1px solid rgba(255,255,255,0.08);
+    background: #000;
+    position: relative;
+  }
+  .video-block video {
+    width: 100%;
+    display: block;
+    max-height: 480px;
+    object-fit: cover;
+  }
+
+  /* ===== INTEGRATIONS SECTION ===== */
+  .integrations-section {
+    margin-top: 80px;
+    padding: 52px 44px;
+    border-radius: var(--radius-md);
+    background: rgba(255,255,255,0.02);
+    border: 1px solid rgba(255,255,255,0.08);
+  }
+  .integrations-section .int-head {
+    margin-bottom: 32px;
+  }
+  .integrations-section .int-head h3 {
+    font-size: clamp(1.5rem, 4vw, 2.2rem);
+    font-weight: 800;
+    color: #fff;
+    margin-bottom: 10px;
+    line-height: 1.15;
+  }
+  .integrations-section .int-head p {
+    font-size: 15px;
+    color: rgba(255,255,255,0.6);
+    max-width: 50ch;
+    line-height: 1.6;
+  }
+  .integration-logos {
+    display: flex;
+    gap: 24px;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+  .integration-logos img {
+    height: 22px;
+    width: auto;
+    opacity: 0.45;
+    filter: brightness(0) invert(1);
+    transition: opacity 0.2s;
+  }
+  .integration-logos img:hover { opacity: 0.85; }
+  .int-note {
+    margin-top: 20px;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--gold-soft);
+  }
+  @media (max-width: 640px) {
+    .integrations-section { padding: 28px 20px; }
+    .integration-logos img { height: 17px; gap: 16px; }
+  }
+
+  /* ===== IT OPS SECTION ===== */
+  .itops-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 48px;
+    align-items: center;
+    margin-top: 56px;
+  }
+  @media (max-width: 800px) { .itops-grid { grid-template-columns: 1fr; gap: 32px; } }
+  .itops-image {
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    border: 1px solid rgba(255,255,255,0.08);
+  }
+  .itops-image img { width: 100%; display: block; object-fit: cover; }
+  .itops-points { display: flex; flex-direction: column; gap: 20px; }
+  .itops-point {
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+    padding: 20px;
+    background: rgba(255,255,255,0.02);
+    border: 1px solid rgba(255,255,255,0.07);
+    border-radius: var(--radius-md);
+    transition: border-color 0.3s var(--ease), background 0.3s var(--ease);
+  }
+  .itops-point:hover {
+    border-color: rgba(203,140,66,0.3);
+    background: rgba(203,140,66,0.04);
+  }
+  .itops-icon {
+    width: 36px;
+    height: 36px;
+    border-radius: 8px;
+    background: rgba(203,140,66,0.12);
+    border: 1px solid rgba(203,140,66,0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+  .itops-icon svg { width: 16px; height: 16px; color: var(--gold-soft); }
+  .itops-point h5 {
+    font-size: 15px;
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 4px;
+  }
+  .itops-point p {
+    font-size: 14px;
+    color: rgba(255,255,255,0.65);
+    line-height: 1.55;
+    margin: 0;
+  }
 
   /* ===== MOBILE FIXES ===== */
   @media (max-width: 640px) {
@@ -482,17 +573,19 @@
       </div>
     </div>
 
-    <!-- Workflow canvas image from n8n -->
-    <div class="auto-image-block reveal">
-      <img src="https://n8niostorageaccount.blob.core.windows.net/n8nio-strapi-blobs-prod/assets/workflow_itops_5d5a4bf299.svg"
-           alt="Automated workflow canvas showing connected steps and AI agents"
-           loading="lazy"
-           style="background: #1a1a1f; padding: 20px;">
+    <!-- Video block -->
+    <div class="video-block reveal">
+      <video autoplay muted loop playsinline>
+        <source src="https://n8niostorageaccount.blob.core.windows.net/n8nio-strapi-blobs-prod/assets/run_tweak_repeat_56a63007bb.mp4" type="video/mp4">
+      </video>
     </div>
 
-    <!-- Integration logos strip -->
-    <div class="integration-strip reveal">
-      <span class="strip-label">// Connects to your existing tools — 500+ integrations</span>
+    <!-- Integrations section -->
+    <div class="integrations-section reveal">
+      <div class="int-head">
+        <h3>Plug into your existing tools.<br><span class="serif-italic text-gold">All 500+ of them.</span></h3>
+        <p>Whatever you're already using — email, CRM, spreadsheets, Slack, calendars — I connect them. Pre-built for the common stuff. Custom connections for everything else. You don't need to change how you work. I just make it work together.</p>
+      </div>
       <div class="integration-logos">
         <img src="https://n8niostorageaccount.blob.core.windows.net/n8nio-strapi-blobs-stage/assets/microsoft_logo_white_673a9e3e32.svg" alt="Microsoft" loading="lazy">
         <img src="https://n8niostorageaccount.blob.core.windows.net/n8nio-strapi-blobs-stage/assets/zendesk_logo_white_33a443408b.svg" alt="Zendesk" loading="lazy">
@@ -501,12 +594,63 @@
         <img src="https://n8niostorageaccount.blob.core.windows.net/n8nio-strapi-blobs-stage/assets/paddle_e74541f6b3.svg" alt="Paddle" loading="lazy">
         <img src="https://n8niostorageaccount.blob.core.windows.net/n8nio-strapi-blobs-stage/assets/onfleet_04f3069030.svg" alt="Onfleet" loading="lazy">
         <img src="https://n8niostorageaccount.blob.core.windows.net/n8nio-strapi-blobs-stage/assets/re_vodafone_1dfddd2e7c.svg" alt="Vodafone" loading="lazy">
+        <img src="https://n8niostorageaccount.blob.core.windows.net/n8nio-strapi-blobs-stage/assets/re_dedatech_bfc8c7c7ff.svg" alt="Dedatech" loading="lazy">
+        <img src="https://n8niostorageaccount.blob.core.windows.net/n8nio-strapi-blobs-stage/assets/unbabel_1392f8b8ac.svg" alt="Unbabel" loading="lazy">
       </div>
+      <p class="int-note">// and hundreds more — if it has an API, I can connect it</p>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== IT OPS / SCALE YOUR WORKLOAD ==================== -->
+<section class="section-pad">
+  <div class="container">
+    <div class="section-head reveal">
+      <span class="eyebrow">04 / Take back your time</span>
+      <h2 class="display-l">
+        Cut your workload.<br><span class="serif-italic text-gold">Not your standards.</span>
+      </h2>
+      <p class="lead-dim">
+        The stuff that eats your day — the checking, the updating, the chasing — doesn't need you. It needs a system. Here's what that looks like in practice.
+      </p>
     </div>
 
-    <!-- Automation engine image (yours) -->
-    <div class="auto-image-block reveal" style="margin-top: 24px;">
-      <img src="https://i.imgur.com/yPXplhW.jpeg" alt="Automation engine — workflows and AI agents" loading="lazy">
+    <div class="itops-grid">
+      <div class="itops-image reveal">
+        <img src="https://n8niostorageaccount.blob.core.windows.net/n8nio-strapi-blobs-prod/assets/It_Ops_export_3to2_c55196a496.webp"
+             alt="Visual showing automated workflow operations dashboard"
+             loading="lazy">
+      </div>
+
+      <div class="itops-points reveal">
+        <div class="itops-point">
+          <div class="itops-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9M16.5 3.5a2.121 2.121 0 013 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+          </div>
+          <div>
+            <h5>No more doing the same task twice</h5>
+            <p>Things like updating records, sending status emails, or moving data between apps — automated. Set it once, it runs forever. You stop doing it entirely.</p>
+          </div>
+        </div>
+        <div class="itops-point">
+          <div class="itops-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+          </div>
+          <div>
+            <h5>Problems get caught before they blow up</h5>
+            <p>Instead of finding out something went wrong two hours later, automated checks flag issues the moment they happen — and trigger a fix right away.</p>
+          </div>
+        </div>
+        <div class="itops-point">
+          <div class="itops-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
+          </div>
+          <div>
+            <h5>Everything in one place, not fifteen tabs</h5>
+            <p>Stop jumping between apps to get a full picture. Your data, your alerts, your status updates — pulled together into one clean view, automatically.</p>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </section>
@@ -568,7 +712,7 @@
         Get on my calendar
         <svg class="arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M7 17L17 7M9 7h8v8"/></svg>
       </a>
-      <a href="mailto:richardsaviourz@gmail.com" class="btn btn-ghost" style="color: #fff; border-color: rgba(255,255,255,0.25);">Email Richard</a>
+      <a href="mailto:richardsaviourz@gmail.com" class="btn btn-ghost" style="color: #0d0d0e; background: #fff; border-color: #fff;">Email Richard</a>
     </div>
     <p class="footnote" style="color: rgba(255,255,255,0.5);">No weird pitch · just a real conversation about what makes sense for you</p>
   </div>
