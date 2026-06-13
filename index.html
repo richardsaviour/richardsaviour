@@ -17,6 +17,23 @@
 </head>
 <body class="is-loading">
 
+<!-- ==================== SCROLL FLOW PATH (SVG thread, drawn on scroll) ====================
+     Full-document overlay. Sizing + the path "d" are generated in main.js from the
+     live positions of the [data-flow] anchors, so it stays responsive on every viewport. -->
+<div class="rs-flow" id="rs-flow" aria-hidden="true">
+  <svg id="rs-flow-svg" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMin meet" fill="none">
+    <path id="rs-flow-ghost" d=""></path>
+    <path id="rs-flow-line" d=""></path>
+    <g id="rs-flow-end" opacity="0">
+      <circle class="ring-pulse" r="13"></circle>
+      <circle class="dot-core" r="5"></circle>
+    </g>
+    <g id="rs-flow-bird" opacity="0">
+      <path class="bird-shape" d="M13 0 L-9 -9 Q-2 0 -9 9 Z"></path>
+    </g>
+  </svg>
+</div>
+
 <!-- ==================== LOADER (signature, branded) ==================== -->
 <div class="rs-loader" id="rs-loader" aria-hidden="true">
   <div class="rs-loader-mark">
@@ -57,13 +74,13 @@
       <p class="hero-sub">
         I'm <span class="hero-name">Richard Saviour</span>, and I help your business stop losing money from the digital things you already know you should fix.
       </p>
-      <div class="hero-bullets">
+      <div class="hero-bullets" data-flow="painpoints">
         <p>Maybe your website looks good but does not convert.</p>
         <p>Maybe your content gets posted but does not engage.</p>
         <p>Maybe leads vanish after one conversation.</p>
         <p>Maybe those emails never quite make it out.</p>
       </div>
-      <p class="hero-highlight">
+      <p class="hero-highlight" data-flow="solution">
         I help businesses <span class="stress">look better, communicate better, follow up better,</span> and sell smarter online.
       </p>
       <div class="hero-ctas">
@@ -143,7 +160,7 @@
     <div class="belt-grid">
       <div class="reveal">
         <span class="eyebrow">01 / Toolkit</span>
-        <h2 class="display-l" style="margin-top:20px;">
+        <h2 class="display-l" style="margin-top:20px;" data-flow="toolkit">
           Your digital<br><span class="serif-italic text-gold">utility belt.</span>
         </h2>
         <p class="text-mute" style="font-size:16px; margin-top:24px; max-width: 380px; line-height:1.65; font-weight:500;">
@@ -155,7 +172,7 @@
         </a>
       </div>
       <div class="reveal">
-        <div class="pills-cluster">
+        <div class="pills-cluster" data-flow="skills">
           <span class="pill featured"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M2 12h20"/></svg>Websites</span>
           <span class="pill"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="13.5" cy="6.5" r="2.5"/><circle cx="19" cy="13" r="2.5"/><circle cx="13.5" cy="19.5" r="2.5"/><circle cx="6" cy="13" r="2.5"/></svg>Graphic Design</span>
           <span class="pill"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2"/></svg>Video Editing</span>
@@ -185,7 +202,7 @@
   <div class="container">
     <div class="section-head reveal">
       <span class="eyebrow">02 / Diagnosis</span>
-      <h2 class="display-l">
+      <h2 class="display-l" data-flow="diagnosis">
         Most businesses don't have a marketing problem.<br>
         <span class="serif-italic text-gold">They have an order problem.</span>
       </h2>
@@ -194,7 +211,7 @@
       </p>
     </div>
 
-    <div class="timeline reveal">
+    <div class="timeline reveal" data-flow="timeline">
       <div class="timeline-step">
         <div class="step-image"><img src="https://i.imgur.com/zdTtFDv.jpeg" alt="Build the home — your website" loading="lazy"></div>
         <div class="timeline-num">01</div>
@@ -224,7 +241,7 @@
       </div>
     </div>
 
-    <div class="warning-card reveal">
+    <div class="warning-card reveal" data-flow="warning">
       <span class="label">Do not automate chaos</span>
       <p>Because automation is not magic. If your system is broken,</p>
       <p class="punchline">automation just helps you break it faster.</p>
@@ -244,7 +261,7 @@
       <p>The order that helps your business stop feeling scattered and start feeling like a system.</p>
     </div>
 
-    <div class="pillars-grid">
+    <div class="pillars-grid" data-flow="pillars">
       <div class="pillar-card reveal">
         <div class="pillar-num">PILLAR / 01</div>
         <h3>Ownership</h3>
@@ -296,14 +313,14 @@
     </div>
 
     <div class="why-grid">
-      <div class="why-item reveal"><span class="why-num">01</span><p>Can people understand this quickly?</p></div>
+      <div class="why-item reveal" data-flow="standard-1"><span class="why-num">01</span><p>Can people understand this quickly?</p></div>
       <div class="why-item reveal"><span class="why-num">02</span><p>Does this look trustworthy?</p></div>
-      <div class="why-item reveal"><span class="why-num">03</span><p>Is the next step obvious?</p></div>
+      <div class="why-item reveal" data-flow="standard-3"><span class="why-num">03</span><p>Is the next step obvious?</p></div>
       <div class="why-item reveal"><span class="why-num">04</span><p>Does this feel professional?</p></div>
       <div class="why-item reveal"><span class="why-num">05</span><p>Is the message too vague?</p></div>
       <div class="why-item reveal"><span class="why-num">06</span><p>Can this be tracked?</p></div>
       <div class="why-item reveal"><span class="why-num">07</span><p>Can this be automated?</p></div>
-      <div class="why-item reveal"><span class="why-num">08</span><p>Will this help the business make money?</p></div>
+      <div class="why-item reveal" data-flow="standard-8"><span class="why-num">08</span><p>Will this help the business make money?</p></div>
     </div>
   </div>
 </section>
@@ -333,7 +350,7 @@
         <div class="author">
           <div class="avatar avatar-photo"><img src="https://i.imgur.com/PQIjKd8.jpeg" alt="Thomas G. Bell" loading="lazy"></div>
           <div class="author-text">
-            <span class="name">Thomas G. Bell</span>
+            <span class="name" data-flow="receipt-1">Thomas G. Bell</span>
             <span class="role">CEO · TBCreations LLC</span>
           </div>
         </div>
@@ -352,7 +369,7 @@
         <div class="author">
           <div class="avatar avatar-photo"><img src="https://assets.cdn.filesafe.space/wg8MaCLhPTGKd78gw1G8/media/686e49eb038ba857c040ad6e.png" alt="Jason McNamara" loading="lazy"></div>
           <div class="author-text">
-            <span class="name">Jason McNamara</span>
+            <span class="name" data-flow="receipt-2">Jason McNamara</span>
             <span class="role">CEO · The No More 9 to 5 Club</span>
           </div>
         </div>
@@ -442,7 +459,7 @@
     <p class="lead">
       Maybe you just need someone who can look at the mess and say, <em>"yeah, I know what to do here."</em>
     </p>
-    <div class="ctas">
+    <div class="ctas" data-flow="cta">
       <a href="/contact/" class="btn btn-primary">
         Get on my calendar
         <svg class="arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M7 17L17 7M9 7h8v8"/></svg>
