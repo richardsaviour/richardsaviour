@@ -2931,3 +2931,101 @@ body.is-loading { overflow-x: hidden; }
   border: 1px dashed rgba(203, 140, 66, 0.35);
   border-radius: 12px;
 }
+
+/* ============================================================
+   SCROLL FLOW PATH — bird-guided thread (document overlay)
+   Added for the scroll-guidance system. Uses existing tokens.
+   ============================================================ */
+.rs-flow {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;        /* never blocks clicks/selection */
+  z-index: 60;                 /* above sections, below nav (100) */
+  opacity: 0;                  /* JS fades it in past the hero */
+  transition: opacity 0.5s var(--ease);
+  contain: layout style;
+}
+#rs-flow-svg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: block;
+  overflow: visible;           /* rotated birds near edges not clipped */
+}
+
+/* Faint full route — the whole journey, barely there */
+#rs-flow-ghost {
+  fill: none;
+  stroke: rgba(120, 116, 108, 0.13);
+  stroke-width: 1.4;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* Soft halo behind the drawn portion */
+#rs-flow-glow {
+  fill: none;
+  stroke: var(--gold-soft);
+  stroke-width: 8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  opacity: 0.16;
+  filter: blur(6px);
+}
+
+/* The live, colour-evolving thread */
+#rs-flow-line {
+  fill: none;
+  stroke: url(#rs-flow-grad);
+  stroke-width: 2.4;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* Section focus marker (rides the head of the thread) */
+#rs-flow-end .ring-pulse {
+  fill: none;
+  stroke: var(--gold);
+  stroke-width: 1.5;
+  opacity: 0;
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: rsFlowPulse 2.6s var(--ease) infinite;
+}
+#rs-flow-end .dot-core {
+  fill: var(--gold);
+  filter: drop-shadow(0 0 5px rgba(var(--gold-rgb), 0.7));
+}
+#rs-flow-end.at-section .ring-pulse { animation-duration: 1.35s; }
+
+@keyframes rsFlowPulse {
+  0%   { transform: scale(0.45); opacity: 0.55; }
+  70%  { transform: scale(1.7);  opacity: 0; }
+  100% { transform: scale(1.7);  opacity: 0; }
+}
+
+/* The flock */
+#rs-flow-birds {
+  filter: drop-shadow(0 1px 5px rgba(var(--gold-rgb), 0.45));
+}
+#rs-flow-birds g { will-change: transform; }
+#rs-flow-birds path { stroke: none; }
+
+/* ---- Mobile: lighter weight, drop the blur filters ---- */
+@media (max-width: 768px) {
+  #rs-flow-line { stroke-width: 2; }
+  #rs-flow-glow { display: none; }
+  #rs-flow-birds { filter: drop-shadow(0 1px 3px rgba(var(--gold-rgb), 0.4)); }
+}
+
+/* ---- Reduced motion: keep a faint static thread, kill all motion ---- */
+@media (prefers-reduced-motion: reduce) {
+  #rs-flow-glow,
+  #rs-flow-line,
+  #rs-flow-end,
+  #rs-flow-birds { display: none; }
+  #rs-flow-ghost { stroke: rgba(120, 116, 108, 0.18); }
+}
