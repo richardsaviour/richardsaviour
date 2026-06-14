@@ -17,20 +17,31 @@
 </head>
 <body class="is-loading">
 
-<!-- ==================== SCROLL FLOW PATH (SVG thread, drawn on scroll) ====================
+<!-- ==================== SCROLL FLOW PATH (bird-guided thread) ====================
      Full-document overlay. Sizing + the path "d" are generated in main.js from the
      live positions of the [data-flow] anchors, so it stays responsive on every viewport. -->
 <div class="rs-flow" id="rs-flow" aria-hidden="true">
   <svg id="rs-flow-svg" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMin meet" fill="none">
+    <defs>
+      <linearGradient id="rs-flow-grad" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="0" y2="1000">
+        <stop offset="0"    stop-color="#cb8c42"/>
+        <stop offset="0.25" stop-color="#e8b23e"/>
+        <stop offset="0.5"  stop-color="#9fb13a"/>
+        <stop offset="0.75" stop-color="#3ea96b"/>
+        <stop offset="1"    stop-color="#d8512e"/>
+      </linearGradient>
+    </defs>
+
     <path id="rs-flow-ghost" d=""></path>
-    <path id="rs-flow-line" d=""></path>
+    <path id="rs-flow-glow"  d=""></path>
+    <path id="rs-flow-line"  d=""></path>
+
     <g id="rs-flow-end" opacity="0">
       <circle class="ring-pulse" r="13"></circle>
-      <circle class="dot-core" r="5"></circle>
+      <circle class="dot-core" r="4.5"></circle>
     </g>
-    <g id="rs-flow-bird" opacity="0">
-      <path class="bird-shape" d="M13 0 L-9 -9 Q-2 0 -9 9 Z"></path>
-    </g>
+
+    <g id="rs-flow-birds"></g>
   </svg>
 </div>
 
