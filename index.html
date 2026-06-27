@@ -1,6 +1,7 @@
 <!doctype html>
 <html lang="en">
 <head>
+<script src="/assets/js/imgur-proxy.js"></script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Richard Saviour — Digital Systems Built Clean</title>
@@ -30,6 +31,17 @@
         <stop offset="0.75" stop-color="#3ea96b"/>
         <stop offset="1"    stop-color="#d8512e"/>
       </linearGradient>
+
+      <!-- Tail-fade: opaque at the head, transparent at the tail (wishing-star taper).
+           Endpoints are updated every frame in main.js to track the comet. -->
+      <linearGradient id="rs-flow-fade" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0"    stop-color="#fff" stop-opacity="0"/>
+        <stop offset="0.55" stop-color="#fff" stop-opacity="0.22"/>
+        <stop offset="1"    stop-color="#fff" stop-opacity="1"/>
+      </linearGradient>
+      <mask id="rs-flow-mask" maskUnits="userSpaceOnUse">
+        <rect id="rs-flow-mask-rect" x="0" y="0" width="100%" height="100%" fill="url(#rs-flow-fade)"/>
+      </mask>
     </defs>
 
     <path id="rs-flow-ghost" d=""></path>

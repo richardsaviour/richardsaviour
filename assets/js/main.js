@@ -204,6 +204,8 @@
   const flock  = document.getElementById('rs-flow-birds');
   const grad   = document.getElementById('rs-flow-grad');
   const gradStops = grad ? grad.querySelectorAll('stop') : [];
+  const fadeGrad = document.getElementById('rs-flow-fade');
+  const maskRect = document.getElementById('rs-flow-mask-rect');
   const NS = 'http://www.w3.org/2000/svg';
 
   const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -246,6 +248,7 @@
 
   /* ---------- state ---------- */
   let W = 0, H = 0, totalLen = 0;
+  let SEG = 150;             // visible comet length (short moving line, not the full path)
   let samples = [];          // [{l, y}] for Y -> length lookup
   let anchors = [];          // [{y, len}]
   let birds = [];
@@ -367,8 +370,18 @@
     if (grad) { grad.setAttribute('y1', 0); grad.setAttribute('y2', H); }
 
     totalLen = line.getTotalLength();
-    line.style.strokeDasharray = totalLen;
-    glow.style.strokeDasharray = totalLen;
+
+    // ---- comet setup: draw only a short segment, fade its tail ----
+    SEG = isMobile() ? 90 : 150;
+    const dash = SEG + ' ' + (totalLen + SEG);   // one short dash, then a gap longer than the path
+    line.style.strokeDasharray = dash;
+    glow.style.strokeDasharray = dash;
+    line.setAttribute('mask', 'url(#rs-flow-mask)');
+    glow.setAttribute('mask', 'url(#rs-flow-mask)');
+    if (maskRect) { maskRect.setAttribute('width', W); maskRect.setAttribute('height', H); }
+    // The faint full-route line reads as "a long line" — hide it so only the
+    // moving comet shows. Flip to '' if you ever want the route hint back.
+    ghost.style.display = 'none';
 
     // length/Y lookup table
     const N = clamp(Math.round(totalLen / 24), 120, 460);
@@ -409,9 +422,22 @@
     headLen += (targetHead - headLen) * 0.12;
     const head = clamp(headLen, 0, totalLen);
 
-    // reveal
-    line.style.strokeDashoffset = (totalLen - head);
-    glow.style.strokeDashoffset = (totalLen - head);
+    // comet: only a short segment ending at the head is drawn.
+    // dashoffset = SEG - head places the dash over [head - SEG, head].
+    line.style.strokeDashoffset = (SEG - head);
+    glow.style.strokeDashoffset = (SEG - head);
+
+    // taper the tail: run the fade gradient from the tail point (transparent)
+    // to the head point (opaque), so the streak fades out like a wishing star.
+    if (fadeGrad) {
+      const tailL = clamp(head - SEG, 0, totalLen);
+      const hPt = line.getPointAtLength(clamp(head, 0, totalLen));
+      const tPt = line.getPointAtLength(tailL);
+      fadeGrad.setAttribute('x1', tPt.x.toFixed(1));
+      fadeGrad.setAttribute('y1', tPt.y.toFixed(1));
+      fadeGrad.setAttribute('x2', hPt.x.toFixed(1));
+      fadeGrad.setAttribute('y2', hPt.y.toFixed(1));
+    }
 
     // fade the overlay in past the hero
     flow.style.opacity = clamp((sy - 60) / (window.innerHeight * 0.5), 0, 1);
