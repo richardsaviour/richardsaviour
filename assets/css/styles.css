@@ -5,8 +5,8 @@
 
 /* ===== TOKENS ===== */
 :root {
-  --font-display: 'Sentient', Georgia, 'Times New Roman', serif;
-  --font-body: 'Switzer', 'Inter', -apple-system, system-ui, sans-serif;
+  --font-display: 'Fraunces', Georgia, serif;
+  --font-body: 'Inter Tight', -apple-system, system-ui, sans-serif;
   --font-mono: 'JetBrains Mono', ui-monospace, monospace;
 
   /* Accent — used sparingly, tastefully */
@@ -112,10 +112,10 @@ h1, h2, h3, h4 {
 }
 
 .eyebrow {
-  font-family: var(--font-mono);
-  font-size: 11px;
+  font-family: var(--font-display);
+  font-size: 14px;
   font-weight: 600;
-  letter-spacing: 0.18em;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
   color: var(--gold-deep);
   display: inline-flex;
@@ -3033,7 +3033,7 @@ body.is-loading { overflow-x: hidden; }
 
 /* =============================================================
    ADDED SECTIONS & ENHANCEMENTS
-   Switzer + Sentient type system. New homepage modules below.
+   Original Fraunces + Inter Tight type system. New homepage modules below.
    ============================================================= */
 
 /* ---- Inline "→ contact" links sprinkled through sections ---- */
