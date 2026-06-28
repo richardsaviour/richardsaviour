@@ -570,3 +570,157 @@
     if (document.hidden) stop(); else start();
   });
 })();
+
+/* =============================================================
+   ADDED FEATURES (homepage): testimonial read-more + 3D coverflow
+   Self-contained; each guard checks for its elements so this is
+   safe to load on every page.
+   ============================================================= */
+(function () {
+  'use strict';
+
+  /* ---- TESTIMONIAL READ-MORE ---- */
+  function initReadMore() {
+    var cards = document.querySelectorAll('.testi-card');
+    cards.forEach(function (card) {
+      var bq = card.querySelector('blockquote');
+      if (!bq || bq.dataset.rmReady) return;
+      bq.dataset.rmReady = '1';
+      bq.classList.add('is-clamped');
+      // Measure on next frame (after layout/fonts settle)
+      window.requestAnimationFrame(function () {
+        var overflowing = (bq.scrollHeight - bq.clientHeight) > 6;
+        if (!overflowing) { bq.classList.remove('is-clamped'); return; }
+        var btn = document.createElement('button');
+        btn.className = 'testi-readmore';
+        btn.type = 'button';
+        btn.setAttribute('aria-expanded', 'false');
+        btn.innerHTML = '<span class="rm-label">Read more</span>' +
+          '<svg class="rm-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg>';
+        bq.insertAdjacentElement('afterend', btn);
+        btn.addEventListener('click', function () {
+          var expanded = card.classList.toggle('is-expanded');
+          bq.classList.toggle('is-clamped', !expanded);
+          btn.setAttribute('aria-expanded', expanded ? 'true' : 'false');
+          btn.querySelector('.rm-label').textContent = expanded ? 'Read less' : 'Read more';
+        });
+      });
+    });
+  }
+  // run after fonts load too (webfont metrics shift line counts)
+  if (document.fonts && document.fonts.ready) {
+    document.fonts.ready.then(initReadMore);
+  }
+  window.addEventListener('load', initReadMore);
+  initReadMore();
+
+  /* ---- 3D COVERFLOW GALLERY ---- */
+  var cf = document.getElementById('coverflow');
+  if (cf) {
+    var cards = Array.prototype.slice.call(cf.querySelectorAll('[data-cf]'));
+    var N = cards.length;
+    var dotsWrap = document.getElementById('cf-dots');
+    var prevBtn = document.getElementById('cf-prev');
+    var nextBtn = document.getElementById('cf-next');
+    var active = 0;
+    var autoTimer = null;
+    var AUTO_MS = 4000;
+
+    // build dots
+    var dots = [];
+    if (dotsWrap) {
+      for (var i = 0; i < N; i++) {
+        (function (idx) {
+          var d = document.createElement('button');
+          d.className = 'cf-dot';
+          d.type = 'button';
+          d.setAttribute('role', 'tab');
+          d.setAttribute('aria-label', 'Go to image ' + (idx + 1));
+          d.addEventListener('click', function () { go(idx); restartAuto(); });
+          dotsWrap.appendChild(d);
+          dots.push(d);
+        })(i);
+      }
+    }
+
+    function layout() {
+      cards.forEach(function (card, i) {
+        var offset = i - active;
+        if (offset > N / 2) offset -= N;
+        if (offset < -N / 2) offset += N;
+        var abs = Math.abs(offset);
+        var sign = offset === 0 ? 0 : (offset > 0 ? 1 : -1);
+        if (abs > 3) {
+          card.style.opacity = '0';
+          card.style.pointerEvents = 'none';
+          card.style.transform = 'translateX(' + (sign * 520) + 'px) scale(0.4)';
+          card.classList.remove('is-active');
+          card.setAttribute('aria-hidden', 'true');
+          return;
+        }
+        card.style.pointerEvents = 'auto';
+        card.removeAttribute('aria-hidden');
+        var tx = offset * 172;
+        var tz = abs === 0 ? 0 : -abs * 130;
+        var ry = -sign * Math.min(abs, 3) * 42;
+        var scale = abs === 0 ? 1 : Math.max(0.84 - (abs - 1) * 0.1, 0.58);
+        var opacity = abs === 0 ? 1 : Math.max(0.92 - (abs - 1) * 0.28, 0.22);
+        card.style.transform = 'translateX(' + tx + 'px) translateZ(' + tz + 'px) rotateY(' + ry + 'deg) scale(' + scale + ')';
+        card.style.zIndex = String(100 - abs);
+        card.style.opacity = String(opacity);
+        card.classList.toggle('is-active', offset === 0);
+      });
+      dots.forEach(function (d, i) { d.classList.toggle('is-active', i === active); });
+    }
+
+    function go(idx) { active = ((idx % N) + N) % N; layout(); }
+    function next() { go(active + 1); }
+    function prev() { go(active - 1); }
+
+    cards.forEach(function (card, i) {
+      card.addEventListener('click', function () {
+        if (i !== active) { go(i); restartAuto(); }
+      });
+    });
+    if (nextBtn) nextBtn.addEventListener('click', function () { next(); restartAuto(); });
+    if (prevBtn) prevBtn.addEventListener('click', function () { prev(); restartAuto(); });
+
+    // keyboard
+    cf.setAttribute('tabindex', '0');
+    cf.addEventListener('keydown', function (e) {
+      if (e.key === 'ArrowRight') { next(); restartAuto(); }
+      else if (e.key === 'ArrowLeft') { prev(); restartAuto(); }
+    });
+
+    // drag / swipe
+    var startX = null, dragging = false;
+    function onDown(x) { startX = x; dragging = true; stopAuto(); }
+    function onUp(x) {
+      if (!dragging || startX === null) return;
+      var dx = x - startX;
+      if (Math.abs(dx) > 40) { if (dx < 0) next(); else prev(); }
+      dragging = false; startX = null; restartAuto();
+    }
+    cf.addEventListener('mousedown', function (e) { onDown(e.clientX); });
+    window.addEventListener('mouseup', function (e) { if (dragging) onUp(e.clientX); });
+    cf.addEventListener('touchstart', function (e) { onDown(e.touches[0].clientX); }, { passive: true });
+    cf.addEventListener('touchend', function (e) { onUp((e.changedTouches[0] || {}).clientX || startX); }, { passive: true });
+
+    // autoplay (pauses when out of view or on hover)
+    function startAuto() { if (!autoTimer) autoTimer = window.setInterval(next, AUTO_MS); }
+    function stopAuto() { if (autoTimer) { window.clearInterval(autoTimer); autoTimer = null; } }
+    function restartAuto() { stopAuto(); startAuto(); }
+    cf.addEventListener('mouseenter', stopAuto);
+    cf.addEventListener('mouseleave', startAuto);
+
+    if ('IntersectionObserver' in window) {
+      new IntersectionObserver(function (entries) {
+        entries.forEach(function (en) { if (en.isIntersecting) startAuto(); else stopAuto(); });
+      }, { threshold: 0.25 }).observe(cf);
+    } else {
+      startAuto();
+    }
+
+    layout();
+  }
+})();
