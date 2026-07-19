@@ -1,0 +1,297 @@
+/* =============================================================
+   RICHARD SAVIOUR — "NIGHT SHIFT" REDESIGN SKIN
+   A full art-direction pass: deep warm ink surfaces, bone-white
+   type, candlelit gold. Loaded after styles.css + enhance.css.
+   The original stylesheet is token-driven, so this file inverts
+   the tokens, pins the sections that must stay ink-dark, and
+   layers new signature elements (glows, ghost numerals, outlined
+   marquee, vignette) on top.
+   ============================================================= */
+
+/* ===== 1. TOKEN INVERSION ===== */
+:root {
+  /* surfaces */
+  --white: #100e0b;          /* base page surface */
+  --off-white: #14110d;      /* alternating section surface */
+  --light-gray: #1d1914;
+  --medium-gray: #453e33;
+  --bg: var(--white);
+  --bg-alt: var(--off-white);
+  --bg-card: #181410;
+
+  /* pinned inks for sections that stay dark by design */
+  --ink: #0a0806;
+  --ink-2: #131009;
+
+  /* type (former darks become bone/ivory) */
+  --soft-black: #f4ecdd;
+  --charcoal: #eae0cd;
+  --deep-gray: #cec4af;
+  --text-body: #cdc4b3;
+  --text-mute: #978d7a;
+  --text-faint: #6f6758;
+
+  /* lines */
+  --border-soft: rgba(244, 236, 221, 0.10);
+  --border-strong: #ede2cc;
+
+  /* gold warms up slightly against ink */
+  --gold: #d69a4d;
+  --gold-soft: #ecb877;
+  --gold-deep: #b57f38;
+  --gold-rgb: 214, 154, 77;
+
+  /* shadows: real darkness + a whisper of gold */
+  --shadow-sm: 0 1px 2px rgba(0,0,0,0.5), 0 2px 8px rgba(0,0,0,0.35);
+  --shadow-md: 0 6px 16px rgba(0,0,0,0.5), 0 16px 32px rgba(0,0,0,0.35);
+  --shadow-lg: 0 14px 32px rgba(0,0,0,0.55), 0 32px 72px rgba(0,0,0,0.4),
+               0 0 0 1px rgba(var(--gold-rgb), 0.06);
+  --shadow-dark: 0 20px 40px rgba(0,0,0,0.6), 0 40px 80px rgba(0,0,0,0.5);
+}
+
+html { background: var(--white); }
+html { color-scheme: dark; }
+
+/* selection: gold wash, ink text */
+::selection { background: rgba(var(--gold-rgb), 0.9); color: #16100a; }
+
+/* grain: multiply is invisible on ink — switch to soft-light */
+body::before {
+  mix-blend-mode: soft-light;
+  opacity: 0.5;
+}
+
+/* cinematic vignette over everything (beneath the grain) */
+html::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 999;
+  background: radial-gradient(ellipse 120% 90% at 50% 40%, transparent 60%, rgba(0,0,0,0.34) 100%);
+}
+
+/* ===== 2. SECTIONS THAT STAY INK ===== */
+.marquee-section,
+.video-testi-section,
+.batman-section,
+footer,
+.rs-loader.is-dark,
+.page-hero.is-dark,
+.dark-bg,
+.auto-explainer,
+.studio-section.is-dark { background: var(--ink); }
+.outreach-section { background: var(--ink-2); }
+.warning-card { background: var(--ink-2); border: 1px solid rgba(var(--gold-rgb), 0.25); }
+.dm-bubble.good { background: linear-gradient(135deg, #191512, #0f0c09); }
+
+/* keep white text literals honest inside pinned sections — no change needed;
+   they already sit on ink. */
+
+/* ===== 3. GLOBAL TYPE & LINE TUNING ===== */
+.eyebrow { color: var(--gold-soft); }
+.eyebrow::before { background: var(--gold); box-shadow: 0 0 12px rgba(var(--gold-rgb), 0.8); }
+
+.display-xl, .display-l { text-shadow: 0 2px 40px rgba(0,0,0,0.4); }
+
+.text-gold { color: var(--gold-soft); }
+
+/* hairline gold horizon at the top of each major light-rhythm section */
+.belt-section, .order-section, .pillars-section, .why-section,
+.tools-section, .testimonials-section, .checklist-section,
+.portfolio-section, .contact-section { position: relative; }
+.belt-section::before, .pillars-section::before, .why-section::before,
+.tools-section::before, .testimonials-section::before,
+.checklist-section::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 10%; right: 10%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(var(--gold-rgb), 0.35), transparent);
+  pointer-events: none;
+}
+
+/* ===== 4. GHOST NUMERALS (injected by enhance.js) ===== */
+.ghost-num {
+  position: absolute;
+  top: -10px;
+  right: -8px;
+  z-index: 0;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-style: italic;
+  font-size: clamp(120px, 18vw, 280px);
+  line-height: 1;
+  color: transparent;
+  -webkit-text-stroke: 1px rgba(var(--gold-rgb), 0.16);
+  pointer-events: none;
+  user-select: none;
+}
+@media (max-width: 900px) { .ghost-num { font-size: 110px; opacity: 0.8; } }
+
+/* ===== 5. HERO — candlelit stage ===== */
+.hero { background: var(--white); }
+.hero::before,
+.hero::after {
+  content: '';
+  position: absolute;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 1;
+  filter: blur(60px);
+}
+.hero::before {
+  width: 55vw; height: 55vw;
+  max-width: 760px; max-height: 760px;
+  top: -18%; right: -12%;
+  background: radial-gradient(closest-side, rgba(var(--gold-rgb), 0.15), transparent 70%);
+}
+.hero::after {
+  width: 40vw; height: 40vw;
+  max-width: 520px; max-height: 520px;
+  bottom: -14%; left: -10%;
+  background: radial-gradient(closest-side, rgba(var(--gold-rgb), 0.09), transparent 70%);
+}
+.hero-overlay {
+  background: linear-gradient(180deg, rgba(16,14,11,0) 0%, rgba(16,14,11,0.35) 70%, var(--white) 100%);
+}
+.hero-sub .hero-name {
+  color: var(--gold-soft);
+}
+.hero-highlight .stress { color: var(--gold-soft); }
+
+/* hero word-cycle panel: glass instrument with a gold ring-light */
+.word-cycle-panel {
+  background: linear-gradient(165deg, rgba(255, 244, 224, 0.05), rgba(255, 244, 224, 0.015)) , var(--ink);
+  border: 1px solid rgba(var(--gold-rgb), 0.22);
+  box-shadow:
+    0 0 0 1px rgba(0,0,0,0.6),
+    0 30px 80px rgba(0,0,0,0.6),
+    0 0 90px rgba(var(--gold-rgb), 0.12),
+    inset 0 1px 0 rgba(255,255,255,0.06);
+}
+
+/* ===== 6. MARQUEE — outlined type, gold serifs ===== */
+.marquee-section {
+  border-block: 1px solid rgba(var(--gold-rgb), 0.22);
+}
+.marquee-track span {
+  color: transparent;
+  -webkit-text-stroke: 1px rgba(244, 236, 221, 0.5);
+}
+.marquee-track span.italic {
+  color: var(--gold-soft);
+  -webkit-text-stroke: 0;
+}
+.marquee-track span::after { color: var(--gold); -webkit-text-stroke: 0; }
+
+/* ===== 7. BUTTONS — bone primary with gold underlight ===== */
+.btn-primary {
+  background: var(--soft-black);
+  color: #17110a;
+  border-color: transparent;
+  box-shadow:
+    0 1px 0 rgba(255,255,255,0.5) inset,
+    0 -2px 0 rgba(var(--gold-rgb), 0.9) inset,
+    0 10px 30px rgba(0,0,0,0.5),
+    0 0 40px rgba(var(--gold-rgb), 0.18);
+}
+.btn-primary:hover {
+  background: #fff8ea;
+  box-shadow:
+    0 1px 0 rgba(255,255,255,0.6) inset,
+    0 -2px 0 rgba(var(--gold-rgb), 1) inset,
+    0 16px 40px rgba(0,0,0,0.55),
+    0 0 60px rgba(var(--gold-rgb), 0.3);
+}
+.btn-primary .arrow { color: var(--gold-deep); }
+.btn-ghost {
+  background: rgba(255, 246, 230, 0.04);
+  border-color: rgba(244, 236, 221, 0.22);
+  backdrop-filter: blur(6px);
+}
+.btn-ghost:hover { border-color: var(--gold); background: rgba(255, 246, 230, 0.07); }
+
+.section-cta { color: var(--soft-black); }
+.section-cta:hover { color: var(--gold-soft); border-color: var(--gold); }
+
+/* ===== 8. CARDS — lantern glass ===== */
+.pillar-card, .testi-card, .why-item, .contact-card, .check-item,
+.calendly-shell, .tools-video-frame {
+  background: linear-gradient(170deg, rgba(255, 245, 226, 0.045), rgba(255, 245, 226, 0.012)), var(--bg-card);
+  border-color: rgba(244, 236, 221, 0.10);
+}
+.pillar-card:hover, .testi-card:hover, .contact-card:hover {
+  border-color: rgba(var(--gold-rgb), 0.45);
+}
+.pill {
+  background: rgba(255, 246, 230, 0.05);
+  border-color: rgba(244, 236, 221, 0.14);
+  box-shadow: none;
+}
+.pill:hover { border-color: rgba(var(--gold-rgb), 0.6); background: rgba(var(--gold-rgb), 0.08); }
+.pill svg { color: var(--gold); }
+.pill.featured {
+  background: var(--soft-black);
+  color: #17110a;
+  border-color: var(--soft-black);
+  box-shadow: 0 0 24px rgba(var(--gold-rgb), 0.15);
+}
+.pill.featured svg { color: var(--gold-deep); }
+
+/* timeline images glow softly */
+.step-image {
+  box-shadow: 0 12px 40px rgba(0,0,0,0.5);
+  border: 1px solid rgba(244, 236, 221, 0.08);
+}
+
+/* ===== 9. SMALL FIXES the inversion can't infer ===== */
+/* checklist icon on hover: gold chip needs ink glyph */
+.check-row:hover .check-icon { color: #17110a; }
+/* contact icon chip: gold-tinted glass, gold glyph */
+.contact-card .contact-icon {
+  background: rgba(var(--gold-rgb), 0.12);
+  border: 1px solid rgba(var(--gold-rgb), 0.35);
+}
+.contact-card .contact-icon svg { color: var(--gold-soft); }
+/* anchors active pill (self-inverted to bone) gets ink text explicitly */
+.section-anchors a.is-active { color: #17110a; }
+
+/* Calendly's embedded widget is white — frame it like a lit window */
+.calendly-shell { box-shadow: var(--shadow-lg), 0 0 80px rgba(var(--gold-rgb), 0.08); }
+
+/* footer: deepest ink + faint gold horizon */
+footer { border-top: 1px solid rgba(var(--gold-rgb), 0.18); }
+
+/* nav: a touch deeper so it reads against ink */
+.nav {
+  background: rgba(8, 7, 5, 0.78) !important;
+  border-color: rgba(244, 236, 221, 0.10);
+}
+
+/* loader matches the night */
+.rs-loader { background: var(--ink); }
+.rs-loader .rs-loader-mark { color: var(--soft-black); }
+.rs-loader .rs-loader-meta { color: var(--text-mute); }
+.rs-loader .rs-loader-bar { background: rgba(244, 236, 221, 0.10); }
+
+/* enhance-layer recolors */
+.rs-cursor-ring { border-color: rgba(var(--gold-rgb), 0.7); }
+body.cursor-view .rs-cursor-ring { background: rgba(244, 236, 221, 0.92); }
+body.cursor-view .rs-cursor-ring .rs-cursor-label { color: #17110a; }
+.rs-spot::after {
+  background: radial-gradient(240px circle at var(--mx, 50%) var(--my, 50%),
+              rgba(var(--gold-rgb), 0.16), transparent 65%);
+}
+.final-cta .rs-aurora {
+  background: radial-gradient(closest-side, rgba(var(--gold-rgb), 0.2), transparent 70%);
+}
+
+/* 404 page inherits tokens; give its art a lantern glow */
+.err-hero { position: relative; overflow: hidden; }
+.err-art { filter: drop-shadow(0 0 60px rgba(var(--gold-rgb), 0.2)); }
+
+/* ===== 10. ACCESSIBILITY / MOTION ===== */
+@media (prefers-reduced-motion: reduce) {
+  html::after { background: none; }
+}

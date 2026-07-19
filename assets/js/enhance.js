@@ -439,4 +439,23 @@
     }
   } catch (e) { /* silent */ }
 
+  /* =====================================================
+     13. GHOST NUMERALS
+     Reads the "01 / …" pattern from section eyebrows and
+     paints an oversized outlined numeral behind the section.
+     ===================================================== */
+  try {
+    document.querySelectorAll('.section-head .eyebrow, .tools-copy .eyebrow, .belt-grid .eyebrow, .batman-text .eyebrow').forEach(function (eb) {
+      var m = (eb.textContent || '').match(/^\s*(\d{2})\s*\//);
+      if (!m) return;
+      var host = eb.closest('.container');
+      if (!host || host.querySelector('.ghost-num')) return;
+      var g = document.createElement('span');
+      g.className = 'ghost-num';
+      g.setAttribute('aria-hidden', 'true');
+      g.textContent = m[1];
+      host.insertBefore(g, host.firstChild);
+    });
+  } catch (e) { /* silent */ }
+
 })();
