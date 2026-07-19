@@ -26,8 +26,11 @@
   .nav .nav-logo, .nav-links a { color: #fff; }
   .automations-body .section-head h2 { color: #fff; }
   .automations-body .section-head p { color: rgba(255,255,255,0.7); }
-  .automations-body .eyebrow { color: var(--gold-soft); }
-  .automations-body .eyebrow::before { background: var(--gold-soft); }
+  .automations-body .eyebrow { color: var(--soft-black); }
+  .automations-body .eyebrow::before { background: var(--gold); }
+  /* keep the dark hero tab readable (light text on its dark pill) */
+  .automations-body .page-hero.is-dark .eyebrow { color: #fff; }
+  .automations-body .warning-card .label { color: var(--soft-black); }
 
   /* ===== ANIMATED PARTICLE CANVAS ===== */
   #particle-canvas {
@@ -750,7 +753,7 @@
 <div class="glow-divider"></div>
 <section class="final-cta orange-section" id="cta" style="border-top:none;">
   <div class="final-cta-content" style="position:relative;z-index:1;">
-    <span class="eyebrow" style="justify-content:center;display:inline-flex;color:var(--gold-soft);">Ready when you are</span>
+    <span class="eyebrow" style="justify-content:center;display:inline-flex;color:var(--soft-black);">Ready when you are</span>
     <h2 style="margin-top:20px;color:#fff;">Let's build the quiet system<br><span class="accent" style="color:var(--gold-soft);">behind your business.</span></h2>
     <p class="lead" style="color:rgba(255,255,255,0.7);">
       We'll look at what you have now, find the repetitive work slowing you down, and decide what should run automatically.

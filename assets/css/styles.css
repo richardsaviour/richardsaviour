@@ -1467,7 +1467,7 @@ section { position: relative; }
 /* ===== FINAL CTA ===== */
 .final-cta {
   text-align: center;
-  padding: 160px 0;
+  padding: 84px 0;
   position: relative;
   overflow: hidden;
   background: var(--white);

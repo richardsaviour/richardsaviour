@@ -170,10 +170,12 @@ body::before { opacity: 0.035; }
    ===================================================== */
 .timeline .timeline-step .step-image,
 .step-image {
-  border-radius: 150px 150px 18px 18px;
+  border-radius: 16px;
   border: 1.5px solid var(--charcoal);
   overflow: hidden;
 }
+/* full square image, focus held at the top of the frame */
+.timeline-step .step-image img { object-position: top; }
 .timeline-num {
   border: 1.5px solid var(--charcoal);
   box-shadow: none;
@@ -213,7 +215,7 @@ body::before { opacity: 0.035; }
   background: var(--sec-bg);
 }
 .testi-card .avatar {
-  border-radius: 999px 999px 8px 8px;
+  border-radius: 999px;
   overflow: hidden;
 }
 .testi-card:nth-child(2) {
@@ -246,8 +248,8 @@ body::before { opacity: 0.035; }
    8. MARQUEE → OUTLINED TYPE
    ===================================================== */
 .marquee-track span {
-  color: transparent;
-  -webkit-text-stroke: 1px rgba(255,255,255,0.55);
+  color: #fff;
+  -webkit-text-stroke: 0;
 }
 .marquee-track span.italic { color: var(--gold-soft); -webkit-text-stroke: 0; }
 .marquee-track span::after { color: var(--gold); -webkit-text-stroke: 0; }
