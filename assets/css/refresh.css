@@ -1,0 +1,353 @@
+/* =============================================================
+   RICHARD SAVIOUR — "CHARACTER PASS" (refresh.css)
+   De-AI component redesign for the light theme, drawn from the
+   reference boards: tab labels that break container edges,
+   alternating filled/outlined numbered cards, arch image masks,
+   spec-bar section headers, sticker labels, doodles, and a
+   rotating badge. Loaded after styles.css + enhance.css.
+   ============================================================= */
+
+/* Per-section surface color, used so tabs can mask lines/borders */
+:root { --sec-bg: var(--white); }
+.belt-section, .pillars-section, .testimonials-section,
+.tools-section, .checklist-section, .portfolio-section.alt,
+.calendly-section { --sec-bg: var(--off-white); }
+.video-testi-section, .studio-section.is-dark, .batman-section,
+.dark-bg, .auto-explainer, .page-hero.is-dark { --sec-bg: var(--soft-black); }
+.outreach-section { --sec-bg: var(--charcoal); }
+
+/* slightly stronger grain on the light theme (reads darker) */
+body::before { opacity: 0.035; }
+
+/* =====================================================
+   1. EYEBROWS → OUTLINED TAB PILLS (everywhere)
+   ===================================================== */
+.eyebrow {
+  padding: 8px 18px;
+  border: 1.5px solid var(--charcoal);
+  border-radius: 999px;
+  background: var(--sec-bg);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  color: var(--charcoal);
+  position: relative;
+  z-index: 2;
+}
+.eyebrow::before {
+  width: 7px; height: 7px;
+  border-radius: 999px;
+  background: var(--gold);
+}
+/* dark sections keep light tabs */
+.page-hero.is-dark .eyebrow, .video-testi-section .eyebrow,
+.studio-section.is-dark .eyebrow, .batman-text .eyebrow,
+.dark-bg .eyebrow, .outreach-section .eyebrow, .auto-explainer .eyebrow {
+  border-color: rgba(255,255,255,0.45);
+  color: #fff;
+}
+
+/* =====================================================
+   2. SECTION HEADS → SPEC BAR
+   A hairline with square end-caps runs behind the tab.
+   ===================================================== */
+.section-head { position: relative; }
+.section-head::before {
+  content: '';
+  position: absolute;
+  top: 15px; left: 0; right: 0;
+  height: 7px;
+  pointer-events: none;
+  background:
+    linear-gradient(var(--charcoal), var(--charcoal)) left center / 7px 7px no-repeat,
+    linear-gradient(var(--charcoal), var(--charcoal)) right center / 7px 7px no-repeat,
+    linear-gradient(var(--border-soft), var(--border-soft)) center / 100% 1.5px no-repeat;
+}
+.video-testi-section .section-head::before,
+.studio-section.is-dark .section-head::before {
+  background:
+    linear-gradient(#fff, #fff) left center / 7px 7px no-repeat,
+    linear-gradient(#fff, #fff) right center / 7px 7px no-repeat,
+    linear-gradient(rgba(255,255,255,0.22), rgba(255,255,255,0.22)) center / 100% 1.5px no-repeat;
+}
+/* short gold rule under centered headlines, with an offset ink square */
+.section-head .display-l::after {
+  content: '';
+  display: block;
+  width: 64px; height: 3px;
+  margin: 26px auto 0;
+  background:
+    linear-gradient(var(--charcoal), var(--charcoal)) right center / 8px 3px no-repeat,
+    linear-gradient(var(--gold), var(--gold)) left center / 52px 3px no-repeat;
+}
+.video-testi-section .section-head .display-l::after,
+.studio-section.is-dark .section-head .display-l::after {
+  background:
+    linear-gradient(#fff, #fff) right center / 8px 3px no-repeat,
+    linear-gradient(var(--gold), var(--gold)) left center / 52px 3px no-repeat;
+}
+
+/* =====================================================
+   3. PILLAR CARDS → ALTERNATING FILLED / OUTLINED,
+      number as a tab astride the top edge
+   ===================================================== */
+.pillar-card {
+  overflow: visible;
+  border-radius: 22px;
+  border: 1.5px solid var(--charcoal);
+  background: transparent;
+  box-shadow: none;
+  padding-top: 44px;
+}
+.pillar-card::before { display: none; } /* old left gold bar */
+.pillar-card .pillar-num {
+  position: absolute;
+  top: 0; left: 28px;
+  transform: translateY(-50%);
+  margin: 0;
+  padding: 6px 14px;
+  border: 1.5px solid var(--charcoal);
+  border-radius: 999px;
+  background: var(--sec-bg);
+  color: var(--charcoal);
+  letter-spacing: 0.14em;
+}
+.pillar-card:nth-child(even) {
+  background: var(--soft-black);
+  border-color: var(--soft-black);
+}
+.pillar-card:nth-child(even) h3 { color: #fff; }
+.pillar-card:nth-child(even) .one-liner { color: var(--gold-soft); }
+.pillar-card:nth-child(even) p { color: rgba(255,255,255,0.72); }
+.pillar-card:nth-child(even) .pillar-num {
+  background: var(--soft-black);
+  border-color: rgba(255,255,255,0.5);
+  color: #fff;
+}
+.pillar-card:hover {
+  transform: translateY(-6px);
+  box-shadow: var(--shadow-lg);
+  border-color: var(--charcoal);
+}
+.pillar-card:nth-child(even):hover { border-color: var(--gold); }
+
+/* =====================================================
+   4. WHY GRID → NUMBERED SPEC BOXES
+   ===================================================== */
+.why-item {
+  flex-direction: column;
+  gap: 14px;
+  background: transparent;
+  border: 1.5px solid var(--charcoal);
+  border-radius: 18px;
+  box-shadow: none;
+  padding: 22px 24px 24px;
+}
+.why-item .why-num {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--charcoal);
+  padding-bottom: 12px;
+  width: 100%;
+  background: linear-gradient(var(--border-soft), var(--border-soft)) bottom left / 100% 1.5px no-repeat;
+}
+.why-item:nth-child(2), .why-item:nth-child(7) {
+  background: var(--soft-black);
+  border-color: var(--soft-black);
+}
+.why-item:nth-child(2) p, .why-item:nth-child(7) p { color: #fff; }
+.why-item:nth-child(2) .why-num, .why-item:nth-child(7) .why-num {
+  color: var(--gold-soft);
+  background: linear-gradient(rgba(255,255,255,0.2), rgba(255,255,255,0.2)) bottom left / 100% 1.5px no-repeat;
+}
+.why-item:hover { background: var(--off-white); transform: translateY(-3px); }
+.why-item:nth-child(2):hover, .why-item:nth-child(7):hover { background: var(--charcoal); }
+
+/* =====================================================
+   5. TIMELINE → ARCH IMAGE MASKS
+   ===================================================== */
+.timeline .timeline-step .step-image,
+.step-image {
+  border-radius: 150px 150px 18px 18px;
+  border: 1.5px solid var(--charcoal);
+  overflow: hidden;
+}
+.timeline-num {
+  border: 1.5px solid var(--charcoal);
+  box-shadow: none;
+}
+
+/* =====================================================
+   6. TESTIMONIALS → QUOTE GLYPH + STAR TAB + ARCH AVATARS,
+      middle card inverted
+   ===================================================== */
+.testi-card {
+  overflow: visible;
+  border-radius: 22px;
+  border: 1.5px solid var(--charcoal);
+  box-shadow: none;
+  background: transparent;
+  padding-top: 40px;
+}
+.testi-card::after {
+  content: '\201C';
+  position: absolute;
+  top: 6px; right: 22px;
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: 84px;
+  line-height: 1;
+  color: rgba(var(--gold-rgb), 0.5);
+  pointer-events: none;
+}
+.testi-card .stars {
+  position: absolute;
+  top: 0; left: 24px;
+  transform: translateY(-50%);
+  margin: 0;
+  padding: 7px 14px;
+  border: 1.5px solid var(--charcoal);
+  border-radius: 999px;
+  background: var(--sec-bg);
+}
+.testi-card .avatar {
+  border-radius: 999px 999px 8px 8px;
+  overflow: hidden;
+}
+.testi-card:nth-child(2) {
+  background: var(--soft-black);
+  border-color: var(--soft-black);
+}
+.testi-card:nth-child(2) blockquote { color: rgba(255,255,255,0.85); }
+.testi-card:nth-child(2) .helped { color: var(--gold-soft); }
+.testi-card:nth-child(2) .author-text .name { color: #fff; }
+.testi-card:nth-child(2) .author-text .role { color: rgba(255,255,255,0.55); }
+.testi-card:nth-child(2) .stars { background: var(--soft-black); border-color: rgba(255,255,255,0.5); }
+.testi-card:hover { transform: translateY(-6px); box-shadow: var(--shadow-lg); border-color: var(--charcoal); }
+.testi-card:nth-child(2):hover { border-color: var(--gold); }
+
+/* =====================================================
+   7. WARNING CARD → STICKER LABEL, DASHED SEAM
+   ===================================================== */
+.warning-card { border: 1.5px dashed rgba(var(--gold-rgb), 0.55); }
+.warning-card .label {
+  transform: rotate(-2deg);
+  background: var(--gold);
+  color: #16110a;
+  border: 0;
+  border-radius: 8px;
+  box-shadow: 0 3px 0 rgba(0,0,0,0.35);
+  letter-spacing: 0.2em;
+}
+
+/* =====================================================
+   8. MARQUEE → OUTLINED TYPE
+   ===================================================== */
+.marquee-track span {
+  color: transparent;
+  -webkit-text-stroke: 1px rgba(255,255,255,0.55);
+}
+.marquee-track span.italic { color: var(--gold-soft); -webkit-text-stroke: 0; }
+.marquee-track span::after { color: var(--gold); -webkit-text-stroke: 0; }
+
+/* =====================================================
+   9. GHOST NUMERALS (light version — Terrixa watermark)
+   ===================================================== */
+.ghost-num {
+  position: absolute;
+  top: -14px; right: -8px;
+  z-index: 0;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-style: italic;
+  font-size: clamp(120px, 17vw, 260px);
+  line-height: 1;
+  color: transparent;
+  -webkit-text-stroke: 1.5px rgba(26, 26, 28, 0.10);
+  pointer-events: none;
+  user-select: none;
+}
+.video-testi-section .ghost-num, .studio-section.is-dark .ghost-num,
+.batman-section .ghost-num {
+  -webkit-text-stroke: 1.5px rgba(255, 255, 255, 0.10);
+}
+@media (max-width: 900px) { .ghost-num { font-size: 100px; right: 0; top: -8px; } }
+
+/* =====================================================
+   10. HERO DOODLES + ROTATING BADGE
+   ===================================================== */
+/* hand-drawn squiggle replaces the straight underline */
+.hero h1 .lang-line .site-word::after {
+  height: 8px;
+  bottom: -2px;
+  background:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 10' preserveAspectRatio='none'%3E%3Cpath d='M2 6 C 12 1, 22 9, 32 5 S 52 1, 62 6 S 82 9, 92 4 S 112 2, 118 6' fill='none' stroke='%23cb8c42' stroke-width='3' stroke-linecap='round'/%3E%3C/svg%3E")
+    center / 100% 100% no-repeat;
+}
+.rs-doodle {
+  position: absolute;
+  pointer-events: none;
+  color: var(--gold);
+  z-index: 3;
+}
+.rs-doodle svg { display: block; width: 100%; height: 100%; }
+@keyframes rs-twinkle {
+  0%, 100% { transform: scale(1) rotate(0deg); opacity: 0.9; }
+  50% { transform: scale(0.72) rotate(18deg); opacity: 0.55; }
+}
+.rs-doodle.tw { animation: rs-twinkle 3.2s ease-in-out infinite; }
+.rs-doodle.tw2 { animation: rs-twinkle 3.2s ease-in-out 1.4s infinite; }
+
+.rs-badge {
+  position: absolute;
+  top: -26px; right: -26px;
+  width: 116px; height: 116px;
+  z-index: 4;
+  pointer-events: none;
+  filter: drop-shadow(0 8px 20px rgba(20,18,12,0.18));
+}
+.rs-badge .spin { animation: rs-spin 16s linear infinite; transform-origin: 50% 50%; }
+@keyframes rs-spin { to { transform: rotate(360deg); } }
+@media (max-width: 1023px) { .rs-badge { display: none; } }
+/* the badge rides the panel corner, so the panel must not clip it;
+   inner decorative layers get their own clipping instead */
+.word-cycle-panel { overflow: visible; }
+.word-cycle-panel .grid-pattern,
+.word-cycle-panel .glow {
+  border-radius: inherit;
+  overflow: hidden;
+}
+
+/* =====================================================
+   11. CONTACT CARDS → PRIMARY FILLED / SECONDARY OUTLINED
+   ===================================================== */
+.contact-card {
+  border-radius: 22px;
+  border: 1.5px solid var(--charcoal);
+  box-shadow: none;
+}
+.contact-card:first-child { background: var(--soft-black); border-color: var(--soft-black); }
+.contact-card:first-child h3 { color: #fff; }
+.contact-card:first-child p { color: rgba(255,255,255,0.72); }
+.contact-card:first-child .tag-line { color: var(--gold-soft); }
+.contact-card:first-child .contact-icon {
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.2);
+}
+.contact-card:first-child .contact-icon svg { color: var(--gold-soft); }
+.contact-card:last-child { background: transparent; }
+
+/* =====================================================
+   12. PILLS — every third one dashed (hand-sorted feel)
+   ===================================================== */
+.pills-cluster .pill:nth-child(3n) { border-style: dashed; }
+
+/* =====================================================
+   13. MOTION SAFETY
+   ===================================================== */
+@media (prefers-reduced-motion: reduce) {
+  .rs-badge .spin { animation: none; }
+  .rs-doodle.tw, .rs-doodle.tw2 { animation: none; }
+}
