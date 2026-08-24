@@ -60,7 +60,15 @@ the bar had no stopping point and rode over the CTA and footer forever.
   indicator, horizontal scroll on mobile, and click-to-scroll offsets that
   stop headings landing underneath the bar.
 
-## 5. Video player (bug)
+## 5. Name clarification
+
+Nick's review is addressed to **Imoabasi** — the legal first name, and what
+the Upwork profile is under — while the site trades as **Richard**. A short
+note now sits directly under the review so a visitor reading the screenshot
+never has to wonder whether it belongs to someone else. The `.fw-note` class
+is reusable if the same clarification is wanted elsewhere.
+
+## 6. Video player (bug)
 
 The player CSS and JS existed **inline on `portfolio/index.html` only**, so
 the homepage controls rendered unstyled. Both are now shared:
@@ -68,7 +76,7 @@ the homepage controls rendered unstyled. Both are now shared:
 copies were removed. The JS also gained `data-autoplay="false"` support and
 an error state that shows fallback copy instead of a dead black rectangle.
 
-## 6. Motion layer (motion.dev)
+## 7. Motion layer (motion.dev)
 
 `assets/js/motion-layer.js`, loaded as a module from the Motion v13 CDN.
 Spring entrance for the featured block, scroll-linked parallax, hero depth

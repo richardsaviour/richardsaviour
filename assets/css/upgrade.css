@@ -349,6 +349,33 @@ em, i, blockquote em { font-style: italic; font-synthesis: none; }
   border-bottom: 1px solid rgba(var(--gold-rgb), 0.4);
 }
 
+/* name clarification under the review — quiet, but legible enough
+   that nobody has to wonder who wrote what */
+.fw-note {
+  position: relative;
+  margin: 18px 0 0;
+  padding: 13px 15px 13px 34px;
+  border-radius: var(--radius-sm);
+  border: 1px dashed var(--border-soft);
+  background: rgba(255,255,255,0.6);
+  font-size: 13px;
+  line-height: 1.55;
+  color: var(--text-mute);
+}
+.fw-note strong {
+  font-weight: 700;
+  color: var(--soft-black);
+}
+.fw-note-mark {
+  position: absolute;
+  left: 14px;
+  top: 12px;
+  font-family: var(--font-display);
+  font-size: 17px;
+  line-height: 1;
+  color: var(--gold-deep);
+}
+
 /* "Upwork" verified chip, sits at the end of the byline row */
 .fw-verified {
   margin-left: auto;
