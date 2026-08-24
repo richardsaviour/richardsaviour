@@ -1,0 +1,520 @@
+/* =============================================================
+   RICHARD SAVIOUR — UPGRADE LAYER (upgrade.css)
+   Loaded last. Three jobs:
+     1. The featured client-work block (gamesloth + Nick's review)
+     2. A lightweight lightbox for proof screenshots
+     3. Typographic + surface polish that pulls the site away from
+        the "generic template" look — real italics, optical sizing,
+        editorial rules, tighter measure, better focus states.
+   ============================================================= */
+
+/* =====================================================
+   0. TYPE — now that the real italic axis is loaded
+   ===================================================== */
+body { font-optical-sizing: auto; }
+
+.serif-italic,
+.hero h1 .accent,
+.page-hero h1 .accent,
+.final-cta .accent {
+  font-optical-sizing: auto;
+  /* WONK on: Fraunces' quirky alternates. This is the single
+     biggest "a human chose this" signal in the whole typeface. */
+  font-variation-settings: 'SOFT' 0, 'WONK' 1;
+  letter-spacing: -0.005em;
+}
+
+/* display sizes want a tighter optical size than body copy */
+.display-l .serif-italic,
+.display-xl .serif-italic { font-variation-settings: 'SOFT' 0, 'WONK' 1; }
+
+/* real italics for emphasis rather than a synthetic slant */
+em, i, blockquote em { font-style: italic; font-synthesis: none; }
+
+/* =====================================================
+   1. FEATURED CLIENT WORK
+   ===================================================== */
+.featured-work {
+  position: relative;
+  background: var(--white);
+  overflow: hidden;
+}
+/* faint engineering grid — gives the white room some tooth */
+.featured-work::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image:
+    linear-gradient(rgba(26,26,28,0.035) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(26,26,28,0.035) 1px, transparent 1px);
+  background-size: 72px 72px;
+  mask-image: radial-gradient(120% 80% at 50% 0%, #000 0%, transparent 72%);
+  -webkit-mask-image: radial-gradient(120% 80% at 50% 0%, #000 0%, transparent 72%);
+}
+.featured-work > .container { position: relative; z-index: 1; }
+
+/* asymmetric on purpose — a 50/50 split is what a template does */
+.fw-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.06fr) minmax(0, 0.94fr);
+  gap: 40px;
+  align-items: start;
+  margin-top: 56px;
+}
+
+/* ---------- the edit ---------- */
+.fw-video { position: relative; min-width: 0; }
+
+.fw-video-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--text-mute);
+  margin-bottom: 14px;
+}
+.fw-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #d8512e;
+  box-shadow: 0 0 0 0 rgba(216,81,46,0.6);
+  animation: pulse 2s infinite;
+}
+
+.fw-card {
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  background: #0a0a0c;
+  border: 1px solid rgba(255,255,255,0.10);
+  box-shadow: 0 30px 80px rgba(0,0,0,0.30), 0 0 0 1px rgba(var(--gold-rgb), 0.16);
+}
+.fw-card .reel-video-block {
+  position: relative;
+  aspect-ratio: 16 / 9;
+  background: #0a0a0c;
+}
+.fw-card .reel-video-block video {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+  cursor: pointer;
+}
+
+/* fallback copy only shows if the remote file refuses to load */
+.fw-video-fallback {
+  display: none;
+  position: absolute;
+  inset: 0;
+  margin: 0;
+  padding: 32px;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  font-size: 14px;
+  line-height: 1.6;
+  color: rgba(255,255,255,0.72);
+  background: #0a0a0c;
+}
+.fw-video-fallback a { color: var(--gold-soft); }
+.fw-card.is-errored .fw-video-fallback { display: flex; }
+.fw-card.is-errored .play-overlay { display: none; }
+
+/* ---------- slate / receipt strip ---------- */
+.fw-slate {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 1px;
+  margin: 18px 0 0;
+  background: var(--border-soft);
+  border: 1px solid var(--border-soft);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+}
+.fw-slate > div {
+  background: var(--white);
+  padding: 13px 15px;
+  min-width: 0;
+}
+.fw-slate dt {
+  font-family: var(--font-mono);
+  font-size: 9.5px;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--text-faint);
+  margin-bottom: 5px;
+}
+.fw-slate dd {
+  margin: 0;
+  font-size: 13.5px;
+  font-weight: 650;
+  color: var(--soft-black);
+  line-height: 1.35;
+}
+.fw-slate dd a {
+  color: var(--gold-deep);
+  text-decoration: none;
+  border-bottom: 1px solid rgba(var(--gold-rgb), 0.4);
+  transition: border-color 0.25s var(--ease);
+}
+.fw-slate dd a:hover { border-color: var(--gold-deep); }
+
+/* ---------- the review ---------- */
+.fw-review {
+  position: relative;
+  margin: 0;
+  padding: 42px 34px 30px;
+  background: var(--off-white);
+  border: 1.5px solid var(--charcoal);
+  border-radius: var(--radius-md);
+  box-shadow: 7px 7px 0 rgba(26,26,28,0.90);
+  min-width: 0;
+}
+
+.fw-sticker {
+  position: absolute;
+  top: -20px;
+  right: -14px;
+  width: 74px;
+  height: 74px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1px;
+  border-radius: 50%;
+  background: var(--gold);
+  color: #17110a;
+  transform: rotate(-11deg);
+  box-shadow: 0 8px 20px rgba(var(--gold-rgb), 0.42);
+  z-index: 2;
+}
+.fw-sticker-score {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 23px;
+  line-height: 1;
+  font-optical-sizing: auto;
+}
+.fw-sticker-label {
+  font-family: var(--font-mono);
+  font-size: 8px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  opacity: 0.78;
+}
+
+/* mirrors .fw-video-tag on the other column */
+.fw-review-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--text-mute);
+  margin-bottom: 16px;
+}
+.fw-review-tag .fw-dot { background: var(--gold); box-shadow: 0 0 0 0 rgba(var(--gold-rgb), 0.6); }
+
+/* ---------- the screenshot itself ---------- */
+.fw-shot {
+  display: block;
+  position: relative;
+  width: 100%;
+  margin: 0 0 16px;
+  padding: 0;
+  border: 1px solid var(--border-soft);
+  border-radius: var(--radius-sm);
+  background: var(--white);
+  overflow: hidden;
+  cursor: zoom-in;
+  box-shadow: 0 2px 10px rgba(20,18,12,0.07);
+  transition: box-shadow 0.32s var(--ease), border-color 0.32s var(--ease);
+}
+.fw-shot img {
+  display: block;
+  width: 100%;
+  height: auto;
+  /* the real screenshot's ratio is unknown, so let it be itself
+     rather than cropping a client's words out of frame */
+}
+.fw-shot:hover {
+  border-color: var(--charcoal);
+  box-shadow: 0 10px 26px rgba(20,18,12,0.14);
+}
+
+.fw-shot-zoom {
+  position: absolute;
+  right: 10px;
+  bottom: 10px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 12px;
+  border-radius: 100px;
+  background: rgba(13,13,14,0.86);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  color: #fff;
+  font-family: var(--font-mono);
+  font-size: 9.5px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  opacity: 0;
+  transform: translateY(5px);
+  transition: opacity 0.3s var(--ease), transform 0.3s var(--ease);
+  pointer-events: none;
+}
+.fw-shot-zoom svg { width: 12px; height: 12px; flex: 0 0 12px; }
+.fw-shot:hover .fw-shot-zoom,
+.fw-shot:focus-visible .fw-shot-zoom { opacity: 1; transform: none; }
+
+/* touch devices never hover — keep the affordance visible */
+@media (hover: none) {
+  .fw-shot-zoom { opacity: 1; transform: none; }
+}
+
+/* explicit, always-visible way into the readable full-size version */
+.fw-read {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  margin-bottom: 22px;
+  padding: 10px 16px;
+  border-radius: 100px;
+  border: 1px solid var(--border-soft);
+  background: var(--white);
+  cursor: pointer;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--text-mute);
+  transition: color 0.28s var(--ease), border-color 0.28s var(--ease), background 0.28s var(--ease);
+}
+.fw-read svg { width: 13px; height: 13px; flex: 0 0 13px; color: var(--gold-deep); }
+.fw-read:hover { color: var(--soft-black); border-color: var(--charcoal); background: var(--white); }
+
+.fw-review .author {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  padding-top: 20px;
+  border-top: 1px solid var(--border-soft);
+}
+.fw-review .avatar {
+  width: 42px;
+  height: 42px;
+  flex: 0 0 42px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: var(--charcoal);
+  color: var(--gold);
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 18px;
+  font-optical-sizing: auto;
+}
+.fw-review .author-text { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.fw-review .author-text .name {
+  font-size: 15px;
+  font-weight: 750;
+  color: var(--soft-black);
+  letter-spacing: -0.01em;
+}
+.fw-review .author-text .role {
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-mute);
+}
+.fw-review .author-text .role a {
+  color: var(--gold-deep);
+  text-decoration: none;
+  border-bottom: 1px solid rgba(var(--gold-rgb), 0.4);
+}
+
+/* "Upwork" verified chip, sits at the end of the byline row */
+.fw-verified {
+  margin-left: auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border-radius: 100px;
+  border: 1px solid rgba(62,169,107,0.34);
+  background: rgba(62,169,107,0.09);
+  font-family: var(--font-mono);
+  font-size: 9.5px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #2e7d51;
+  white-space: nowrap;
+}
+.fw-verified svg { width: 11px; height: 11px; flex: 0 0 11px; }
+
+/* ---------- footer line ---------- */
+.fw-foot {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  margin-top: 44px;
+  padding-top: 26px;
+  border-top: 1px solid var(--border-soft);
+}
+.fw-foot p {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--text-mute);
+  max-width: 52ch;
+}
+
+/* ---------- responsive ---------- */
+@media (max-width: 1000px) {
+  .fw-grid { grid-template-columns: 1fr; gap: 34px; }
+  .fw-review { box-shadow: 5px 5px 0 rgba(26,26,28,0.90); }
+}
+@media (max-width: 620px) {
+  .fw-grid { margin-top: 38px; }
+  .fw-slate { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .fw-review { padding: 36px 18px 24px; }
+  .fw-review .author { flex-wrap: wrap; row-gap: 12px; }
+  .fw-verified { margin-left: 0; }
+  .fw-sticker { width: 62px; height: 62px; top: -16px; right: -8px; }
+  .fw-sticker-score { font-size: 19px; }
+    .fw-foot { flex-direction: column; align-items: flex-start; }
+}
+
+/* =====================================================
+   2. LIGHTBOX (proof screenshots)
+   ===================================================== */
+.rs-lightbox {
+  position: fixed;
+  inset: 0;
+  z-index: 400;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 5vh 5vw;
+  background: rgba(8,8,9,0.90);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.35s var(--ease), visibility 0.35s;
+}
+.rs-lightbox.is-open { opacity: 1; visibility: visible; }
+.rs-lightbox figure {
+  margin: 0;
+  max-width: 1000px;
+  width: 100%;
+  transform: scale(0.97) translateY(8px);
+  transition: transform 0.45s var(--ease);
+}
+.rs-lightbox.is-open figure { transform: none; }
+.rs-lightbox img {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-height: 78vh;
+  object-fit: contain;
+  border-radius: var(--radius-md);
+  background: #fff;
+  box-shadow: 0 40px 90px rgba(0,0,0,0.6);
+}
+.rs-lightbox figcaption {
+  margin-top: 16px;
+  text-align: center;
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.62);
+}
+.rs-lightbox-close {
+  position: absolute;
+  top: 22px;
+  right: 22px;
+  width: 44px;
+  height: 44px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  border: 1px solid rgba(255,255,255,0.22);
+  background: rgba(255,255,255,0.06);
+  color: #fff;
+  cursor: pointer;
+  transition: background 0.25s var(--ease), transform 0.25s var(--ease);
+}
+.rs-lightbox-close:hover { background: rgba(255,255,255,0.16); transform: rotate(90deg); }
+.rs-lightbox-close svg { width: 18px; height: 18px; }
+body.rs-lb-open { overflow: hidden; }
+
+/* =====================================================
+   3. POLISH — small things that add up
+   ===================================================== */
+
+/* clicking a sub-nav link should not park the heading under the bar */
+#video-work, #websites, #social-media,
+#featured-work, #belt, #order, #pillars, #tools, #studio,
+#testimonials, #cta { scroll-margin-top: 132px; }
+
+/* visible, on-brand focus ring — most templates ship with none */
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible,
+[tabindex]:focus-visible {
+  outline: 2px solid var(--gold);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+/* motion-layer entrance state. Only applied once the module has
+   confirmed it loaded, so a CDN failure can never hide content. */
+.rs-motion-ready [data-motion-in] {
+  opacity: 0;
+  will-change: transform, opacity;
+}
+
+/* Registered so the browser interpolates it as a number rather
+   than swapping two strings. Without this the spec bar snaps. */
+@property --spec-scale {
+  syntax: '<number>';
+  inherits: true;
+  initial-value: 1;
+}
+
+/* The hairline behind each section tab wipes in from the left.
+   Falls back to fully drawn when the motion layer never runs. */
+.section-head::before {
+  clip-path: inset(0 calc((1 - var(--spec-scale, 1)) * 100%) 0 0);
+}
+
+/* keep the flow overlay from ever intercepting clicks */
+.rs-flow { pointer-events: none; }
+
+@media (prefers-reduced-motion: reduce) {
+  .fw-dot { animation: none; }
+  .rs-motion-ready [data-motion-in] { opacity: 1; }
+}

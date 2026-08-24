@@ -12,205 +12,15 @@
 <link rel="apple-touch-icon" href="https://res.cloudinary.com/dbtuidmoh/image/upload/c_fit,w_180,h_180,r_36,f_png/v1782670202/R_ox27xv.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700;9..144,800;9..144,900&family=Inter+Tight:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400..900;1,9..144,400..900&amp;family=Inter+Tight:ital,wght@0,400..900;1,400..900&amp;family=JetBrains+Mono:wght@400;500;600&amp;display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/assets/css/styles.css">
 <link rel="stylesheet" href="/assets/css/enhance.css">
 <link rel="stylesheet" href="/assets/css/refresh.css">
+<link rel="stylesheet" href="/assets/css/upgrade.css">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.net.min.js"></script>
 
-<style>
-/* ===== CUSTOM VIDEO PLAYER — separated layout ===== */
-
-/* Wrapper: video player block + info card are siblings, not nested */
-.reel-card {
-  display: flex;
-  flex-direction: column;
-  border-radius: 10px;
-  overflow: hidden;
-  background: #000;
-}
-
-/* ---- VIDEO BLOCK (black chrome, no info inside) ---- */
-.reel-video-block {
-  position: relative;
-  background: #000;
-  line-height: 0;
-}
-
-.reel-video-block video {
-  display: block;
-  width: 100%;
-  aspect-ratio: 16/9;
-  object-fit: cover;
-  cursor: pointer;
-}
-
-/* Big centered play/pause flash */
-.play-overlay {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%) scale(0);
-  width: 56px;
-  height: 56px;
-  background: rgba(0,0,0,0.52);
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  pointer-events: none;
-  transition: transform 0.18s cubic-bezier(.34,1.56,.64,1), opacity 0.18s;
-  opacity: 0;
-  z-index: 9;
-}
-.play-overlay svg { width: 24px; height: 24px; fill: #fff; margin-left: 3px; }
-.reel-card.is-paused .play-overlay { transform: translate(-50%, -50%) scale(1); opacity: 1; }
-
-/* ---- PLAYER CONTROLS BAR (sits below video, dark bg) ---- */
-.video-controls {
-  background: #111;
-  padding: 10px 14px 12px;
-  display: flex;
-  flex-direction: column;
-  gap: 9px;
-}
-
-/* Progress track */
-.video-progress {
-  position: relative;
-  height: 4px;
-  background: rgba(255,255,255,0.18);
-  border-radius: 4px;
-  cursor: pointer;
-  transition: height 0.12s ease;
-}
-.video-progress:hover { height: 6px; }
-
-.video-progress-fill {
-  height: 100%;
-  background: #e5c46a; /* gold accent — matches site */
-  border-radius: 4px;
-  width: 0%;
-  pointer-events: none;
-}
-
-.video-progress-thumb {
-  position: absolute;
-  top: 50%;
-  transform: translate(-50%, -50%) scale(0);
-  width: 13px;
-  height: 13px;
-  background: #fff;
-  border-radius: 50%;
-  pointer-events: none;
-  transition: transform 0.13s ease;
-  box-shadow: 0 0 0 2px rgba(229,196,106,0.5);
-}
-.video-progress:hover .video-progress-thumb { transform: translate(-50%, -50%) scale(1); }
-
-/* Controls row */
-.video-btns {
-  display: flex;
-  align-items: center;
-  gap: 4px;
-}
-
-.video-btn {
-  background: none;
-  border: none;
-  padding: 6px;
-  cursor: pointer;
-  color: #ccc;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 5px;
-  transition: background 0.13s, color 0.13s;
-  flex-shrink: 0;
-}
-.video-btn:hover { background: rgba(255,255,255,0.1); color: #fff; }
-.video-btn svg { width: 18px; height: 18px; fill: currentColor; }
-.video-btn.btn-playpause svg { width: 20px; height: 20px; }
-
-/* Volume area */
-.video-volume-wrap {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-}
-.video-volume-slider {
-  -webkit-appearance: none;
-  appearance: none;
-  width: 70px;
-  height: 3px;
-  border-radius: 3px;
-  background: rgba(255,255,255,0.2);
-  outline: none;
-  cursor: pointer;
-}
-.video-volume-slider::-webkit-slider-thumb {
-  -webkit-appearance: none;
-  width: 11px; height: 11px;
-  border-radius: 50%;
-  background: #fff;
-  cursor: pointer;
-}
-.video-volume-slider::-moz-range-thumb {
-  width: 11px; height: 11px;
-  border-radius: 50%;
-  background: #fff;
-  border: none;
-  cursor: pointer;
-}
-
-/* Time display */
-.video-time {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 11px;
-  color: rgba(255,255,255,0.55);
-  white-space: nowrap;
-  user-select: none;
-  margin-right: 2px;
-}
-
-/* Spacer pushes mute+volume+fullscreen to the right */
-.video-spacer { flex: 1; }
-
-/* Fullscreen btn svg slightly larger */
-.btn-fullscreen svg { width: 17px; height: 17px; }
-
-/* ---- INFO CARD (completely outside the player) ---- */
-.reel-meta {
-  background: var(--surface, #fff);
-  border: 1px solid rgba(0,0,0,0.08);
-  border-top: none;
-  padding: 16px 18px 18px;
-}
-
-.reel-kind {
-  display: inline-block;
-  font-size: 10px;
-  font-family: 'JetBrains Mono', monospace;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: #888;
-  margin-bottom: 6px;
-}
-
-.reel-meta h4 {
-  margin: 0 0 5px;
-  font-size: 15px;
-  font-weight: 700;
-}
-
-.reel-meta p {
-  margin: 0;
-  font-size: 13px;
-  line-height: 1.5;
-  color: #555;
-}
-</style>
+<!-- Video player styles: /assets/css/video-player.css -->
 </head>
 <body class="is-loading">
 
@@ -250,11 +60,19 @@
   </div>
 </section>
 
-<!-- ==================== STICKY SUB-NAV ==================== -->
+<!-- ==================== STICKY SUB-NAV ====================
+     The sub-nav and the three work sections live inside one scope
+     wrapper. Sticky is bounded by its containing block, so the bar
+     rides along through the work sections and then releases at the
+     end of #social-media instead of floating over the CTA/footer. -->
+<div class="anchors-scope">
 <div class="section-anchors" id="portfolio-anchors">
-  <a href="#video-work" data-target="video-work">Video Work</a>
-  <a href="#websites" data-target="websites">Websites</a>
-  <a href="#social-media" data-target="social-media">Social Media</a>
+  <div class="section-anchors-inner">
+    <span class="anchors-indicator" aria-hidden="true"></span>
+    <a href="#video-work" data-target="video-work">Video Work</a>
+    <a href="#websites" data-target="websites">Websites</a>
+    <a href="#social-media" data-target="social-media">Social Media</a>
+  </div>
 </div>
 
 <!-- ==================== SECTION 01 · VIDEO WORK ==================== -->
@@ -637,6 +455,7 @@
     </div>
   </div>
 </section>
+</div><!-- /.anchors-scope — sub-nav releases here -->
 
 <!-- ==================== FINAL CTA ==================== -->
 <section class="final-cta" id="cta">
@@ -707,131 +526,10 @@
 <!-- ==================== SHARED JS ==================== -->
 <script src="/assets/js/main.js"></script>
 <script src="/assets/js/enhance.js"></script>
+<script src="/assets/js/video-player.js"></script>
+<script type="module" src="/assets/js/motion-layer.js"></script>
 
-<!-- ==================== VIDEO PLAYER JS ==================== -->
-<script>
-(function () {
-  'use strict';
-
-  function formatTime(s) {
-    if (!isFinite(s)) return '0:00';
-    const m = Math.floor(s / 60);
-    const sec = Math.floor(s % 60);
-    return m + ':' + (sec < 10 ? '0' : '') + sec;
-  }
-
-  function initVideoCard(card) {
-    const video      = card.querySelector('video');
-    const btnPP      = card.querySelector('[data-action="playpause"]');
-    const btnRew     = card.querySelector('[data-action="rewind"]');
-    const btnFwd     = card.querySelector('[data-action="forward"]');
-    const btnMute    = card.querySelector('[data-action="mute"]');
-    const volSlider  = card.querySelector('[data-action="volume"]');
-    const btnFS      = card.querySelector('[data-action="fullscreen"]');
-    const progress   = card.querySelector('[data-progress]');
-    const fill       = card.querySelector('[data-fill]');
-    const thumb      = card.querySelector('[data-thumb]');
-    const timeEl     = card.querySelector('[data-time]');
-    const overlay    = card.querySelector('.play-overlay');
-
-    if (!video || !btnPP) return;
-
-    video.muted = true;
-    if (volSlider) volSlider.value = 1;
-
-    function updatePlayState() {
-      const paused = video.paused;
-      card.classList.toggle('is-paused', paused);
-      btnPP.querySelector('.icon-play').style.display  = paused ? '' : 'none';
-      btnPP.querySelector('.icon-pause').style.display = paused ? 'none' : '';
-    }
-
-    function updateProgress() {
-      if (!video.duration) return;
-      const pct = (video.currentTime / video.duration) * 100;
-      fill.style.width = pct + '%';
-      if (thumb) thumb.style.left = pct + '%';
-      if (timeEl) timeEl.textContent = formatTime(video.currentTime) + ' / ' + formatTime(video.duration);
-    }
-
-    function updateMuteUI() {
-      if (!btnMute) return;
-      const muted = video.muted || video.volume === 0;
-      btnMute.querySelector('.icon-unmuted').style.display = muted ? 'none' : '';
-      btnMute.querySelector('.icon-muted').style.display   = muted ? '' : 'none';
-    }
-
-    btnPP.addEventListener('click', () => { video.paused ? video.play() : video.pause(); });
-    if (btnRew) btnRew.addEventListener('click', () => { video.currentTime = Math.max(0, video.currentTime - 5); });
-    if (btnFwd) btnFwd.addEventListener('click', () => { video.currentTime = Math.min(video.duration || 0, video.currentTime + 5); });
-
-    if (btnMute) btnMute.addEventListener('click', () => {
-      video.muted = !video.muted;
-      if (volSlider) volSlider.value = video.muted ? 0 : video.volume;
-      updateMuteUI();
-    });
-
-    if (volSlider) volSlider.addEventListener('input', () => {
-      video.volume = parseFloat(volSlider.value);
-      video.muted  = video.volume === 0;
-      updateMuteUI();
-    });
-
-    if (btnFS) btnFS.addEventListener('click', () => {
-      const target = card.querySelector('.reel-video-block') || card;
-      if (document.fullscreenElement) {
-        document.exitFullscreen && document.exitFullscreen();
-      } else {
-        (target.requestFullscreen || target.webkitRequestFullscreen || target.mozRequestFullScreen).call(target);
-      }
-    });
-
-    video.addEventListener('click', () => { video.paused ? video.play() : video.pause(); });
-    video.addEventListener('play',   updatePlayState);
-    video.addEventListener('pause',  updatePlayState);
-    video.addEventListener('timeupdate', updateProgress);
-    video.addEventListener('loadedmetadata', updateProgress);
-
-    // Scrub — mouse
-    let scrubbing = false;
-    function scrubTo(clientX) {
-      const rect = progress.getBoundingClientRect();
-      const pct  = Math.max(0, Math.min((clientX - rect.left) / rect.width, 1));
-      video.currentTime = pct * (video.duration || 0);
-    }
-    progress.addEventListener('mousedown', (e) => { scrubbing = true; scrubTo(e.clientX); });
-    document.addEventListener('mousemove',  (e) => { if (scrubbing) scrubTo(e.clientX); });
-    document.addEventListener('mouseup',    ()  => { scrubbing = false; });
-    // Scrub — touch
-    progress.addEventListener('touchstart', (e) => { scrubbing = true; scrubTo(e.touches[0].clientX); }, { passive: true });
-    document.addEventListener('touchmove',  (e) => { if (scrubbing) scrubTo(e.touches[0].clientX); },  { passive: true });
-    document.addEventListener('touchend',   ()  => { scrubbing = false; });
-
-    // Autoplay in view
-    const io = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) { video.play().catch(() => {}); }
-        else { video.pause(); }
-      });
-    }, { threshold: 0.4 });
-    io.observe(card);
-
-    updatePlayState();
-    updateMuteUI();
-  }
-
-  function initAll() {
-    document.querySelectorAll('[data-video-card]').forEach(initVideoCard);
-  }
-
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initAll);
-  } else {
-    initAll();
-  }
-})();
-</script>
-
+<!-- Video players are handled by the shared /assets/js/video-player.js -->
 <!-- ==================== VANTA JS ==================== -->
 <script>
   (function () {

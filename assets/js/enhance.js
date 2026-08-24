@@ -40,6 +40,7 @@
   try {
     var nav = document.querySelector('.nav');
     if (nav) {
+      var subNav = document.querySelector('.section-anchors');
       var lastY = window.scrollY;
       var navTicking = false;
       function updateNav() {
@@ -54,6 +55,12 @@
           nav.classList.add('nav-hidden');
         } else if (delta < -6) {
           nav.classList.remove('nav-hidden');
+        }
+        /* the portfolio sub-nav travels with the main nav, so reading
+           down the page is never interrupted by a bar sitting on top
+           of a heading. Scroll up and both come back together. */
+        if (subNav) {
+          subNav.classList.toggle('is-tucked', nav.classList.contains('nav-hidden'));
         }
         lastY = y;
       }
@@ -385,6 +392,68 @@
       g.textContent = m[1];
       host.insertBefore(g, host.firstChild);
     });
+  } catch (e) { /* silent */ }
+
+  /* =====================================================
+     14. LIGHTBOX for proof screenshots ([data-lightbox])
+     Built once, on first use. Escape and backdrop close it,
+     and focus is returned to the trigger afterwards.
+     ===================================================== */
+  try {
+    var lbTriggers = document.querySelectorAll('[data-lightbox]');
+    if (lbTriggers.length) {
+      var lb = null;
+      var lbImg = null;
+      var lbCap = null;
+      var lbOpener = null;
+
+      function buildLightbox() {
+        lb = document.createElement('div');
+        lb.className = 'rs-lightbox';
+        lb.setAttribute('role', 'dialog');
+        lb.setAttribute('aria-modal', 'true');
+        lb.innerHTML =
+          '<button class="rs-lightbox-close" type="button" aria-label="Close">' +
+            '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">' +
+            '<path d="M18 6L6 18M6 6l12 12"/></svg>' +
+          '</button>' +
+          '<figure><img alt=""><figcaption></figcaption></figure>';
+        document.body.appendChild(lb);
+        lbImg = lb.querySelector('img');
+        lbCap = lb.querySelector('figcaption');
+
+        lb.querySelector('.rs-lightbox-close').addEventListener('click', closeLightbox);
+        lb.addEventListener('click', function (e) {
+          if (e.target === lb) closeLightbox();
+        });
+      }
+
+      function closeLightbox() {
+        if (!lb) return;
+        lb.classList.remove('is-open');
+        document.body.classList.remove('rs-lb-open');
+        if (lbOpener) { lbOpener.focus(); lbOpener = null; }
+      }
+
+      document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape' && lb && lb.classList.contains('is-open')) closeLightbox();
+      });
+
+      lbTriggers.forEach(function (btn) {
+        btn.addEventListener('click', function () {
+          var src = btn.getAttribute('data-src');
+          if (!src) return;
+          if (!lb) buildLightbox();
+          lbOpener = btn;
+          lbImg.src = src;
+          lbImg.alt = btn.getAttribute('data-caption') || 'Screenshot';
+          lbCap.textContent = btn.getAttribute('data-caption') || '';
+          lb.classList.add('is-open');
+          document.body.classList.add('rs-lb-open');
+          lb.querySelector('.rs-lightbox-close').focus();
+        });
+      });
+    }
   } catch (e) { /* silent */ }
 
 })();

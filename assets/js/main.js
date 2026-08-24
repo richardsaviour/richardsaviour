@@ -157,27 +157,87 @@
     decorativeVideos.forEach(v => videoIO.observe(v));
   }
 
-  /* ===== ANCHOR-NAV ACTIVE STATE (portfolio page) ===== */
+  /* ===== ANCHOR-NAV ACTIVE STATE + SLIDING PILL (portfolio page) ===== */
   const anchorNav = document.querySelector('.section-anchors');
   if (anchorNav && 'IntersectionObserver' in window) {
     const anchorLinks = anchorNav.querySelectorAll('a');
-    const sectionMap = new Map();
+    const indicator   = anchorNav.querySelector('.anchors-indicator');
+    const track       = anchorNav.querySelector('.section-anchors-inner');
+    const sectionMap  = new Map();
+
     anchorLinks.forEach(a => {
       const id = (a.getAttribute('href') || '').replace('#', '');
       if (!id) return;
       const sec = document.getElementById(id);
       if (sec) sectionMap.set(sec, a);
     });
+
+    /* move the gold pill under whichever link is active. If the
+       motion layer loaded, spring it; otherwise the CSS transition
+       on .anchors-indicator handles the move. */
+    function moveIndicator() {
+      if (!indicator || !track) return;
+      const active = anchorNav.querySelector('a.is-active');
+      if (!active) { indicator.style.opacity = '0'; return; }
+
+      const m = window.__rsMotion;
+      if (m && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        indicator.style.transition = 'none';
+        m.animate(indicator, {
+          opacity: 1,
+          width: active.offsetWidth + 'px',
+          x: active.offsetLeft
+        }, m.spring);
+      } else {
+        indicator.style.opacity = '1';
+        indicator.style.width = active.offsetWidth + 'px';
+        indicator.style.transform = 'translateX(' + active.offsetLeft + 'px)';
+      }
+    }
+
+    function setActive(link) {
+      if (!link || link.classList.contains('is-active')) return;
+      anchorLinks.forEach(l => l.classList.remove('is-active'));
+      link.classList.add('is-active');
+      moveIndicator();
+      /* keep the active pill in view when the bar scrolls horizontally */
+      if (track && track.scrollWidth > track.clientWidth) {
+        track.scrollTo({
+          left: link.offsetLeft - (track.clientWidth - link.offsetWidth) / 2,
+          behavior: 'smooth'
+        });
+      }
+    }
+
     const secIO = new IntersectionObserver(entries => {
       entries.forEach(entry => {
         if (entry.isIntersecting && entry.intersectionRatio > 0.2) {
-          anchorLinks.forEach(l => l.classList.remove('is-active'));
-          const a = sectionMap.get(entry.target);
-          if (a) a.classList.add('is-active');
+          setActive(sectionMap.get(entry.target));
         }
       });
     }, { threshold: [0.2, 0.4], rootMargin: '-20% 0px -40% 0px' });
     sectionMap.forEach((_a, sec) => secIO.observe(sec));
+
+    /* click: scroll with an offset that clears the nav + the sticky bar */
+    anchorLinks.forEach(link => {
+      link.addEventListener('click', e => {
+        const id = (link.getAttribute('href') || '').replace('#', '');
+        const target = document.getElementById(id);
+        if (!target) return;
+        e.preventDefault();
+        setActive(link);
+        const offset = anchorNav.getBoundingClientRect().height + 78;
+        window.scrollTo({
+          top: target.getBoundingClientRect().top + window.scrollY - offset,
+          behavior: 'smooth'
+        });
+        history.replaceState(null, '', '#' + id);
+      });
+    });
+
+    window.addEventListener('resize', moveIndicator);
+    window.addEventListener('load', moveIndicator);
+    setActive(anchorLinks[0]);
   }
 })();
 

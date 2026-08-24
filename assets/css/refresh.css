@@ -280,14 +280,8 @@ body::before { opacity: 0.035; }
 /* =====================================================
    10. HERO DOODLES + ROTATING BADGE
    ===================================================== */
-/* hand-drawn squiggle replaces the straight underline */
-.hero h1 .lang-line .site-word::after {
-  height: 8px;
-  bottom: -2px;
-  background:
-    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 10' preserveAspectRatio='none'%3E%3Cpath d='M2 6 C 12 1, 22 9, 32 5 S 52 1, 62 6 S 82 9, 92 4 S 112 2, 118 6' fill='none' stroke='%23cb8c42' stroke-width='3' stroke-linecap='round'/%3E%3C/svg%3E")
-    center / 100% 100% no-repeat;
-}
+/* (the squiggle underline under the hero word was removed —
+   the word now carries itself with the serif italic alone) */
 .rs-doodle {
   position: absolute;
   pointer-events: none;

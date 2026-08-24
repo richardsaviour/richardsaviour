@@ -537,25 +537,21 @@ section { position: relative; }
   position: relative;
   pointer-events: auto;
 }
+/* "website" — matches the .serif-italic accent used in every other
+   heading on the site. No underline, no rule, no squiggle. */
 .hero h1 .lang-line .site-word {
   font-family: var(--font-display);
   font-style: italic;
-  font-weight: 600;
+  font-weight: 500;
+  font-optical-sizing: auto;
+  font-variation-settings: 'SOFT' 0, 'WONK' 1;
   color: var(--gold-deep);
+  letter-spacing: -0.005em;
   position: relative;
   display: inline-block;
-  padding-right: 0.05em;
+  padding-right: 0.06em;
 }
-.hero h1 .lang-line .site-word::after {
-  content: '';
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 0.06em;
-  height: 2px;
-  background: linear-gradient(90deg, transparent, var(--gold), transparent);
-  border-radius: 2px;
-}
+.hero h1 .lang-line .site-word::after { content: none; }
 
 /* ============================================================
    WORD CYCLE PANEL — the signature "box motion graphic"
@@ -1772,44 +1768,89 @@ body.is-loading { overflow-x: hidden; }
 /* ============================================================
    ANCHOR SUB-NAV (portfolio)
    ============================================================ */
+/* The scope wrapper bounds the sticky bar: it can only travel as far
+   as the last work section, then it lets go. No overlap on the CTA
+   or footer, and no bar hanging over unrelated content. */
+.anchors-scope { position: relative; }
+
 .section-anchors {
-  display: flex;
-  gap: 10px;
-  flex-wrap: wrap;
-  justify-content: center;
-  padding: 32px 0;
-  border-bottom: 1px solid var(--border-soft);
-  background: var(--white);
   position: sticky;
-  top: 80px;
-  z-index: 50;
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  background: rgba(255,255,255,0.92);
+  top: 84px;
+  z-index: 40;
+  display: flex;
+  justify-content: center;
+  padding: 18px 16px;
+  pointer-events: none;          /* only the pills are clickable */
+  background: none;
+  border: 0;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
 }
+/* the visible capsule — mirrors the main nav's shape and glass */
+.section-anchors-inner {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 5px;
+  border-radius: 100px;
+  pointer-events: auto;
+  max-width: 100%;
+  overflow-x: auto;
+  scrollbar-width: none;
+  background: rgba(13,13,14,0.90);
+  border: 1px solid rgba(255,255,255,0.10);
+  backdrop-filter: blur(20px) saturate(1.4);
+  -webkit-backdrop-filter: blur(20px) saturate(1.4);
+  box-shadow: 0 14px 34px rgba(0,0,0,0.20);
+  transition: transform 0.4s var(--ease), opacity 0.3s var(--ease);
+}
+.section-anchors-inner::-webkit-scrollbar { display: none; }
+
+/* sliding pill that follows the active item */
+.anchors-indicator {
+  position: absolute;
+  top: 5px;
+  left: 0;
+  height: calc(100% - 10px);
+  width: 0;
+  border-radius: 100px;
+  background: var(--gold);
+  opacity: 0;
+  pointer-events: none;
+  z-index: 0;
+  transition: transform 0.55s var(--ease), width 0.55s var(--ease), opacity 0.3s ease;
+}
+
 .section-anchors a {
+  position: relative;
+  z-index: 1;
+  white-space: nowrap;
   font-family: var(--font-mono);
-  font-size: 11px;
+  font-size: 10.5px;
   font-weight: 600;
   letter-spacing: 0.16em;
   text-transform: uppercase;
-  color: var(--text-mute);
+  color: rgba(255,255,255,0.62);
   text-decoration: none;
   padding: 10px 18px;
   border-radius: 100px;
-  border: 1px solid var(--border-soft);
-  background: var(--white);
-  transition: all 0.3s var(--ease);
+  border: 0;
+  background: none;
+  transition: color 0.3s var(--ease);
 }
-.section-anchors a:hover {
-  color: var(--soft-black);
-  border-color: var(--charcoal);
-  transform: translateY(-1px);
+.section-anchors a:hover { color: #fff; }
+.section-anchors a.is-active { color: #17110a; }
+
+/* The bar retracts with the main nav. Scrolling down clears the
+   viewport completely — no capsule parked on top of a heading —
+   and scrolling up brings both back together. */
+.section-anchors.is-tucked {
+  pointer-events: none;
 }
-.section-anchors a.is-active {
-  background: var(--soft-black);
-  color: var(--gold);
-  border-color: var(--soft-black);
+.section-anchors.is-tucked .section-anchors-inner {
+  transform: translateY(-190%);
+  opacity: 0;
 }
 
 /* ============================================================
@@ -2700,8 +2741,9 @@ body.is-loading { overflow-x: hidden; }
   .nav-logo { font-size: 16px; }
   .auto-grid { grid-template-columns: 1fr; }
   .page-hero { min-height: auto; padding: 160px 0 80px; }
-  .section-anchors { top: 100px; gap: 8px; padding: 20px 0; }
-  .section-anchors a { padding: 8px 14px; font-size: 10px; }
+  .section-anchors { top: 76px; padding: 12px 12px; }
+  .section-anchors-inner { gap: 2px; padding: 4px; }
+  .section-anchors a { padding: 9px 13px; font-size: 9.5px; letter-spacing: 0.12em; }
 }
 
 /* ============================================================

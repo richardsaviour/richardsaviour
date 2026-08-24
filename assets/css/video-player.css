@@ -1,0 +1,197 @@
+/* =============================================================
+   RICHARD SAVIOUR — VIDEO PLAYER COMPONENT
+   Extracted from portfolio/index.html so every page that uses a
+   [data-video-card] gets the same controls. Pairs with
+   /assets/js/video-player.js.
+   ============================================================= */
+
+/* ===== CUSTOM VIDEO PLAYER — separated layout ===== */
+
+/* Wrapper: video player block + info card are siblings, not nested */
+.reel-card {
+  display: flex;
+  flex-direction: column;
+  border-radius: 10px;
+  overflow: hidden;
+  background: #000;
+}
+
+/* ---- VIDEO BLOCK (black chrome, no info inside) ---- */
+.reel-video-block {
+  position: relative;
+  background: #000;
+  line-height: 0;
+}
+
+.reel-video-block video {
+  display: block;
+  width: 100%;
+  aspect-ratio: 16/9;
+  object-fit: cover;
+  cursor: pointer;
+}
+
+/* Big centered play/pause flash */
+.play-overlay {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0);
+  width: 56px;
+  height: 56px;
+  background: rgba(0,0,0,0.52);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  transition: transform 0.18s cubic-bezier(.34,1.56,.64,1), opacity 0.18s;
+  opacity: 0;
+  z-index: 9;
+}
+.play-overlay svg { width: 24px; height: 24px; fill: #fff; margin-left: 3px; }
+.reel-card.is-paused .play-overlay { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+
+/* ---- PLAYER CONTROLS BAR (sits below video, dark bg) ---- */
+.video-controls {
+  background: #111;
+  padding: 10px 14px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+}
+
+/* Progress track */
+.video-progress {
+  position: relative;
+  height: 4px;
+  background: rgba(255,255,255,0.18);
+  border-radius: 4px;
+  cursor: pointer;
+  transition: height 0.12s ease;
+}
+.video-progress:hover { height: 6px; }
+
+.video-progress-fill {
+  height: 100%;
+  background: #e5c46a; /* gold accent — matches site */
+  border-radius: 4px;
+  width: 0%;
+  pointer-events: none;
+}
+
+.video-progress-thumb {
+  position: absolute;
+  top: 50%;
+  transform: translate(-50%, -50%) scale(0);
+  width: 13px;
+  height: 13px;
+  background: #fff;
+  border-radius: 50%;
+  pointer-events: none;
+  transition: transform 0.13s ease;
+  box-shadow: 0 0 0 2px rgba(229,196,106,0.5);
+}
+.video-progress:hover .video-progress-thumb { transform: translate(-50%, -50%) scale(1); }
+
+/* Controls row */
+.video-btns {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.video-btn {
+  background: none;
+  border: none;
+  padding: 6px;
+  cursor: pointer;
+  color: #ccc;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 5px;
+  transition: background 0.13s, color 0.13s;
+  flex-shrink: 0;
+}
+.video-btn:hover { background: rgba(255,255,255,0.1); color: #fff; }
+.video-btn svg { width: 18px; height: 18px; fill: currentColor; }
+.video-btn.btn-playpause svg { width: 20px; height: 20px; }
+
+/* Volume area */
+.video-volume-wrap {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.video-volume-slider {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 70px;
+  height: 3px;
+  border-radius: 3px;
+  background: rgba(255,255,255,0.2);
+  outline: none;
+  cursor: pointer;
+}
+.video-volume-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 11px; height: 11px;
+  border-radius: 50%;
+  background: #fff;
+  cursor: pointer;
+}
+.video-volume-slider::-moz-range-thumb {
+  width: 11px; height: 11px;
+  border-radius: 50%;
+  background: #fff;
+  border: none;
+  cursor: pointer;
+}
+
+/* Time display */
+.video-time {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  color: rgba(255,255,255,0.55);
+  white-space: nowrap;
+  user-select: none;
+  margin-right: 2px;
+}
+
+/* Spacer pushes mute+volume+fullscreen to the right */
+.video-spacer { flex: 1; }
+
+/* Fullscreen btn svg slightly larger */
+.btn-fullscreen svg { width: 17px; height: 17px; }
+
+/* ---- INFO CARD (completely outside the player) ---- */
+.reel-meta {
+  background: var(--surface, #fff);
+  border: 1px solid rgba(0,0,0,0.08);
+  border-top: none;
+  padding: 16px 18px 18px;
+}
+
+.reel-kind {
+  display: inline-block;
+  font-size: 10px;
+  font-family: 'JetBrains Mono', monospace;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #888;
+  margin-bottom: 6px;
+}
+
+.reel-meta h4 {
+  margin: 0 0 5px;
+  font-size: 15px;
+  font-weight: 700;
+}
+
+.reel-meta p {
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.5;
+  color: #555;
+}
