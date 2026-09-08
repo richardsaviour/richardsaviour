@@ -5,8 +5,24 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="theme-color" content="#ffffff">
-<title>Lost in the void — Richard Saviour</title>
-<meta name="description" content="That page doesn't exist. But the rest of the site does.">
+<title>Page not found — Richard Saviour</title>
+<meta name="description" content="That page doesn't exist. The work, however, does.">
+<link rel="canonical" href="https://richardsaviour.com/404.html">
+<meta name="author" content="Richard Saviour">
+<meta name="robots" content="noindex, follow">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Richard Saviour">
+<meta property="og:url" content="https://richardsaviour.com/404.html">
+<meta property="og:title" content="Page not found — Richard Saviour">
+<meta property="og:description" content="That page doesn't exist. The work, however, does.">
+<meta property="og:image" content="https://res.cloudinary.com/dbtuidmoh/image/upload/c_pad,b_rgb:0d0d0e,w_1200,h_630,f_jpg/v1782670202/R_ox27xv.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Page not found — Richard Saviour">
+<meta name="twitter:description" content="That page doesn't exist. The work, however, does.">
+<meta name="twitter:image" content="https://res.cloudinary.com/dbtuidmoh/image/upload/c_pad,b_rgb:0d0d0e,w_1200,h_630,f_jpg/v1782670202/R_ox27xv.png">
+<link rel="preconnect" href="https://res.cloudinary.com" crossorigin>
 <link rel="icon" type="image/png" href="https://res.cloudinary.com/dbtuidmoh/image/upload/c_fit,w_256,h_256,r_44,f_png/v1782670202/R_ox27xv.png">
 <link rel="shortcut icon" type="image/png" href="https://res.cloudinary.com/dbtuidmoh/image/upload/c_fit,w_256,h_256,r_44,f_png/v1782670202/R_ox27xv.png">
 <link rel="apple-touch-icon" href="https://res.cloudinary.com/dbtuidmoh/image/upload/c_fit,w_180,h_180,r_36,f_png/v1782670202/R_ox27xv.png">
@@ -18,6 +34,7 @@
 <link rel="stylesheet" href="/assets/css/video-player.css">
 <link rel="stylesheet" href="/assets/css/refresh.css">
 <link rel="stylesheet" href="/assets/css/upgrade.css">
+<link rel="stylesheet" href="/assets/css/structure.css">
 
 <!-- dotLottie web component -->
 <script src="https://unpkg.com/@lottiefiles/dotlottie-wc@0.9.14/dist/dotlottie-wc.js" type="module"></script>
@@ -125,6 +142,7 @@
 </style>
 </head>
 <body>
+<a class="skip-link" href="#main">Skip to content</a>
 
 <!-- ==================== NAV ==================== -->
 <nav class="nav" aria-label="Primary">
@@ -132,13 +150,18 @@
   <button class="nav-toggle" aria-expanded="false" aria-controls="nav-links">Menu</button>
   <div class="nav-links" id="nav-links">
     <a href="/">Home</a>
-    <a href="/portfolio/">Portfolio</a>
-    <a href="/automations/">Need Automations?</a>
+    <a href="/portfolio/">Work</a>
+    <a href="/services/">Services</a>
+    <a href="/about/">About</a>
     <a href="/contact/">Contact</a>
+    <a href="/contact/" class="nav-cta">Let's work
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="13" height="13" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+    </a>
   </div>
 </nav>
 
 <!-- ==================== 404 HERO ==================== -->
+<main id="main">
 <section class="err-hero">
   <span class="err-ghost" aria-hidden="true">404</span>
   <div class="container">
@@ -182,6 +205,8 @@
     </div>
   </div>
 </section>
+
+</main>
 
 <script src="/assets/js/main.js"></script>
 <script src="/assets/js/enhance.js"></script>

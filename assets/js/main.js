@@ -139,10 +139,16 @@
   });
 
   /* ===== DECORATIVE VIDEO AUTOPLAY-IN-VIEW ===== */
+  // Cards marked data-autoplay="false" opt out here too. Previously this
+  // selector grabbed every .reel-card video, so the flag the player honours
+  // was overridden a few lines later — featured trailers played themselves.
   const decorativeVideos = document.querySelectorAll(
-    '.media-card video[autoplay], .section-hero-image video[autoplay], video[data-autoplay-in-view], .reel-card video'
+    '.media-card video[autoplay], .section-hero-image video[autoplay], ' +
+    'video[data-autoplay-in-view], .reel-card:not([data-autoplay="false"]) video'
   );
-  if ('IntersectionObserver' in window && decorativeVideos.length) {
+  const noMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches ||
+                   ((navigator.connection || {}).saveData === true);
+  if ('IntersectionObserver' in window && decorativeVideos.length && !noMotion) {
     const videoIO = new IntersectionObserver(entries => {
       entries.forEach(entry => {
         const v = entry.target;

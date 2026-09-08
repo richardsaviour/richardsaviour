@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+Disallow: /videorole/
+
+Sitemap: https://richardsaviour.com/sitemap.xml

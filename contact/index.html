@@ -6,7 +6,23 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="theme-color" content="#ffffff">
 <title>Contact — Richard Saviour</title>
-<meta name="description" content="Book a 30-minute call with Richard Saviour, or email directly. No weird pitch. Just a real conversation about what makes sense next.">
+<meta name="description" content="Book a call or email Richard Saviour about video editing, motion graphics, content, websites, automation or AI systems. Live calendar, no weird pitch.">
+<link rel="canonical" href="https://richardsaviour.com/contact/">
+<meta name="author" content="Richard Saviour">
+<meta name="robots" content="index, follow">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Richard Saviour">
+<meta property="og:url" content="https://richardsaviour.com/contact/">
+<meta property="og:title" content="Contact — Richard Saviour">
+<meta property="og:description" content="Book a call or email Richard Saviour about video editing, motion graphics, content, websites, automation or AI systems. Live calendar, no weird pitch.">
+<meta property="og:image" content="https://res.cloudinary.com/dbtuidmoh/image/upload/c_pad,b_rgb:0d0d0e,w_1200,h_630,f_jpg/v1782670202/R_ox27xv.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Contact — Richard Saviour">
+<meta name="twitter:description" content="Book a call or email Richard Saviour about video editing, motion graphics, content, websites, automation or AI systems. Live calendar, no weird pitch.">
+<meta name="twitter:image" content="https://res.cloudinary.com/dbtuidmoh/image/upload/c_pad,b_rgb:0d0d0e,w_1200,h_630,f_jpg/v1782670202/R_ox27xv.png">
+<link rel="preconnect" href="https://res.cloudinary.com" crossorigin>
 <link rel="icon" type="image/png" href="https://res.cloudinary.com/dbtuidmoh/image/upload/c_fit,w_256,h_256,r_44,f_png/v1782670202/R_ox27xv.png">
 <link rel="shortcut icon" type="image/png" href="https://res.cloudinary.com/dbtuidmoh/image/upload/c_fit,w_256,h_256,r_44,f_png/v1782670202/R_ox27xv.png">
 <link rel="apple-touch-icon" href="https://res.cloudinary.com/dbtuidmoh/image/upload/c_fit,w_180,h_180,r_36,f_png/v1782670202/R_ox27xv.png">
@@ -18,8 +34,10 @@
 <link rel="stylesheet" href="/assets/css/video-player.css">
 <link rel="stylesheet" href="/assets/css/refresh.css">
 <link rel="stylesheet" href="/assets/css/upgrade.css">
+<link rel="stylesheet" href="/assets/css/structure.css">
 </head>
 <body class="is-loading">
+<a class="skip-link" href="#main">Skip to content</a>
 
 <!-- ==================== LOADER (clean / minimal) ==================== -->
 <div class="rs-loader" id="rs-loader" aria-hidden="true">
@@ -36,13 +54,18 @@
   <button class="nav-toggle" aria-expanded="false" aria-controls="nav-links">Menu</button>
   <div class="nav-links" id="nav-links">
     <a href="/">Home</a>
-    <a href="/portfolio/">Portfolio</a>
-    <a href="/automations/">Need Automations?</a>
+    <a href="/portfolio/">Work</a>
+    <a href="/services/">Services</a>
+    <a href="/about/">About</a>
     <a href="/contact/">Contact</a>
+    <a href="/contact/" class="nav-cta">Let's work
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="13" height="13" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+    </a>
   </div>
 </nav>
 
 <!-- ==================== PAGE HERO (clean / light) ==================== -->
+<main id="main">
 <section class="page-hero" style="min-height: 60vh; background: var(--off-white);">
   <div class="container">
     <span class="eyebrow">Get in touch</span>
@@ -67,7 +90,7 @@
             <path d="M16 2v4M8 2v4M3 10h18"/>
           </svg>
         </div>
-        <h3>Book a call</h3>
+        <h2>Book a call</h2>
         <span class="tag-line">// 30 minutes · active call</span>
         <p>The faster way. We jump on a call, you tell me what's broken or stuck, and I'll tell you honestly whether I'm the right fit or not.</p>
         <a href="#calendly-embed" class="btn btn-primary">
@@ -83,7 +106,7 @@
             <path d="M22 6L12 13 2 6"/>
           </svg>
         </div>
-        <h3>Email directly</h3>
+        <h2>Email directly</h2>
         <span class="tag-line">// Slower · same human</span>
         <p>If you'd rather write everything down, that's also fine. Reach me directly — I read everything, and I reply.</p>
         <a href="mailto:richardsaviourz@gmail.com" class="direct-email">richardsaviourz@gmail.com</a>
@@ -176,12 +199,14 @@
 </section>
 
 <!-- ==================== FOOTER ==================== -->
+</main>
+
 <footer>
   <div class="container">
     <div class="footer-grid">
       <div class="footer-brand">
         <div class="logo-big">richard<span class="dot">.</span></div>
-        <p>Websites. Content. Email. Automation. AI Agents. n8n. Design. Video. Outreach.</p>
+        <p>Video editing. Motion graphics. Content. Design. Websites. Automation. AI systems.</p>
         <div class="built">
           <span>Built clean.</span>
           <span>Built smart.</span>
@@ -189,33 +214,34 @@
         </div>
       </div>
       <div class="footer-col">
-        <h5>Pages</h5>
+        <h2>Pages</h2>
         <ul>
           <li><a href="/">Home</a></li>
-          <li><a href="/portfolio/">Portfolio</a></li>
-          <li><a href="/automations/">Need Automations?</a></li>
+          <li><a href="/portfolio/">Work</a></li>
+          <li><a href="/services/">Services</a></li>
+          <li><a href="/about/">About</a></li>
           <li><a href="/contact/">Contact</a></li>
         </ul>
       </div>
       <div class="footer-col">
-        <h5>Connect</h5>
+        <h2>Connect</h2>
         <ul>
           <li><a href="mailto:richardsaviourz@gmail.com">Email me</a></li>
-          <li><a href="#calendly-embed">Book a call</a></li>
-          <li><a href="/portfolio/">View work</a></li>
+          <li><a href="/contact/">Book a call</a></li>
+          <li><a href="/portfolio/">View the work</a></li>
         </ul>
       </div>
       <div class="footer-col">
-        <h5>Reply time</h5>
+        <h2>Explore</h2>
         <ul>
-          <li><span style="color: var(--text-mute);">Calls — within 24h</span></li>
-          <li><span style="color: var(--text-mute);">Email — same day · weekdays</span></li>
-          <li><span style="color: var(--text-mute);">No bots · just me</span></li>
+          <li><a href="/portfolio/#featured-highlight">GameSloth trailer</a></li>
+          <li><a href="/portfolio/#video-work">Video &amp; motion</a></li>
+          <li><a href="/services/#automation">Automation &amp; AI</a></li>
         </ul>
       </div>
     </div>
     <div class="footer-bottom">
-      <span>© 2026 Richard Saviour · All rights reserved</span>
+      <span>&copy; 2026 Richard Saviour &middot; All rights reserved</span>
       <a class="footer-email" href="mailto:richardsaviourz@gmail.com">richardsaviourz@gmail.com</a>
       <span class="tagline">No cape. No chaos. Just clean digital systems.</span>
     </div>

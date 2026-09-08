@@ -381,7 +381,7 @@
      paints an oversized outlined numeral behind the section.
      ===================================================== */
   try {
-    document.querySelectorAll('.section-head .eyebrow, .tools-copy .eyebrow, .belt-grid .eyebrow, .batman-text .eyebrow').forEach(function (eb) {
+    document.querySelectorAll('.section-head .eyebrow, .head-split .eyebrow, .tools-copy .eyebrow, .belt-grid .eyebrow, .batman-text .eyebrow, .svc-intro .eyebrow').forEach(function (eb) {
       var m = (eb.textContent || '').match(/^\s*(\d{2})\s*\//);
       if (!m) return;
       var host = eb.closest('.container');
