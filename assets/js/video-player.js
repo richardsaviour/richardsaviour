@@ -154,7 +154,25 @@
     updateMuteUI();
   }
 
+  /* Thumbnails — any Cloudinary video without a poster gets one generated
+     from its own footage (so_auto = Cloudinary picks a representative
+     frame). Posters are set in the HTML already; this is a safety net so
+     any video added later never shows as a black rectangle. */
+  function cloudinaryPoster(src) {
+    var m = /^(https:\/\/res\.cloudinary\.com\/[^/]+\/video\/upload\/)(.+)\.mp4(\?.*)?$/.exec(src || '');
+    return m ? m[1] + 'so_auto,c_limit,w_1280,q_auto,f_auto/' + m[2] + '.jpg' : null;
+  }
+
+  function addPosters() {
+    document.querySelectorAll('video:not([poster])').forEach(function (v) {
+      var src = v.getAttribute('src') || (v.querySelector('source') || {}).src;
+      var p = cloudinaryPoster(src);
+      if (p) v.setAttribute('poster', p);
+    });
+  }
+
   function initAll() {
+    addPosters();
     document.querySelectorAll('[data-video-card]').forEach(initVideoCard);
   }
 

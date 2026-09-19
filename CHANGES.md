@@ -1,3 +1,30 @@
+# Site update — September 2026 (video)
+
+## Trailer now self-hosted
+The GameSloth trailer is no longer hotlinked from `gamesloth.app`. Both the
+homepage and `/portfolio/` now play it from your own Cloudinary
+(`gamesloth-product-trailer-v1_zvj2ic.mp4`). The fallback message no longer
+says the file is "served from gamesloth.app".
+
+## Video thumbnails (black-screen fix)
+**Cause:** every video used `preload="none"` with no `poster`, so the browser
+had nothing to draw until someone pressed play.
+
+**Fix:** each Cloudinary video now has a `poster` built from its own footage
+using Cloudinary's frame-grab URL:
+
+```
+.../video/upload/so_auto,c_limit,w_1280,q_auto,f_auto/<id>.jpg
+```
+
+`so_auto` lets Cloudinary pick a representative frame. To pick a specific
+moment instead, swap it for a time in seconds, e.g. `so_4.5`.
+`preload="none"` is kept, so pages still don't download any video until it's
+played. `video-player.js` also adds a poster automatically to any Cloudinary
+video that doesn't have one, so future uploads won't show black either.
+
+---
+
 # Site update — August 2026
 
 ## 1. Featured client work (new section on the homepage)
