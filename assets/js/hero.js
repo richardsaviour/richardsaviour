@@ -9,14 +9,15 @@
    img:      picture for the card. If missing or it fails to load,
              the card shows the initials on a colour tile.
    logo:     true = fit the whole image inside the tile (for logos/mascots)
+   bg:       tile colour behind the image, e.g. "#000" for see-through logos
    Tip: put logo files in assets/img/brands/ and point img at them —
         local files load faster and never break.                      */
 /* Brands I've worked with */
 const BRANDS = [
   { name: "GameSloth",        initials: "GS",  img: "assets/img/brands/gamesloth.webp", logo: true },
-  { name: "TBCreations",      initials: "TB",  img: "https://i.imgur.com/LAIm5st.png" },
-  { name: "PuddlesBGone",     initials: "PB",  img: "https://images.leadconnectorhq.com/image/f_webp/q_80/r_1200/u_https://assets.cdn.filesafe.space/18aTc2noRdTgWNe6Okwj/media/6798cedb9dbb3778fe036dac.png" },
-  { name: "Mind Trainer Pro", initials: "MT",  img: "https://assets.cdn.filesafe.space/RQxOzYrxraN8KvkfDnWp/media/67518cb26c55b54d25e14b90.png" },
+  { name: "TBCreations",      initials: "TB",  img: "https://i.imgur.com/LAIm5st.png", logo: true, bg: "#000" },
+  { name: "PuddlesBGone",     initials: "PB",  img: "https://images.leadconnectorhq.com/image/f_webp/q_80/r_1200/u_https://assets.cdn.filesafe.space/18aTc2noRdTgWNe6Okwj/media/6798cedb9dbb3778fe036dac.png", logo: true, bg: "#000" },
+  { name: "Mind Trainer Pro", initials: "MT",  img: "https://assets.cdn.filesafe.space/RQxOzYrxraN8KvkfDnWp/media/67518cb26c55b54d25e14b90.png", logo: true, bg: "#000" },
   { name: "HybridDude",       initials: "HD",  img: "https://i.imgur.com/K6Ur4Lf.jpeg" },
   { name: "Royal of India",   initials: "RI",  img: "https://i.imgur.com/EIy10TB.jpeg" },
   { name: "585 Cash Lanes",   initials: "585", img: "https://i.imgur.com/P9WMViA.jpeg" },
@@ -56,6 +57,10 @@ function buildRing(ring) {
       img.decoding = "async";
       img.referrerPolicy = "no-referrer";
       img.onerror = () => img.remove();      // keep the initials tile
+      img.onload = () => {                   // image is in: hide the initials behind it
+        art.classList.add("has-img");
+        if (item.bg) art.style.setProperty("--tile", item.bg);
+      };
       img.src = item.img;
       art.appendChild(img);
     }

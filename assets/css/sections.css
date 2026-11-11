@@ -309,6 +309,24 @@
 
 
 
+/* ---------- Review screenshot zoom ---------- */
+.shot img { cursor: zoom-in; transition: opacity .2s ease; }
+.shot img:hover { opacity: .85; }
+.zoom { position: fixed; inset: 0; z-index: 210; display: grid; place-items: center; padding: 60px 10px 16px; background: rgba(20,3,3,.95); cursor: zoom-out; }
+.zoom[hidden] { display: none; }
+.zoom__scroll { max-width: 100%; max-height: 100%; overflow: auto; border-radius: 12px; }
+/* on phones the picture stays wide enough to read, and you swipe sideways */
+.zoom img { width: min(1100px, max(96vw, 760px)); max-width: none; height: auto; border-radius: 12px; }
+
+/* ---------- Scroll animation (classes are added by site.js) ---------- */
+.reveal {
+  opacity: 0;
+  translate: 0 34px;
+  transition: opacity .6s ease, translate .7s cubic-bezier(.2,.8,.2,1);
+}
+.reveal[data-exit="top"] { translate: 0 -34px; }
+.reveal.is-in { opacity: 1; translate: 0 0; transition-delay: var(--d, 0ms); }
+
 /* ============================================================
    3D OBJECTS — stopwatch, gears, envelope
    All drawn with CSS/SVG in the same glossy maroon-and-gold

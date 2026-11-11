@@ -199,3 +199,81 @@ document.querySelectorAll("[data-copy]").forEach((btn) => {
     setTimeout(() => (btn.textContent = label), 2000);
   });
 });
+
+/* ---------- Review screenshots: click to read them big ---------- */
+(function zoom() {
+  const shots = document.querySelectorAll(".shot img");
+  if (!shots.length) return;
+  const box = document.createElement("div");
+  box.className = "zoom";
+  box.hidden = true;
+  box.setAttribute("role", "dialog");
+  box.setAttribute("aria-modal", "true");
+  box.setAttribute("aria-label", "Review screenshot");
+  box.innerHTML = '<button class="lb__x" type="button" aria-label="Close">✕</button><div class="zoom__scroll"><img alt=""></div>';
+  document.body.appendChild(box);
+  const big = box.querySelector("img");
+  let opener = null;
+
+  function open(img) {
+    opener = img;
+    big.src = img.currentSrc || img.src;
+    big.alt = img.alt;
+    box.hidden = false;
+    document.body.style.overflow = "hidden";
+    box.querySelector("button").focus();
+  }
+  function close() {
+    box.hidden = true;
+    document.body.style.overflow = "";
+    if (opener) opener.focus();
+  }
+  shots.forEach((img) => {
+    img.tabIndex = 0;
+    img.setAttribute("role", "button");
+    img.setAttribute("aria-label", "Open review screenshot: " + img.alt);
+    img.addEventListener("click", () => open(img));
+    img.addEventListener("keydown", (e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); open(img); } });
+  });
+  box.addEventListener("click", close);
+  document.addEventListener("keydown", (e) => { if (!box.hidden && e.key === "Escape") close(); });
+})();
+
+/* ---------- Scroll animation: blocks rise in as they enter and slip out as they leave ----------
+   Add or remove selectors in REVEAL to choose what animates.
+   Turned off for visitors who ask for reduced motion.                                       */
+(function reveal() {
+  if (!("IntersectionObserver" in window) || matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+  const REVEAL = [
+    ".bento > *", ".next", ".vgrid .vcard", ".claim", ".sechead",
+    ".auto__say", ".auto__show", ".outreach", ".dash__say", ".mock",
+    ".mailme__in > *", ".foot .wrap", ".rsec > .h2", ".rsec__grid > *", ".vtest", ".legal",
+  ];
+  const items = [...document.querySelectorAll(REVEAL.join(","))];
+  if (!items.length) return;
+
+  // stagger: items that share a parent come in one after another
+  const order = new Map();
+  items.forEach((el) => {
+    const n = order.get(el.parentElement) || 0;
+    order.set(el.parentElement, n + 1);
+    el.style.setProperty("--d", Math.min(n, 6) * 70 + "ms");
+    el.classList.add("reveal");
+  });
+
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach((e) => {
+      const el = e.target;
+      const seen = e.intersectionRect.height;
+      // in: a fair slice is on screen. out: almost none is.
+      if (seen >= Math.min(e.boundingClientRect.height * 0.3, innerHeight * 0.25)) {
+        el.classList.add("is-in");
+      } else if (seen < Math.min(e.boundingClientRect.height * 0.12, innerHeight * 0.08)) {
+        el.classList.remove("is-in");
+        // leave upward when it exits through the top, downward through the bottom
+        el.dataset.exit = e.boundingClientRect.top < 0 ? "top" : "bottom";
+      }
+    });
+  }, { threshold: [0, 0.05, 0.12, 0.2, 0.3, 0.5, 0.8, 1] });
+  items.forEach((el) => io.observe(el));
+})();

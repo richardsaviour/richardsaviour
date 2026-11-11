@@ -238,6 +238,7 @@
 }
 .card__art img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
 .card__art--logo img { object-fit: contain; padding: 8%; }
+.card__art.has-img { color: transparent; }   /* initials must not show through see-through logos */
 .card__name {
   font-weight: 500;
   font-size: calc(var(--card-w) * .1);
