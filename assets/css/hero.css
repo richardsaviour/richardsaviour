@@ -51,7 +51,7 @@
   --ring-tilt: 8deg;            /* + = seen from slightly below (near cards sit higher) */
   --card-w: 8.6cqw;
   --card-h: 10.8cqw;
-  --fade-from: 76%;             /* where Richard starts melting into the background */
+  --fade-from: .7;              /* where the fade starts, as a share of the photo's height */
   --rated-bottom: 2.2cqw;
   --rated-size: 1.55cqw;
 
@@ -80,7 +80,7 @@
     --ring-p: 190cqw;
     --card-w: 14.5cqw;
     --card-h: 18.4cqw;
-    --fade-from: 70%;
+    --fade-from: .66;
     --rated-bottom: 6cqw;
     --rated-size: 3.9cqw;
     width: 100cqw;
@@ -169,7 +169,11 @@
    so cards behind him are fully hidden and everything melts out together ---------- */
 .fade {
   z-index: 5;
-  background: linear-gradient(180deg, rgba(60,15,15,0) var(--fade-from), var(--maroon) 96%);
+  /* tied to Richard's photo, so it is always fully faded by the photo's bottom edge
+     (--fade-from = how far down the photo the fade starts) */
+  background: linear-gradient(180deg,
+    rgba(60,15,15,0) calc(var(--me-top) + var(--me-h) * var(--fade-from)),
+    var(--maroon) calc(var(--me-top) + var(--me-h) * .985));
 }
 
 /* ---------- 3 + 6. Card ring ----------
