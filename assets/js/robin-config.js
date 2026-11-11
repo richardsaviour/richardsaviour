@@ -25,7 +25,7 @@
    can read them from the website.
    ============================================================ */
 window.ROBIN_CONFIG = {
-  apiUrl: "",
+  apiUrl: "https://robin.richardsaviour.com/chat",
   leadUrl: "",
   askEmailFirst: true,     // false = Robin answers without asking for an email
   email: "richardsaviourz@gmail.com",
