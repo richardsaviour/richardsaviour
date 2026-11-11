@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Richard — Video Editor & Automation Expert</title>
+<meta name="description" content="Richard edits videos in hours and automates anything. Rated 4.9/5 by 50+ clients. Email replies in under 30 minutes.">
+<meta name="theme-color" content="#3c0f0f">
+
+<!-- Fonts: Acthirey (display, local file) + Poppins (everything else) -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400&display=swap" rel="stylesheet">
+<link rel="preload" as="font" type="font/woff2" href="assets/fonts/acthirey-demo.woff2" crossorigin>
+<link rel="preload" as="image" href="assets/img/richard.webp">
+
+<link rel="stylesheet" href="assets/css/base.css">
+<link rel="stylesheet" href="assets/css/hero.css">
+<link rel="stylesheet" href="assets/css/sections.css">
+<link rel="stylesheet" href="assets/css/robin.css">
+</head>
+<body>
+
+<!-- Shared SVG shapes used with <use> across the page -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="i-stars" viewBox="0 0 120 22"><path id="st" d="M11 1l3.1 6.3 6.9 1-5 4.9 1.2 6.9L11 16.8 4.8 20.1 6 13.2 1 8.3l6.9-1z"/><use href="#st" x="24.5"/><use href="#st" x="49"/><use href="#st" x="73.5"/><use href="#st" x="98"/></symbol>
+    <symbol id="i-arrow" viewBox="0 0 16 16"><path d="M5 11 11 5M6 5h5v5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-play" viewBox="0 0 16 16"><path d="M5.5 3.5v9l7-4.5z" fill="currentColor"/></symbol>
+    <symbol id="i-mail" viewBox="0 0 16 16"><path d="M2.5 4.5h11v7h-11zM2.5 5l5.5 4 5.5-4" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  </defs>
+</svg>
+
+<!-- ============================================================
+     HERO
+     .hero   = the rounded maroon panel
+     .stage  = the composition. Every size inside it is a % of the
+               stage width (cqw units), so it scales as one piece.
+     ============================================================ -->
+<header class="hero panel on-dark" id="hero">
+
+  <nav class="nav" aria-label="Main">
+    <a class="nav__logo logo" href="./">richard<i>.</i></a>
+    <ul class="nav__links">
+      <li><a href="./" aria-current="page">Home</a></li>
+      <li><a href="#work">Portfolio</a></li>
+      <li><a href="reviews.html">Reviews</a></li>
+    </ul>
+    <!-- Primary action everywhere: email Richard -->
+    <a class="pill pill--gold nav__cta" href="mailto:richardsaviourz@gmail.com?subject=Project%20enquiry">
+      Email me
+      <span class="pill__dot" aria-hidden="true"><svg><use href="#i-arrow"/></svg></span>
+    </a>
+  </nav>
+
+  <div class="stage">
+
+    <!-- Orbit lines on the "floor" -->
+    <div class="halo" aria-hidden="true"></div>
+
+    <!-- 1. Headline sits BEHIND the birds and the cutout -->
+    <h1 class="title">
+      <span class="title__half title__half--l">
+        <span class="title__big">Award</span>
+        <span class="title__sub"><span>Video</span><span>Editor</span></span>
+      </span>
+      <span class="title__half title__half--r">
+        <span class="title__big">Winning</span>
+        <span class="title__sub"><span>Automation</span><span>Expert</span></span>
+      </span>
+    </h1>
+
+    <!-- 2. Birds (Vanta) — above the text, behind Richard -->
+    <div class="birds" id="birds" aria-hidden="true"></div>
+
+    <!-- 3. Cards on the far side of the ring (behind Richard). Filled by hero.js -->
+    <div class="orbit orbit--back" aria-hidden="true"><div class="orbit__tilt"><div class="orbit__spin"></div></div></div>
+
+    <!-- 4. Richard -->
+    <img class="me" src="assets/img/richard.webp" width="769" height="748" alt="Richard speaking on stage" fetchpriority="high">
+
+    <!-- 5. Bottom fade over Richard and the far-side cards -->
+    <div class="fade" aria-hidden="true"></div>
+
+    <!-- 6. Cards on the near side of the ring (in front of Richard). Filled by hero.js -->
+    <div class="orbit orbit--front" aria-hidden="true"><div class="orbit__tilt"><div class="orbit__spin"></div></div></div>
+
+    <!-- 7. Rating -->
+    <div class="rated">
+      <p class="rated__line">Rated <b>4.9/5</b> by <b>50+ Clients</b></p>
+      <svg class="stars" role="img" aria-label="5 stars"><use href="#i-stars"/></svg>
+      <a class="rated__link tlink" href="reviews.html">See reviews</a>
+    </div>
+
+  </div>
+</header>
+
+<main>
+
+<!-- ============================================================
+     SECTION 2 — PROOF
+     ============================================================ -->
+<section class="sec wrap rings rings--tr">
+  <div class="bento">
+
+    <article class="box box--dark tex on-dark s8 proof">
+      <p class="proof__line">I scaled my own business to <span class="em">$2K in monthly revenue</span> in just <span class="em">2&nbsp;months</span> of launch.</p>
+      <p class="proof__same">I bring that <b>same energy</b> to my clients' projects.</p>
+      <a class="proof__live tlink" href="https://greekonion.com" target="_blank" rel="noopener">See it live: GreekOnion.com</a>
+    </article>
+
+    <article class="box box--gold on-gold s4 stat stat--hero">
+      <svg class="stars" role="img" aria-label="5 stars"><use href="#i-stars"/></svg>
+      <p class="stat__num">4.9<small>/5</small></p>
+      <p class="stat__label">Rated by 50+ clients</p>
+      <a class="pill pill--dark" href="reviews.html">See reviews <span class="pill__dot" aria-hidden="true"><svg><use href="#i-arrow"/></svg></span></a>
+    </article>
+
+    <article class="box box--line s4 stat">
+      <p class="stat__num">A few <span class="em">hours</span></p>
+      <p class="stat__label">Most videos delivered, no matter the complexity</p>
+    </article>
+    <article class="box box--line s4 stat">
+      <p class="stat__num">Under a <span class="em">week</span></p>
+      <p class="stat__label">Any app, from planning to execution</p>
+    </article>
+    <article class="box box--tint s4 stat">
+      <p class="stat__num">Under <span class="em">30 min</span></p>
+      <p class="stat__label">My reply time on email. <a class="tlink" href="mailto:richardsaviourz@gmail.com?subject=Project%20enquiry">Try me</a></p>
+    </article>
+
+  </div>
+  <p class="next">Take a look at my video samples below <span aria-hidden="true">↓</span></p>
+</section>
+
+<!-- ============================================================
+     SECTION 3 — VIDEO SAMPLES
+     Cards are built by site.js from the VIDEOS list at the top of that file.
+     ============================================================ -->
+<section class="sec wrap" id="work">
+  <h2 class="sr-only">Video samples</h2>
+  <div class="vgrid" id="vgrid"></div>
+
+  <div class="box box--dark tex on-dark claim">
+    <!-- Stopwatch, drawn in the same glossy style as Robin (robin.css look, sections.css rules) -->
+    <div class="sw" aria-hidden="true">
+      <span class="sw__shadow"></span>
+      <span class="sw__crown"></span><span class="sw__btn"></span>
+      <span class="sw__body"><span class="sw__face"><i class="sw__hand"></i><i class="sw__hand sw__hand--slow"></i><b class="sw__pin"></b></span><span class="sw__glass"></span></span>
+    </div>
+    <p class="claim__line">One of the <span class="em">FASTEST</span> delivery times. Most videos done in <span class="em">just a few hours</span>, no matter the complexity.</p>
+    <a class="pill pill--glass" href="reviews.html">See reviews <span class="pill__dot" aria-hidden="true"><svg><use href="#i-arrow"/></svg></span></a>
+  </div>
+</section>
+
+<!-- ============================================================
+     SECTION 4 — GET STARTED (email first) + ROBIN (questions)
+     The orb inside the word "Robin" is drawn and animated by robin.js / robin.css.
+     ============================================================ -->
+<section class="sec wrap" id="robin">
+  <div class="bento">
+
+    <article class="box box--line s7 start">
+      <p class="lead">Love what you see? This is just a little of what I can do.</p>
+      <p class="start__line">I can produce <span class="em">ANY type of video</span> you need. Explainers, talking heads, trailers, ads, shorts, anything.</p>
+      <div class="start__go">
+        <a class="pill pill--gold pill--big" href="mailto:richardsaviourz@gmail.com?subject=Project%20enquiry">Ready to get started? Email me <span class="pill__dot" aria-hidden="true"><svg><use href="#i-mail"/></svg></span></a>
+        <p class="start__fast"><span class="live"></span>I reply in <b>under 30 minutes</b></p>
+      </div>
+    </article>
+
+    <article class="box box--tint s5 ask">
+      <p class="lead">Questions first? Talk to my assistant</p>
+      <div class="robinword">
+        <button class="robinword__btn" type="button" data-robin-open aria-label="Open chat with Robin">
+          <span aria-hidden="true">R</span><span class="orb" data-robin-orb data-cycle aria-hidden="true"></span><span aria-hidden="true">bin</span>
+        </button>
+        <button class="robinword__card" type="button" data-robin-open>I'm ready to help 👋 <b>Ask me anything.</b></button>
+      </div>
+    </article>
+
+  </div>
+</section>
+
+<!-- ============================================================
+     SECTION 5 — AUTOMATION & APPS
+     The flow animation is driven by site.js (FLOWS list).
+     ============================================================ -->
+<section class="auto panel tex on-dark" id="automation">
+  <div class="wrap auto__in">
+    <div class="auto__say">
+      <h2 class="auto__big">I can automate <span class="em">ANYTHING.</span></h2>
+      <p class="auto__mid">I can build <span class="em">ANY app</span> you need, fully delivered in <span class="em">LESS THAN A WEEK</span>, from planning to execution.</p>
+      <p class="auto__mid">Complex videos? Done in a few <span class="em">HOURS.</span></p>
+      <a class="pill pill--glass" href="reviews.html">See reviews <span class="pill__dot" aria-hidden="true"><svg><use href="#i-arrow"/></svg></span></a>
+    </div>
+
+    <div class="auto__show">
+      <!-- Two meshing gears with smoke: the "always working" picture (pure CSS + SVG) -->
+      <div class="gears" aria-hidden="true">
+        <svg width="0" height="0" style="position:absolute"><defs>
+          <linearGradient id="g-gold" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ffe08a"/><stop offset=".5" stop-color="#e2a324"/><stop offset="1" stop-color="#8f5f06"/></linearGradient>
+          <linearGradient id="g-tan" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f1dcc0"/><stop offset=".5" stop-color="#b89c7a"/><stop offset="1" stop-color="#6d543a"/></linearGradient>
+        </defs></svg>
+        <div class="gears__tilt">
+          <div class="gear gear--a"><svg viewBox="-68 -68 136 136"><path fill="url(#g-gold)" fill-rule="evenodd" d="M53.54 -7.05 L65.85 -4.49 L65.85 4.49 L53.54 7.05 L49.89 20.66 L59.27 29.04 L54.78 36.81 L42.84 32.87 L32.87 42.84 L36.81 54.78 L29.04 59.27 L20.66 49.89 L7.05 53.54 L4.49 65.85 L-4.49 65.85 L-7.05 53.54 L-20.66 49.89 L-29.04 59.27 L-36.81 54.78 L-32.87 42.84 L-42.84 32.87 L-54.78 36.81 L-59.27 29.04 L-49.89 20.66 L-53.54 7.05 L-65.85 4.49 L-65.85 -4.49 L-53.54 -7.05 L-49.89 -20.66 L-59.27 -29.04 L-54.78 -36.81 L-42.84 -32.87 L-32.87 -42.84 L-36.81 -54.78 L-29.04 -59.27 L-20.66 -49.89 L-7.05 -53.54 L-4.49 -65.85 L4.49 -65.85 L7.05 -53.54 L20.66 -49.89 L29.04 -59.27 L36.81 -54.78 L32.87 -42.84 L42.84 -32.87 L54.78 -36.81 L59.27 -29.04 L49.89 -20.66ZM11.00 0.00a11 11 0 1 0 -22 0a11 11 0 1 0 22 0ZM37.58 16.50a9 9 0 1 0 -18 0a9 9 0 1 0 18 0ZM9.00 33.00a9 9 0 1 0 -18 0a9 9 0 1 0 18 0ZM-19.58 16.50a9 9 0 1 0 -18 0a9 9 0 1 0 18 0ZM-19.58 -16.50a9 9 0 1 0 -18 0a9 9 0 1 0 18 0ZM9.00 -33.00a9 9 0 1 0 -18 0a9 9 0 1 0 18 0ZM37.58 -16.50a9 9 0 1 0 -18 0a9 9 0 1 0 18 0Z"/><circle r="47" fill="none" stroke="rgba(255,255,255,.4)" stroke-width="1.2"/><circle r="15" fill="none" stroke="rgba(60,15,15,.45)" stroke-width="2"/></svg></div>
+          <div class="gear gear--b"><svg viewBox="-48 -48 96 96"><path fill="url(#g-tan)" fill-rule="evenodd" d="M33.35 -6.63 L45.76 -4.69 L45.76 4.69 L33.35 6.63 L28.27 18.89 L35.67 29.04 L29.04 35.67 L18.89 28.27 L6.63 33.35 L4.69 45.76 L-4.69 45.76 L-6.63 33.35 L-18.89 28.27 L-29.04 35.67 L-35.67 29.04 L-28.27 18.89 L-33.35 6.63 L-45.76 4.69 L-45.76 -4.69 L-33.35 -6.63 L-28.27 -18.89 L-35.67 -29.04 L-29.04 -35.67 L-18.89 -28.27 L-6.63 -33.35 L-4.69 -45.76 L4.69 -45.76 L6.63 -33.35 L18.89 -28.27 L29.04 -35.67 L35.67 -29.04 L28.27 -18.89ZM9.00 0.00a9 9 0 1 0 -18 0a9 9 0 1 0 18 0ZM21.35 14.85a6.5 6.5 0 1 0 -13.0 0a6.5 6.5 0 1 0 13.0 0ZM-8.35 14.85a6.5 6.5 0 1 0 -13.0 0a6.5 6.5 0 1 0 13.0 0ZM-8.35 -14.85a6.5 6.5 0 1 0 -13.0 0a6.5 6.5 0 1 0 13.0 0ZM21.35 -14.85a6.5 6.5 0 1 0 -13.0 0a6.5 6.5 0 1 0 13.0 0Z"/><circle r="29" fill="none" stroke="rgba(255,255,255,.45)" stroke-width="1.2"/><circle r="12" fill="none" stroke="rgba(60,15,15,.45)" stroke-width="2"/></svg></div>
+        </div>
+        <span class="puff"></span><span class="puff"></span><span class="puff"></span><span class="puff"></span><span class="puff"></span>
+      </div>
+
+    <!-- Animated example: trigger → brain → result. Labels rotate through real use cases. -->
+    <div class="flow" id="flow" aria-hidden="true">
+      <p class="flow__tag"><span class="live"></span><span id="flow-name">Lead follow-up</span></p>
+      <div class="flow__row">
+        <div class="flow__node"><svg viewBox="0 0 24 24"><path d="M13 2 4 14h7l-1 8 9-12h-7z"/></svg><span data-flow="0">New lead comes in</span></div>
+        <div class="flow__wire"><i></i></div>
+        <div class="flow__node flow__node--core"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3.2"/><path d="M12 2v4M12 18v4M2 12h4M18 12h4M5 5l2.8 2.8M16.2 16.2 19 19M19 5l-2.8 2.8M7.8 16.2 5 19"/></svg><span data-flow="1">AI writes the reply</span></div>
+        <div class="flow__wire"><i></i></div>
+        <div class="flow__node"><svg viewBox="0 0 24 24"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg><span data-flow="2">CRM updated, email sent</span></div>
+      </div>
+      <ul class="flow__list">
+        <li>Workflows</li><li>Bots</li><li>Content engines</li><li>Trading tools</li><li>Web apps</li><li>AI agents</li>
+      </ul>
+    </div>
+    </div>
+
+    <!-- An app Richard built that anyone can try -->
+    <article class="outreach" id="outreach">
+      <div class="outreach__say">
+        <p class="outreach__tag">Try one I built. <b>Free to use.</b></p>
+        <h3 class="outreach__big">Outreach</h3>
+        <p class="outreach__line">Cold DMs and emails. <span class="em">Bulk sending without limits.</span> Connect up to <span class="em">5 mailboxes</span>.</p>
+        <div class="outreach__go">
+          <a class="pill pill--gold" href="https://outreach.richardsaviour.com" target="_blank" rel="noopener">Use it free <span class="pill__dot" aria-hidden="true"><svg><use href="#i-arrow"/></svg></span></a>
+          <a class="tlink" href="mailto:richardsaviourz@gmail.com?subject=I%20want%20my%20own%20outreach%20app">Want to own it? I'll build a custom one for you</a>
+        </div>
+      </div>
+      <!-- small animated picture of the app at work (site.js) -->
+      <div class="sender" id="sender" aria-hidden="true">
+        <p class="sender__url">outreach.richardsaviour.com</p>
+        <ul class="sender__boxes"><li>1</li><li>2</li><li>3</li><li>4</li><li>5</li></ul>
+        <p class="sender__count"><b id="sender-n">0</b> sent today</p>
+        <p class="sender__last" id="sender-last">Mailbox 1 · email sent</p>
+      </div>
+    </article>
+  </div>
+</section>
+
+<!-- ============================================================
+     SECTION 6 — CLIENT DASHBOARD (coming soon — presentation only)
+     This is an animated mock-up. Nothing here talks to a server.
+     For now clients email their plan and Richard sets things up by hand.
+     LATER: the real dashboard (sign-up, project scope, tasks with dates,
+     payments by card through Paystack, US account or crypto) will be its
+     own app on the VPS, e.g. https://clients.richardsaviour.com —
+     link to it from here and from the nav when it exists.
+     ============================================================ -->
+<section class="sec wrap dash rings rings--bl" id="dashboard">
+  <div class="dash__say">
+    <p class="chip">Coming soon. Rolling out to new clients.</p>
+    <h2 class="h2 dash__big">Your project. <span class="em">ONE place.</span></h2>
+    <ul class="dash__points">
+      <li><b>Email me your plan, idea and scope.</b> I set up your dashboard for you.</li>
+      <li>Requests, timelines, deadlines and progress, all in one place.</li>
+      <li><b>No endless calls.</b> No chasing updates.</li>
+      <li>Payment sits in escrow. <b>You release it only when milestones are ticked and you're happy.</b></li>
+    </ul>
+  </div>
+
+  <div class="mock on-dark" id="mock" aria-hidden="true">
+    <div class="mock__bar"><span></span><span></span><span></span><b>Client dashboard</b></div>
+    <div class="mock__body">
+      <div class="mock__head">
+        <div><p class="mock__title">Product launch video</p><p class="mock__sub">Due Friday</p></div>
+        <p class="mock__count"><b id="mock-done">0</b> of 5 done</p>
+      </div>
+      <div class="mock__track"><i id="mock-fill"></i></div>
+      <ul class="mock__list">
+        <li><i></i><span>Brief approved</span><em>Mon</em></li>
+        <li><i></i><span>Script and storyboard</span><em>Tue</em></li>
+        <li><i></i><span>First cut delivered</span><em>Wed</em></li>
+        <li><i></i><span>Revisions done</span><em>Thu</em></li>
+        <li><i></i><span>Final files handed over</span><em>Fri</em></li>
+      </ul>
+      <div class="mock__pay">
+        <span class="mock__lock"><svg viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg></span>
+        <p><b id="mock-pay-title">Payment held in escrow</b><span id="mock-pay-sub">Released by you when everything is ticked</span></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     SECTION 7 — REVIEWS TEASER (full list lives on reviews.html)
+     ============================================================ -->
+<section class="sec wrap" id="reviews">
+  <div class="sechead">
+    <h2 class="h2">Rated <span class="em">4.9/5</span> by 50+ clients</h2>
+    <a class="pill pill--dark" href="reviews.html">See all reviews <span class="pill__dot" aria-hidden="true"><svg><use href="#i-arrow"/></svg></span></a>
+  </div>
+  <div class="bento">
+    <figure class="box box--tint s6 quote">
+      <svg class="stars" role="img" aria-label="5 stars"><use href="#i-stars"/></svg>
+      <blockquote>“Richard was an amazing communicator &amp; stuck well to deadlines… he created <b>world class video quality</b> and is highly skilled in his field.”</blockquote>
+      <figcaption>TikTok Video &amp; Editing Creation <span>Upwork client</span></figcaption>
+    </figure>
+    <figure class="box box--tint s6 quote">
+      <svg class="stars" role="img" aria-label="5 stars"><use href="#i-stars"/></svg>
+      <blockquote>“<b>Did a great job</b> and will be working again in the very near future! He's been awesome and continues to learn more to improve!”</blockquote>
+      <figcaption>Expert Video Editor for TikTok, Facebook Reels and IG Reels <span>Upwork client</span></figcaption>
+    </figure>
+  </div>
+</section>
+
+</main>
+
+<!-- ============================================================
+     EMAIL CTA — the main action of the whole site
+     ============================================================ -->
+<section class="mailme panel on-gold" id="email">
+  <div class="wrap mailme__in">
+    <h2 class="mailme__big">Send me an email.<br>Get a reply in <span class="em">under 30 minutes.</span></h2>
+    <p class="lead">Tell me your plan, idea and scope. I'll come back with a quote and a delivery time.</p>
+    <div class="mailme__go">
+      <a class="pill pill--dark pill--big" href="mailto:richardsaviourz@gmail.com?subject=Project%20enquiry">richardsaviourz@gmail.com <span class="pill__dot" aria-hidden="true"><svg><use href="#i-mail"/></svg></span></a>
+      <button class="mailme__copy" type="button" data-copy="richardsaviourz@gmail.com">Copy email</button>
+    </div>
+    <p class="mailme__alt">Just have a quick question? <button class="tlink" type="button" data-robin-open>Ask Robin</button></p>
+
+    <!-- Envelope: the letter slides in, the flap folds shut, the reply badge pops (pure CSS) -->
+    <div class="env" aria-hidden="true">
+      <div class="env__tilt">
+        <span class="env__back"></span>
+        <span class="env__flap"></span>
+        <span class="env__letter"><i></i><i></i><i></i></span>
+        <span class="env__front"></span>
+        <span class="env__badge">Reply in under 30 min</span>
+      </div>
+      <span class="env__shadow"></span>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     FOOTER
+     ============================================================ -->
+<footer class="foot panel tex on-dark">
+  <div class="wrap">
+    <div class="foot__top">
+      <div>
+        <p class="foot__logo logo">richard<i>.</i></p>
+        <a class="foot__mail tlink" href="mailto:richardsaviourz@gmail.com">richardsaviourz@gmail.com</a>
+      </div>
+      <nav class="foot__nav" aria-label="Footer">
+        <a href="./">Home</a>
+        <a href="#work">Portfolio</a>
+        <a href="reviews.html">Reviews</a>
+        <a href="https://outreach.richardsaviour.com" target="_blank" rel="noopener">Outreach app</a>
+        <a href="https://calendly.com/richardsaviour/activecall30mins" target="_blank" rel="noopener">Book a call</a>
+      </nav>
+    </div>
+    <p class="foot__base"><span>© 2026 Richard Saviour</span><span><a href="terms.html">Terms &amp; Conditions</a> &nbsp;·&nbsp; <a href="privacy.html">Privacy Policy</a></span></p>
+  </div>
+</footer>
+
+<!-- Video lightbox (filled by site.js) -->
+<div class="lb" id="lb" hidden role="dialog" aria-modal="true" aria-label="Video player">
+  <button class="lb__x" type="button" data-lb-close aria-label="Close video">✕</button>
+  <button class="lb__nav lb__nav--prev" type="button" data-lb-prev aria-label="Previous video">‹</button>
+  <div class="lb__stage"><video id="lb-video" controls playsinline preload="none"></video><p class="lb__label" id="lb-label"></p></div>
+  <button class="lb__nav lb__nav--next" type="button" data-lb-next aria-label="Next video">›</button>
+</div>
+
+<!-- Birds background (needs three.js r134) -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.birds.min.js" defer></script>
+<script src="assets/js/hero.js" defer></script>
+<script src="assets/js/site.js" defer></script>
+<!-- Robin: settings first, then the widget -->
+<script src="assets/js/robin-config.js" defer></script>
+<script src="assets/js/robin.js" defer></script>
+</body>
+</html>

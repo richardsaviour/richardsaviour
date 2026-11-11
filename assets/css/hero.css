@@ -1,0 +1,279 @@
+/* ============================================================
+   HERO
+   The composition lives in .stage. Sizes inside use cqw
+   (1cqw = 1% of the stage width), so the whole thing scales
+   as one piece. Desktop and phone only differ by the numbers
+   in the two "layout numbers" blocks below.
+
+   Layers, back to front:
+     1 headline · 2 birds · 3 far-side cards · 4 Richard
+     5 bottom fade · 6 near-side cards · 7 rating
+   ============================================================ */
+
+.hero {
+  position: relative;
+  container: hero / inline-size;
+  /* maroon, with a warm spotlight behind Richard and a soft gold light from the top */
+  background:
+    radial-gradient(42% 46% at 50% 44%, rgba(226,163,36,.2) 0%, rgba(226,163,36,0) 70%),
+    radial-gradient(60% 64% at 50% 46%, #8a3a2a 0%, #561b17 44%, rgba(60,15,15,0) 76%),
+    radial-gradient(50% 40% at 50% -6%, rgba(226,163,36,.16), rgba(226,163,36,0) 70%),
+    var(--maroon);
+}
+/* fine grid that fades out toward the edges */
+.hero::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    linear-gradient(rgba(255,255,255,.06) 1px, transparent 1px) 50% 0 / 56px 56px,
+    linear-gradient(90deg, rgba(255,255,255,.06) 1px, transparent 1px) 50% 0 / 56px 56px;
+  -webkit-mask-image: radial-gradient(75% 70% at 50% 40%, #000 10%, transparent 75%);
+          mask-image: radial-gradient(75% 70% at 50% 40%, #000 10%, transparent 75%);
+}
+.hero .nav { position: absolute; inset: 0 0 auto 0; z-index: 10; }
+
+/* ---------- Stage + layout numbers (desktop) ---------- */
+.stage {
+  --ratio: .66;                 /* stage height / width */
+  --title-top: 10.5cqw;
+  --title-size: 9.1cqw;
+  --title-gap: 4cqw;            /* space between AWARD and WINNING (his head sits here) */
+  --sub-size: 2.5cqw;
+  --sub-pad-l: 9.4cqw;         /* keeps VIDEO EDITOR clear of his head */
+  --sub-pad-r: 8.6cqw;          /* keeps AUTOMATION EXPERT clear of his head */
+  --me-h: 52cqw;
+  --me-top: 11.5cqw;
+  --ring-y: 46.5cqw;            /* vertical centre of the card ring */
+  --ring-r: 38cqw;              /* ring radius */
+  --ring-p: 170cqw;             /* camera distance */
+  --ring-tilt: 8deg;            /* + = seen from slightly below (near cards sit higher) */
+  --card-w: 8.6cqw;
+  --card-h: 10.8cqw;
+  --fade-from: 76%;             /* where Richard starts melting into the background */
+  --rated-bottom: 2.2cqw;
+  --rated-size: 1.55cqw;
+
+  position: relative;
+  width: min(100cqw, calc((100svh - 20px) / var(--ratio)));
+  min-width: min(100cqw, 720px);
+  aspect-ratio: 1 / var(--ratio);
+  margin-inline: auto;
+  container: stage / inline-size;
+}
+
+/* ---------- Layout numbers (phone) — same composition, re-proportioned ---------- */
+@container hero (max-width: 640px) {
+  .stage {
+    --ratio: 1.4;
+    --title-top: 21cqw;
+    --title-size: 9.9cqw;
+    --title-gap: 2cqw;
+    --sub-size: 2.9cqw;
+    --sub-pad-l: 13.6cqw;
+    --sub-pad-r: 13.6cqw;
+    --me-h: 86cqw;
+    --me-top: 24cqw;
+    --ring-y: 88cqw;
+    --ring-r: 43cqw;
+    --ring-p: 190cqw;
+    --card-w: 14.5cqw;
+    --card-h: 18.4cqw;
+    --fade-from: 70%;
+    --rated-bottom: 6cqw;
+    --rated-size: 3.9cqw;
+    width: 100cqw;
+    min-width: 0;
+  }
+}
+
+/* ---------- 1. Headline (behind the birds and the cutout) ---------- */
+.title {
+  position: absolute;
+  top: var(--title-top);
+  left: 0;
+  right: 0;
+  z-index: 1;
+  display: flex;
+  justify-content: center;
+  column-gap: var(--title-gap);
+  color: var(--white);
+  text-transform: uppercase;
+  font-weight: 400;
+}
+.title__half { display: inline-grid; }
+.title__big {
+  font-family: var(--f-display);
+  font-size: var(--title-size);
+  line-height: .9;
+  letter-spacing: -.01em;
+}
+/* Sub-line words are pushed to the two ends of the big word above them */
+.title__sub {
+  display: flex;
+  justify-content: space-between;
+  margin-top: .5em;
+  font-family: var(--f-body);
+  font-style: italic;
+  font-weight: 300;
+  font-size: var(--sub-size);
+  line-height: 1;
+  letter-spacing: .04em;
+  color: var(--tan);
+}
+.title__half--l .title__sub { padding-right: var(--sub-pad-l); }
+.title__half--r .title__sub { padding-left: var(--sub-pad-r); }
+
+/* ---------- Orbit lines: thin gold rings on the floor, echoing the card ring ---------- */
+.halo, .halo::before, .halo::after {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  translate: -50% -50%;
+  border-radius: 50%;
+  border: 1px solid rgba(226,163,36,.3);
+  pointer-events: none;
+}
+.halo { top: calc(var(--ring-y) + 1cqw); width: calc(var(--ring-r) * 2.25); height: calc(var(--ring-r) * .42); z-index: 0; }
+.halo::before { content: ""; width: 128%; height: 150%; border-color: rgba(226,163,36,.17); }
+.halo::after { content: ""; width: 160%; height: 210%; border-color: rgba(226,163,36,.09); }
+
+/* ---------- 2. Birds (Vanta draws its canvas in here) ---------- */
+.birds, .fade {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  width: 100vw;              /* full hero width, even when the stage is narrower */
+  transform: translateX(-50%);
+  pointer-events: none;
+}
+.birds { z-index: 2; opacity: .9; }
+
+/* ---------- 4. Richard ---------- */
+.me {
+  position: absolute;
+  top: var(--me-top);
+  height: var(--me-h);
+  width: auto;
+  max-width: none;
+  /* Line his head up with the gap between AWARD and WINNING.
+     --gap-shift = how far that gap sits left of centre (WINNING is the longer word).
+     His head is 40% across the cutout. */
+  left: calc(50cqw - var(--title-size) * var(--gap-shift, .513) - var(--me-h) * 769 / 748 * .40);
+  z-index: 4;
+}
+
+/* ---------- 5. Bottom fade — sits over Richard AND the far-side cards,
+   so cards behind him are fully hidden and everything melts out together ---------- */
+.fade {
+  z-index: 5;
+  background: linear-gradient(180deg, rgba(60,15,15,0) var(--fade-from), var(--maroon) 96%);
+}
+
+/* ---------- 3 + 6. Card ring ----------
+   Two identical rings spin in sync. The back ring is layered behind
+   Richard and only shows the far-side cards; the front ring is layered
+   in front and only shows the near-side cards (backface-visibility). */
+.orbit {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: var(--ring-y);
+  height: 0;
+  perspective: var(--ring-p);
+  pointer-events: none;
+}
+.orbit--back { z-index: 3; }
+.orbit--front { z-index: 6; }
+.orbit__tilt, .orbit__spin {
+  position: absolute;
+  left: 50%;
+  top: 0;
+  width: 0;
+  height: 0;
+  transform-style: preserve-3d;
+}
+.orbit__tilt { transform: rotateX(var(--ring-tilt)); }
+.orbit__spin { animation: orbit 70s linear infinite; }
+@keyframes orbit { to { transform: rotateY(-360deg); } }
+
+.card {
+  position: absolute;
+  left: calc(var(--card-w) / -2);
+  top: calc(var(--card-h) / -2);
+  width: var(--card-w);
+  height: var(--card-h);
+  padding: calc(var(--card-w) * .06);
+  display: flex;
+  flex-direction: column;
+  gap: calc(var(--card-w) * .05);
+  border-radius: calc(var(--card-w) * .17);
+  /* glass-look frame (kept solid so cards behind never show through) */
+  background: linear-gradient(160deg, #94574b, #5c241d 70%);
+  border: 1px solid rgba(255,255,255,.42);
+  box-shadow: 0 1.4cqw 2.6cqw rgba(20,3,3,.45);
+  transform: rotateY(calc(var(--i) * 1turn / var(--n))) translateZ(var(--ring-r));
+  -webkit-backface-visibility: hidden;
+          backface-visibility: hidden;
+}
+/* far-side cards are turned to face the camera, and dimmed a touch */
+.orbit--back .card {
+  transform: rotateY(calc(var(--i) * 1turn / var(--n))) translateZ(var(--ring-r)) rotateY(180deg);
+  filter: brightness(.72);
+}
+.card__art {
+  position: relative;
+  flex: 1;
+  min-height: 0;
+  border-radius: calc(var(--card-w) * .12);
+  overflow: hidden;
+  display: grid;
+  place-items: center;
+  background: var(--tile, var(--white));
+  color: var(--tile-ink, var(--maroon));
+  font-family: var(--f-display);
+  font-size: calc(var(--card-w) * .36);
+}
+.card__art img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.card__art--logo img { object-fit: contain; padding: 8%; }
+.card__name {
+  font-weight: 500;
+  font-size: calc(var(--card-w) * .1);
+  line-height: 1.2;
+  text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  color: var(--white);
+}
+
+/* ---------- 7. Rating ---------- */
+.rated {
+  position: absolute;
+  z-index: 7;
+  left: 0;
+  right: 0;
+  bottom: var(--rated-bottom);
+  display: grid;
+  justify-items: center;
+  gap: calc(var(--rated-size) * .45);
+  color: var(--white);
+}
+.rated__line { font-size: var(--rated-size); font-style: italic; font-weight: 300; }
+.rated__line b { font-weight: 600; }
+.rated .stars { width: calc(var(--rated-size) * 6); }
+.rated__link { font-size: max(calc(var(--rated-size) * .82), 12.5px); color: var(--tan); padding: .3em .6em; }
+
+/* ---------- One load-in moment ---------- */
+@keyframes rise { from { opacity: 0; transform: translateY(3cqw); } }
+@keyframes fadein { from { opacity: 0; } }
+.title__big, .title__sub { animation: rise .8s cubic-bezier(.2,.8,.2,1) both; }
+.title__sub { animation-delay: .12s; }
+.me { animation: rise .9s .15s cubic-bezier(.2,.8,.2,1) both; }
+.orbit, .rated { animation: fadein .8s .55s both; }
+
+@media (prefers-reduced-motion: reduce) {
+  .orbit__spin, .title__big, .title__sub, .me, .orbit, .rated { animation: none !important; }
+}

@@ -1,0 +1,199 @@
+/* ============================================================
+   BASE — brand tokens, fonts, reset, buttons, boxes, nav, footer
+   ============================================================ */
+
+/* Display font (headlines). NOTE: this is the DEMO file — see assets/fonts/LICENSE-Acthirey-demo.txt.
+   When you buy the full font, replace the .woff2 and keep the same family name. */
+@font-face {
+  font-family: "Acthirey";
+  src: url("../fonts/acthirey-demo.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+:root {
+  /* Brand colors */
+  --maroon: #3c0f0f;        /* main dark */
+  --maroon-2: #6e2a21;      /* lighter maroon, glows and gradients */
+  --brown: #4b352a;
+  --tan: #b89c7a;
+  --white: #fff;
+  --gold: #e2a324;          /* burnt yellow — highlights and CTAs */
+  --gold-deep: #b97a08;     /* burnt yellow that stays readable on white */
+  --ink: #2a0a0a;           /* text on white */
+  --line: rgba(60,15,15,.13);
+  --tint: #f5f0ea;          /* soft tan wash for boxes on white */
+
+  /* Type */
+  --f-display: "Acthirey", "Playfair Display", Georgia, serif;
+  --f-body: "Poppins", system-ui, sans-serif;
+
+  --wrap: 1200px;
+  --pad: clamp(14px, 3.4vw, 40px);
+  --radius: 28px;
+  --gap: clamp(10px, 1.2vw, 16px);
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; }
+body {
+  margin: 0;
+  background: var(--white);
+  color: var(--ink);
+  font-family: var(--f-body);
+  font-size: 16px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: clip;
+}
+img, svg, video { display: block; max-width: 100%; }
+a { color: inherit; text-decoration: none; }
+ul, ol { list-style: none; margin: 0; padding: 0; }
+h1, h2, h3, p { margin: 0; }
+button { font: inherit; color: inherit; background: none; border: 0; padding: 0; cursor: pointer; }
+:focus-visible { outline: 2px solid var(--gold); outline-offset: 3px; border-radius: 6px; }
+
+.wrap { width: min(100% - 2 * var(--pad), var(--wrap)); margin-inline: auto; }
+.sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+
+/* ---------- Emphasis: key words take the accent colour ---------- */
+.em { color: var(--gold-deep); }
+.on-dark .em { color: var(--gold); }
+.on-gold .em { color: var(--white); }
+
+/* ---------- Dark rounded panels (hero, automation, footer) ---------- */
+.panel {
+  position: relative;
+  margin: 10px;
+  border-radius: var(--radius);
+  background: var(--maroon);
+  color: var(--white);
+  overflow: hidden;
+  isolation: isolate;
+}
+
+/* Brand texture for dark surfaces: fine grid that fades out + a warm glow.
+   Add class "tex" to any dark panel or box. Move the glow with --gx / --gy. */
+.tex::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background:
+    radial-gradient(60% 70% at var(--gx, 85%) var(--gy, 0%), rgba(226,163,36,.2), rgba(110,42,33,.55) 38%, rgba(60,15,15,0) 72%),
+    linear-gradient(rgba(255,255,255,.055) 1px, transparent 1px) 0 0 / 44px 44px,
+    linear-gradient(90deg, rgba(255,255,255,.055) 1px, transparent 1px) 0 0 / 44px 44px;
+  -webkit-mask-image: radial-gradient(110% 110% at var(--gx, 85%) var(--gy, 0%), #000 20%, transparent 78%);
+          mask-image: radial-gradient(110% 110% at var(--gx, 85%) var(--gy, 0%), #000 20%, transparent 78%);
+}
+
+/* ---------- Boxes (the rounded cards that make up the page) ---------- */
+.bento { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: var(--gap); }
+.s12 { grid-column: span 12; } .s8 { grid-column: span 8; } .s7 { grid-column: span 7; }
+.s6 { grid-column: span 6; } .s5 { grid-column: span 5; } .s4 { grid-column: span 4; }
+@media (max-width: 900px) { .s8, .s7, .s6, .s5, .s4 { grid-column: span 12; } }
+
+.box {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  border-radius: var(--radius);
+  padding: clamp(22px, 3vw, 40px);
+}
+.box--dark { background: var(--maroon); color: var(--white); }
+.box--gold { background: var(--gold); color: var(--maroon); }
+.box--line { background: var(--white); border: 1px solid var(--line); }
+.box--tint { background: var(--tint); }
+
+/* ---------- Type helpers ---------- */
+.h2 { font-family: var(--f-display); font-weight: 400; font-size: clamp(34px, 5vw, 64px); line-height: 1; }
+.lead { font-size: clamp(15px, 1.5vw, 18px); line-height: 1.5; }
+
+/* ---------- Pill buttons ---------- */
+.pill {
+  display: inline-flex;
+  align-items: center;
+  gap: .65em;
+  padding: .45em .45em .45em 1.15em;
+  border-radius: 999px;
+  font-weight: 500;
+  font-size: 15px;
+  line-height: 1;
+  white-space: nowrap;
+  transition: transform .2s ease, background-color .2s ease;
+}
+.pill__dot {
+  display: grid;
+  place-items: center;
+  width: 2em;
+  height: 2em;
+  border-radius: 50%;
+  transition: transform .2s ease;
+}
+.pill__dot svg { width: .95em; height: .95em; }
+.pill:hover { transform: translateY(-1px); }
+.pill:hover .pill__dot { transform: rotate(45deg); }
+.pill--big { font-size: clamp(15px, 1.5vw, 18px); }
+
+/* main CTA — burnt yellow */
+.pill--gold { background: var(--gold); color: var(--maroon); font-weight: 600; box-shadow: inset 0 1px 0 rgba(255,255,255,.45); }
+.pill--gold .pill__dot { background: var(--maroon); color: var(--gold); }
+/* glass — for dark backgrounds */
+.pill--glass {
+  background: rgba(255,255,255,.1);
+  color: var(--white);
+  border: 1px solid rgba(255,255,255,.32);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.25);
+  -webkit-backdrop-filter: blur(10px);
+          backdrop-filter: blur(10px);
+}
+.pill--glass:hover { background: rgba(255,255,255,.18); }
+.pill--glass .pill__dot { background: var(--white); color: var(--maroon); }
+/* dark — for white and gold backgrounds */
+.pill--dark { background: var(--maroon); color: var(--white); }
+.pill--dark .pill__dot { background: var(--gold); color: var(--maroon); }
+
+/* quiet text link */
+.tlink { text-decoration: underline; text-underline-offset: .22em; text-decoration-thickness: 1px; }
+.tlink:hover { color: var(--gold-deep); }
+.on-dark .tlink:hover { color: var(--gold); }
+
+/* ---------- Stars ---------- */
+.stars { width: 110px; height: auto; aspect-ratio: 120 / 22; fill: var(--gold); }
+
+/* ---------- Top nav (inside dark panels) ---------- */
+.nav {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  padding: clamp(12px, 2vw, 24px) clamp(16px, 3vw, 40px);
+  color: var(--white);
+}
+.logo { font-family: var(--f-body); font-weight: 600; letter-spacing: -.02em; line-height: 1; }
+.logo i { font-style: normal; color: var(--gold); }
+.nav__logo { justify-self: start; font-size: clamp(18px, 1.7vw, 22px); }
+.nav__links { display: flex; gap: clamp(12px, 3vw, 40px); font-size: clamp(12px, 1.2vw, 15px); }
+.nav__links a { padding: .7em 0; opacity: .8; }
+.nav__links a:hover, .nav__links a[aria-current] { opacity: 1; }
+.nav__links a[aria-current] { box-shadow: 0 1.5px 0 var(--gold); }
+.nav__cta { justify-self: end; font-size: clamp(12px, 1.2vw, 15px); }
+@media (max-width: 660px) {
+  .nav { grid-template-columns: auto 1fr auto; padding: 12px 12px 12px 16px; }
+  .nav__logo { font-size: 17px; }
+  .nav__links { justify-self: center; gap: 12px; font-size: 11.5px; }
+  .nav__cta { font-size: 11.5px; padding: .85em 1.1em; }
+  .nav__cta .pill__dot { display: none; }
+}
+
+/* ---------- Footer ---------- */
+.foot { padding: clamp(32px, 5vw, 60px) 0 26px; --gx: 0%; --gy: 100%; }
+.foot__top { display: flex; flex-wrap: wrap; gap: 28px 60px; justify-content: space-between; align-items: flex-end; }
+.foot__logo { font-size: clamp(40px, 6vw, 72px); }
+.foot__mail { display: inline-block; margin-top: 14px; font-size: clamp(15px, 1.6vw, 19px); }
+.foot__nav { display: flex; flex-wrap: wrap; gap: 10px 26px; font-size: 14px; }
+.foot__nav a { opacity: .8; }
+.foot__nav a:hover { opacity: 1; color: var(--gold); }
+.foot__base { margin-top: 32px; padding-top: 18px; border-top: 1px solid rgba(255,255,255,.14); display: flex; flex-wrap: wrap; gap: 8px 24px; justify-content: space-between; font-size: 12.5px; color: rgba(255,255,255,.6); }
+.foot__base a:hover { color: var(--gold); }
